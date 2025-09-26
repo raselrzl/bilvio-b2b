@@ -13,7 +13,7 @@ export default function LoginPage() {
       </div>
 
       <div className="flex items-center justify-center">
-            <LoginForm />
+        <LoginForm />
       </div>
     </main>
   );
