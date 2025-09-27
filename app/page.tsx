@@ -1,7 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="text-center">
       <p className="text-xl uppercase font-bold">BILVIO Under development</p>

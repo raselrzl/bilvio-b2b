@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
+import { loginUserAction } from "@/app/utils/Auth";
 
 type Errors = { email?: string; password?: string };
 
@@ -41,25 +42,21 @@ export default function LoginForm() {
     setErrors((prev) => ({ ...prev, ...validate() }));
   }
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setSubmitted(true);
-    const nextErrors = validate();
-    setErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
+async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  e.preventDefault();
+  setSubmitted(true);
 
-    setLoading(true);
-    console.log({ email, password }); // log immediately
+  const nextErrors = validate();
+  setErrors(nextErrors);
+  if (Object.keys(nextErrors).length > 0) return;
 
-    try {
-      // simulate network call for spinner visibility
-      await new Promise((r) => setTimeout(r, 1200));
-      // TODO: real auth fetch here
-      // await fetch("/api/login", { method: "POST", body: JSON.stringify({ email, password }) });
-    } finally {
-      setLoading(false);
-    }
+  setLoading(true);
+  try {
+    await loginUserAction({ email, password });
+  } finally {
+    setLoading(false);
   }
+}
 
   const showEmailError = (touched.email || submitted) && !!errors.email;
   const showPasswordError = (touched.password || submitted) && !!errors.password;
