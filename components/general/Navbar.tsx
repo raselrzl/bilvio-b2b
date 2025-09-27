@@ -17,7 +17,7 @@ export default function Navbar() {
           />
         </Link>
 
-        <img src="/englogo.jpg" alt="Logo" className="h-8 w-8 bg-white p-1 rounded-full object-cover" />
+        <img src="/englogo.jpg" alt="Logo" className="h-8 w-8 bg-white p-1 rounded-full object-cover mr-4" />
 
       </div>
     </nav>
