@@ -43,7 +43,6 @@ export default function RegisterForm() {
   const [country, setCountry] = useState<string>("");
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
-  const [dataAccess, setDataAccess] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -83,7 +82,6 @@ export default function RegisterForm() {
         "Min. 8 chars, with upper, lower, and a number.";
     if (!confirm) next.confirm = "Please confirm your password.";
     else if (password !== confirm) next.confirm = "Passwords do not match.";
-    if (!dataAccess) next.dataAccess = "You must grant data access.";
     if (!agree) next.agree = "You must agree to the regulation.";
     return next;
   }
@@ -109,7 +107,6 @@ export default function RegisterForm() {
       country,
       city,
       zip,
-      dataAccess,
       email,
       password,
       confirm,
@@ -373,20 +370,10 @@ export default function RegisterForm() {
 
         {/* Data access */}
         <div className="flex items-center gap-2">
-          <Checkbox
-            id="dataAccess"
-            checked={dataAccess}
-            onCheckedChange={(v) => setDataAccess(Boolean(v))}
-            disabled={loading}
-            aria-invalid={!!errors.dataAccess}
-            aria-describedby={errors.dataAccess ? "dataAccess-error" : undefined}
-          />
-          <Label
-            htmlFor="dataAccess"
-            className={errors.dataAccess ? "text-red-600" : undefined}
-          >
+          
+          <p className="text-md uppercase font-bold">
             Data access
-          </Label>
+          </p>
         </div>
         {errors.dataAccess && (
           <p id="dataAccess-error" role="alert" className="text-sm text-red-600 -mt-2">
