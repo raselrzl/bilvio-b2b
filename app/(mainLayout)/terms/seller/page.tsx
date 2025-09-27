@@ -348,9 +348,9 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
           <li>repair cost calculation.</li>
         </ul>
         <p>
-          The Operator responds within 5 working days. If agreed, the Buyer will
+          The Operator responds within 5 working days. If userConcentd, the Buyer will
           be asked to send an accounting document for reimbursement. If not
-          agreed, the Operator may request a revised calculation or prepare one
+          userConcentd, the Operator may request a revised calculation or prepare one
           based on documentation.
         </p>
         <p>
@@ -473,7 +473,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
           changes or those not worsening Users’ situation may take effect
           sooner. Users who accepted Orders before changes are governed by the
           current version. Changed Terms apply to a registered User who does not
-          terminate the Account agreement before the effective date.
+          terminate the Account userConcentment before the effective date.
         </p>
         <p>
           For statistical/quality reasons, the Operator uses information

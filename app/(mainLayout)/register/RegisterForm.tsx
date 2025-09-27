@@ -14,8 +14,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ArrowRight, Loader2 } from "lucide-react";
+import { registerUserAction } from "@/app/actions";
 
-type Intent = "sales" | "purchases" | undefined;
 type FieldKey =
   | "intent"
   | "taxNumber"
@@ -28,14 +28,14 @@ type FieldKey =
   | "email"
   | "password"
   | "confirm"
-  | "agree"
+  | "userConcent"
   | "dataAccess";
 
 export default function RegisterForm() {
   const [loading, setLoading] = useState(false);
 
-  // form state
-  const [intent, setIntent] = useState<Intent>(undefined);
+  type IntentUI = "" | "sales" | "purchases";
+  const [intent, setIntent] = useState<IntentUI>("");
   const [taxNumber, setTaxNumber] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [phone, setPhone] = useState("");
@@ -46,7 +46,7 @@ export default function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [agree, setAgree] = useState(false);
+  const [userConcent, setuserConcent] = useState(false);
 
   const [errors, setErrors] = useState<Partial<Record<FieldKey, string>>>({});
 
@@ -78,28 +78,42 @@ export default function RegisterForm() {
       /\d/.test(password);
     if (!password) next.password = "Password is required.";
     else if (!pwdOk)
-      next.password =
-        "Min. 8 chars, with upper, lower, and a number.";
+      next.password = "Min. 8 chars, with upper, lower, and a number.";
     if (!confirm) next.confirm = "Please confirm your password.";
     else if (password !== confirm) next.confirm = "Passwords do not match.";
-    if (!agree) next.agree = "You must agree to the regulation.";
+    if (!userConcent) next.userConcent = "You must agree to the regulation.";
     return next;
   }
+
+  // ...
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
+
     const nextErrors = validate();
     setErrors(nextErrors);
 
+    // bail if any client-side errors
     if (Object.keys(nextErrors).length > 0) {
       setLoading(false);
       return;
     }
 
-    // Log values immediately
-    console.log({
-      intent,
+    // extra guard so TS knows intent is not ""
+    if (!intent) {
+      setErrors((prev) => ({ ...prev, intent: "Please choose one option." }));
+      setLoading(false);
+      return;
+    }
+
+    // make the payload type-safe against the action’s expected arg
+    type RegisterInput = Parameters<typeof registerUserAction>[0];
+    const payload: RegisterInput = {
+      email,
+      password,
+      confirm,
+      intent, // now narrowed to "sales" | "purchases"
       taxNumber,
       companyName,
       phone,
@@ -107,17 +121,25 @@ export default function RegisterForm() {
       country,
       city,
       zip,
-      email,
-      password,
-      confirm,
-      agree,
-    });
+      userConcent, // included so it’s saved server-side
+    };
 
     try {
-      // Simulate request so the spinner is visible
-      await new Promise((r) => setTimeout(r, 1200));
-      // TODO: send to your API
-    } finally {
+      const res = await registerUserAction(payload);
+      if (res?.ok === false && res.errors) {
+        const mapped: Partial<Record<FieldKey, string>> = {};
+        for (const [k, v] of Object.entries(
+          res.errors as Record<string, string[] | string>
+        )) {
+          const key = (k === "zipCode" ? "zip" : k) as FieldKey;
+          mapped[key] = Array.isArray(v) ? v.join(", ") : v;
+        }
+        setErrors((prev) => ({ ...prev, ...mapped }));
+        setLoading(false);
+        return;
+      }
+      // success -> server action will redirect
+    } catch {
       setLoading(false);
     }
   }
@@ -126,7 +148,12 @@ export default function RegisterForm() {
     <div className="w-full px-8 md:pl-32">
       <h1 className="text-4xl uppercase font-extrabold mb-6">Registration</h1>
 
-      <form onSubmit={onSubmit} className="grid gap-4" aria-busy={loading} noValidate>
+      <form
+        onSubmit={onSubmit}
+        className="grid gap-4"
+        aria-busy={loading}
+        noValidate
+      >
         {/* ROW 1 (2 cols): Intent + Tax number */}
         <div className="grid gap-4 md:grid-cols-2">
           {/* Intent */}
@@ -134,7 +161,9 @@ export default function RegisterForm() {
             <Label
               htmlFor="intent"
               className={`transition-colors ${
-                errors.intent ? "text-red-600" : "group-focus-within:text-blue-600"
+                errors.intent
+                  ? "text-red-600"
+                  : "group-focus-within:text-blue-600"
               }`}
             >
               On the Bilvio platform I intend to carry out
@@ -142,7 +171,7 @@ export default function RegisterForm() {
 
             <Select
               value={intent}
-              onValueChange={(v) => setIntent(v === "sales" || v === "purchases" ? v : undefined)}
+              onValueChange={(v) => setIntent(v as IntentUI)} // <-- cast the string to your union
               disabled={loading}
             >
               <SelectTrigger
@@ -163,7 +192,11 @@ export default function RegisterForm() {
               </SelectContent>
             </Select>
             {errors.intent && (
-              <p id="intent-error" role="alert" className="text-sm text-red-600">
+              <p
+                id="intent-error"
+                role="alert"
+                className="text-sm text-red-600"
+              >
                 {errors.intent}
               </p>
             )}
@@ -174,7 +207,9 @@ export default function RegisterForm() {
             <Label
               htmlFor="taxNumber"
               className={`transition-colors ${
-                errors.taxNumber ? "text-red-600" : "group-focus-within:text-blue-600"
+                errors.taxNumber
+                  ? "text-red-600"
+                  : "group-focus-within:text-blue-600"
               }`}
             >
               Tax number
@@ -186,10 +221,16 @@ export default function RegisterForm() {
               disabled={loading}
               className={inputCls(!!taxNumber, !!errors.taxNumber)}
               aria-invalid={!!errors.taxNumber}
-              aria-describedby={errors.taxNumber ? "taxNumber-error" : undefined}
+              aria-describedby={
+                errors.taxNumber ? "taxNumber-error" : undefined
+              }
             />
             {errors.taxNumber && (
-              <p id="taxNumber-error" role="alert" className="text-sm text-red-600">
+              <p
+                id="taxNumber-error"
+                role="alert"
+                className="text-sm text-red-600"
+              >
                 {errors.taxNumber}
               </p>
             )}
@@ -201,7 +242,9 @@ export default function RegisterForm() {
           <Label
             htmlFor="companyName"
             className={`transition-colors ${
-              errors.companyName ? "text-red-600" : "group-focus-within:text-blue-600"
+              errors.companyName
+                ? "text-red-600"
+                : "group-focus-within:text-blue-600"
             }`}
           >
             Company name
@@ -213,10 +256,16 @@ export default function RegisterForm() {
             disabled={loading}
             className={inputCls(!!companyName, !!errors.companyName)}
             aria-invalid={!!errors.companyName}
-            aria-describedby={errors.companyName ? "companyName-error" : undefined}
+            aria-describedby={
+              errors.companyName ? "companyName-error" : undefined
+            }
           />
           {errors.companyName && (
-            <p id="companyName-error" role="alert" className="text-sm text-red-600">
+            <p
+              id="companyName-error"
+              role="alert"
+              className="text-sm text-red-600"
+            >
               {errors.companyName}
             </p>
           )}
@@ -255,7 +304,9 @@ export default function RegisterForm() {
           <Label
             htmlFor="street"
             className={`transition-colors ${
-              errors.street ? "text-red-600" : "group-focus-within:text-blue-600"
+              errors.street
+                ? "text-red-600"
+                : "group-focus-within:text-blue-600"
             }`}
           >
             Street
@@ -283,13 +334,19 @@ export default function RegisterForm() {
             <Label
               htmlFor="country"
               className={`transition-colors ${
-                errors.country ? "text-red-600" : "group-focus-within:text-blue-600"
+                errors.country
+                  ? "text-red-600"
+                  : "group-focus-within:text-blue-600"
               }`}
             >
               Country
             </Label>
 
-            <Select value={country} onValueChange={setCountry} disabled={loading}>
+            <Select
+              value={country}
+              onValueChange={setCountry}
+              disabled={loading}
+            >
               <SelectTrigger
                 id="country"
                 className={`h-10 w-full rounded-none border bg-white transition-colors
@@ -309,7 +366,11 @@ export default function RegisterForm() {
               </SelectContent>
             </Select>
             {errors.country && (
-              <p id="country-error" role="alert" className="text-sm text-red-600">
+              <p
+                id="country-error"
+                role="alert"
+                className="text-sm text-red-600"
+              >
                 {errors.country}
               </p>
             )}
@@ -320,7 +381,9 @@ export default function RegisterForm() {
             <Label
               htmlFor="city"
               className={`transition-colors ${
-                errors.city ? "text-red-600" : "group-focus-within:text-blue-600"
+                errors.city
+                  ? "text-red-600"
+                  : "group-focus-within:text-blue-600"
               }`}
             >
               City
@@ -370,13 +433,14 @@ export default function RegisterForm() {
 
         {/* Data access */}
         <div className="flex items-center gap-2">
-          
-          <p className="text-md uppercase font-bold">
-            Data access
-          </p>
+          <p className="text-md uppercase font-bold">Data access</p>
         </div>
         {errors.dataAccess && (
-          <p id="dataAccess-error" role="alert" className="text-sm text-red-600 -mt-2">
+          <p
+            id="dataAccess-error"
+            role="alert"
+            className="text-sm text-red-600 -mt-2"
+          >
             {errors.dataAccess}
           </p>
         )}
@@ -394,7 +458,6 @@ export default function RegisterForm() {
           <Input
             id="email"
             type="email"
-            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={loading}
@@ -418,7 +481,9 @@ export default function RegisterForm() {
               <Label
                 htmlFor="password"
                 className={`transition-colors ${
-                  errors.password ? "text-red-600" : "group-focus-within:text-blue-600"
+                  errors.password
+                    ? "text-red-600"
+                    : "group-focus-within:text-blue-600"
                 }`}
               >
                 Password
@@ -426,13 +491,14 @@ export default function RegisterForm() {
               <Input
                 id="password"
                 type="password"
-                autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
                 className={inputCls(!!password, !!errors.password)}
                 aria-invalid={!!errors.password}
-                aria-describedby={errors.password ? "password-error" : "password-hint"}
+                aria-describedby={
+                  errors.password ? "password-error" : "password-hint"
+                }
               />
             </div>
             <p
@@ -441,10 +507,15 @@ export default function RegisterForm() {
                 errors.password ? "text-red-600" : "text-muted-foreground"
               }`}
             >
-              min. 8 characters, at least one uppercase and one lowercase letter, and a number
+              min. 8 characters, at least one uppercase and one lowercase
+              letter, and a number
             </p>
             {errors.password && (
-              <p id="password-error" role="alert" className="text-sm text-red-600">
+              <p
+                id="password-error"
+                role="alert"
+                className="text-sm text-red-600"
+              >
                 {errors.password}
               </p>
             )}
@@ -455,7 +526,9 @@ export default function RegisterForm() {
             <Label
               htmlFor="confirm"
               className={`transition-colors ${
-                errors.confirm ? "text-red-600" : "group-focus-within:text-blue-600"
+                errors.confirm
+                  ? "text-red-600"
+                  : "group-focus-within:text-blue-600"
               }`}
             >
               Confirm password
@@ -463,7 +536,6 @@ export default function RegisterForm() {
             <Input
               id="confirm"
               type="password"
-              autoComplete="new-password"
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
               disabled={loading}
@@ -472,25 +544,36 @@ export default function RegisterForm() {
               aria-describedby={errors.confirm ? "confirm-error" : undefined}
             />
             {errors.confirm && (
-              <p id="confirm-error" role="alert" className="text-sm text-red-600">
+              <p
+                id="confirm-error"
+                role="alert"
+                className="text-sm text-red-600"
+              >
                 {errors.confirm}
               </p>
             )}
           </div>
         </div>
 
-        {/* Regulation agreement */}
+        {/* Regulation userConcentment */}
         <div className="flex items-start gap-2">
           <Checkbox
-            id="agree"
-            checked={agree}
-            onCheckedChange={(v) => setAgree(Boolean(v))}
+            id="userConcent"
+            checked={userConcent}
+            onCheckedChange={(v) => setuserConcent(Boolean(v))}
             disabled={loading}
-            aria-invalid={!!errors.agree}
-            aria-describedby={errors.agree ? "agree-error" : undefined}
+            aria-invalid={!!errors.userConcent}
+            aria-describedby={
+              errors.userConcent ? "userConcent-error" : undefined
+            }
           />
-          <Label htmlFor="agree" className={errors.agree ? "text-red-600 leading-snug" : "leading-snug"}>
-            I know and agree to the provisions of the{" "}
+          <Label
+            htmlFor="userConcent"
+            className={
+              errors.userConcent ? "text-red-600 leading-snug" : "leading-snug"
+            }
+          >
+            I know and userConcent to the provisions of the{" "}
             <Link
               href="/terms/seller"
               className="text-black hover:text-black/75 font-bold underline"
@@ -499,9 +582,13 @@ export default function RegisterForm() {
             </Link>
           </Label>
         </div>
-        {errors.agree && (
-          <p id="agree-error" role="alert" className="text-sm text-red-600 -mt-2">
-            {errors.agree}
+        {errors.userConcent && (
+          <p
+            id="userConcent-error"
+            role="alert"
+            className="text-sm text-red-600 -mt-2"
+          >
+            {errors.userConcent}
           </p>
         )}
 

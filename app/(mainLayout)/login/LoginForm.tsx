@@ -124,7 +124,6 @@ export default function LoginForm() {
             }}
             onBlur={() => handleBlur("password")}
             disabled={loading}
-            autoComplete="current-password"
             aria-invalid={showPasswordError}
             aria-describedby={showPasswordError ? "password-error" : undefined}
             className={inputCls(!!password, showPasswordError)}
