@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { loginUserAction } from "@/app/utils/Auth";
+import { loginUserAction } from "@/app/actions";
 
 type Errors = { email?: string; password?: string };
 
@@ -21,6 +22,8 @@ export default function LoginForm() {
     password: false,
   });
   const [submitted, setSubmitted] = useState(false);
+
+  const search = useSearchParams();
 
   // style helper
   const inputCls = (filled: boolean, errored?: boolean) =>
@@ -42,21 +45,34 @@ export default function LoginForm() {
     setErrors((prev) => ({ ...prev, ...validate() }));
   }
 
-async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-  e.preventDefault();
-  setSubmitted(true);
+  // Map server error query string -> inline field errors
+  useEffect(() => {
+    const err = search.get("error");
+    if (err === "notfound") {
+      setErrors({ email: "Account doesn’t exist." });
+      setTouched((t) => ({ ...t, email: true }));
+    } else if (err === "invalid") {
+      setErrors({ password: "Invalid credentials." });
+      setTouched((t) => ({ ...t, password: true }));
+    }
+  }, [search]);
 
-  const nextErrors = validate();
-  setErrors(nextErrors);
-  if (Object.keys(nextErrors).length > 0) return;
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSubmitted(true);
 
-  setLoading(true);
-  try {
-    await loginUserAction({ email, password });
-  } finally {
-    setLoading(false);
+    const nextErrors = validate();
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+
+    setLoading(true);
+    try {
+      await loginUserAction({ email, password });
+      // success: server action redirects
+    } finally {
+      setLoading(false);
+    }
   }
-}
 
   const showEmailError = (touched.email || submitted) && !!errors.email;
   const showPasswordError = (touched.password || submitted) && !!errors.password;
@@ -84,7 +100,8 @@ async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
-              if (touched.email || submitted) setErrors(validate({ email: e.target.value, password }));
+              if (touched.email || submitted)
+                setErrors(validate({ email: e.target.value, password }));
             }}
             onBlur={() => handleBlur("email")}
             disabled={loading}
@@ -117,7 +134,8 @@ async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
-              if (touched.password || submitted) setErrors(validate({ email, password: e.target.value }));
+              if (touched.password || submitted)
+                setErrors(validate({ email, password: e.target.value }));
             }}
             onBlur={() => handleBlur("password")}
             disabled={loading}
@@ -135,10 +153,7 @@ async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         {/* Forgot link */}
         <p className="text-sm text-muted-foreground text-right">
           Can’t log in?{" "}
-          <Link
-            href="/reset-password"
-            className="text-black hover:text-black/75 font-bold underline"
-          >
+          <Link href="/reset-password" className="text-black hover:text-black/75 font-bold underline">
             Reset password
           </Link>
         </p>
@@ -164,10 +179,7 @@ async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
         {/* Register link */}
         <p className="text-sm text-muted-foreground text-center">
           Don’t have account?{" "}
-          <Link
-            href="/register"
-            className="text-black hover:text-black/75 font-bold underline"
-          >
+          <Link href="/register" className="text-black hover:text-black/75 font-bold underline">
             Register
           </Link>
         </p>

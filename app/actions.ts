@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "./utils/db";
+import { cookies } from "next/headers";
 
 const registerSchema = z.object({
   email: z.string().email("Enter a valid e-mail address."),
@@ -78,5 +79,55 @@ export async function registerUserAction(raw: RegisterPayload) {
 
   redirect("/login");
 }
+
+
+
+
+
+const SESSION_TTL_SECONDS = 60 * 10;
+const loginSchema = z.object({
+  email: z.string().email("Enter a valid e-mail address."),
+  password: z.string().min(1, "Password is required."),
+});
+
+export async function loginUserAction(input: z.infer<typeof loginSchema>) {
+  const { email, password } = loginSchema.parse(input);
+
+  const user = await prisma.user.findUnique({
+    where: { email },
+    select: { id: true, email: true, password: true },
+  });
+
+  // email not found
+  if (!user) {
+    redirect("/login?error=notfound");
+  }
+
+  // wrong password
+  if (user.password !== password) {
+    redirect("/login?error=invalid");
+  }
+
+  // success -> set 20-minute session cookie and go home
+  const jar = await cookies();
+  jar.set("bilvio_session", user.email, {
+    path: "/",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: SESSION_TTL_SECONDS, 
+  });
+
+  redirect("/");
+}
+
+
+
+export async function logoutAction() {
+  const jar = await cookies();
+  jar.set("bilvio_session", "", { path: "/", maxAge: 0 });
+  redirect("/login");
+}
+
 
 
