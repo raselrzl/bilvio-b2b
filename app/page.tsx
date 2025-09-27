@@ -24,7 +24,6 @@ export default async function Home() {
         >
           Reset Password
         </Link>
-
         <Link
           href="/terms/seller"
           className="text-black hover:text-black/75 font-bold underline mt-4"
