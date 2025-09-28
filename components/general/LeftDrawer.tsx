@@ -49,8 +49,8 @@ export default function AppHeader() {
 
   // push the body content when drawer opens (no visual redesign)
   useEffect(() => {
-    document.body.style.setProperty("--rail-w", "3.5rem");   // w-14
-    document.body.style.setProperty("--drawer-w", "200px");  // your max-w-[200px]
+    document.body.style.setProperty("--rail-w", "3.5rem"); // w-14
+    document.body.style.setProperty("--drawer-w", "200px"); // your max-w-[200px]
     document.body.classList.toggle("drawer-push-open", open);
     return () => document.body.classList.remove("drawer-push-open");
   }, [open]);
@@ -61,9 +61,9 @@ export default function AppHeader() {
   return (
     <div>
       {/* Top Navbar (unchanged) */}
-      <header className="sticky top-0 z-[70] flex h-14 items-center justify-between bg-gray-800 px-4">
+      <header className="sticky bg-gray-800 top-0 z-[70] flex h-14 items-center justify-between  px-4">
         <div className="flex items-center gap-3">
-          <img src="/log3.png" alt="Bilvio" className="h-8 w-auto ml-10" />
+          <img src="/log3.png" alt="Bilvio" className="h-8 w-[90px] ml-2" />
           <Button
             variant="outline"
             size="icon"
@@ -80,10 +80,18 @@ export default function AppHeader() {
           <span className="hidden sm:inline text-sm font-medium text-white">
             demo@bilvio.com
           </span>
-          <Button variant="ghost" size="icon" className="rounded-full text-white bg-gray-900">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full text-white bg-gray-900"
+          >
             <Bell className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon" className="rounded-full text-white bg-gray-900">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full text-white bg-gray-900"
+          >
             <UserIcon className="h-5 w-5" />
           </Button>
         </div>
@@ -116,18 +124,21 @@ export default function AppHeader() {
 
       {/* Drawer (same look), but overlay is transparent so nothing covers content */}
       <Drawer direction="left" open={open} onOpenChange={setOpen}>
-        <DrawerOverlay
-          className="fixed top-14 left-14 right-0 bottom-0 z-[75] bg-transparent pointer-events-none"
-        />
+        <DrawerOverlay className="fixed top-14 left-14 right-0 bottom-0 z-[75] bg-transparent pointer-events-none" />
 
         <DrawerContent
           className="fixed top-14 left-14 z-[80] h-[calc(100vh)] w-[200px] p-0
-                     bg-gray-800 text-white border-none"
+             bg-gray-800 text-white border-none"
+          style={{ width: 200 }} // <- add this if your drawer lib overrides Tailwind widths
         >
           <DrawerHeader className="px-4 py-3">
             <DrawerTitle className="uppercase font-extrabold text-white">
               <div className="flex items-center gap-3">
-                <img src="/log3.png" alt="Bilvio" className="h-8 w-auto ml-10" />
+                <img
+                  src="/log3.png"
+                  alt="Bilvio"
+                  className="h-8 w-[90px] ml-2"
+                />
                 <Button
                   variant="outline"
                   size="icon"
@@ -153,7 +164,11 @@ export default function AppHeader() {
                       onClick={() => setOpen(false)}
                       aria-current={active ? "page" : undefined}
                       className={`group flex items-center justify-between py-2 transition h-8
-                         ${active ? "bg-[#619aab] text-white" : "hover:bg-gray-700"}`}
+                         ${
+                           active
+                             ? "bg-[#619aab] text-white"
+                             : "hover:bg-gray-700"
+                         }`}
                     >
                       <span className="flex items-center gap-2 pl-4">
                         <Icon className="h-5 w-5" aria-hidden="true" />
@@ -171,8 +186,8 @@ export default function AppHeader() {
       {/* Global push rules (no design change; only shifts your body content) */}
       <style jsx global>{`
         :root {
-          --rail-w: 3.5rem;   /* w-14 */
-          --drawer-w: 200px;  /* matches Drawer width */
+          --rail-w: 3.5rem; /* w-14 */
+          --drawer-w: 200px; /* matches Drawer width */
         }
         /* mark your page/content wrapper with 'app-content' */
         .app-content {
