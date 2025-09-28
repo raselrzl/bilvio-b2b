@@ -1,7 +1,7 @@
 // app/page.tsx
 import Link from "next/link";
 import { cookies } from "next/headers";
-import { logoutAction } from "./actions";
+import { logoutAction } from "../actions";
 
 export default async function Home() {
   const jar = await cookies(); // keep using await to match your project typing

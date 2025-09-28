@@ -5,7 +5,8 @@ import { redirectIfAuthed } from "@/app/utils/Auth";
 export default async  function LoginPage() {
   await redirectIfAuthed();
   return (
-    <main className="min-h-screen grid grid-cols-1 md:grid-cols-2 px-6">
+    <div>
+       <main className="min-h-screen grid grid-cols-1 md:grid-cols-2 px-6">
       <div className="relative bg-gray-50">
         <img
           src="/homepage.svg"
@@ -18,5 +19,7 @@ export default async  function LoginPage() {
         <LoginForm />
       </div>
     </main>
+    </div>
+   
   );
 }
