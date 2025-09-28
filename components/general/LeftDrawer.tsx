@@ -47,10 +47,9 @@ export default function AppHeader() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  // push the body content when drawer opens (no visual redesign)
   useEffect(() => {
-    document.body.style.setProperty("--rail-w", "3.5rem"); // w-14
-    document.body.style.setProperty("--drawer-w", "200px"); // your max-w-[200px]
+    document.body.style.setProperty("--rail-w", "3.5rem");
+    document.body.style.setProperty("--drawer-w", "200px");
     document.body.classList.toggle("drawer-push-open", open);
     return () => document.body.classList.remove("drawer-push-open");
   }, [open]);
@@ -62,8 +61,12 @@ export default function AppHeader() {
     <div>
       {/* Top Navbar (unchanged) */}
       <header className="sticky bg-gray-800 top-0 z-[70] flex h-14 items-center justify-between  px-4">
-        <div className="flex items-center gap-3">
-          <img src="/log3.png" alt="Bilvio" className="h-8 w-[90px] ml-2" />
+        <div className="flex items-center justify-between gap-3 w-[200px]">
+          <img
+            src="/log3.png"
+            alt="Bilvio"
+            className="h-10 md:h-12 w-auto ml-2 flex-shrink-0"
+          />{" "}
           <Button
             variant="outline"
             size="icon"
@@ -133,12 +136,12 @@ export default function AppHeader() {
         >
           <DrawerHeader className="px-4 py-3">
             <DrawerTitle className="uppercase font-extrabold text-white">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center justify-between gap-3 w-[200px]">
                 <img
                   src="/log3.png"
                   alt="Bilvio"
-                  className="h-8 w-[90px] ml-2"
-                />
+                  className="h-10 md:h-12 w-auto ml-2 flex-shrink-0"
+                />{" "}
                 <Button
                   variant="outline"
                   size="icon"
