@@ -1,7 +1,9 @@
 import React from "react";
 import RegisterForm from "./RegisterForm";
+import { redirectIfAuthed } from "@/app/utils/Auth";
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  await redirectIfAuthed();
   return (
     <main className="min-h-screen grid grid-cols-1 md:grid-cols-2 px-6">
       <div className="relative bg-gray-50">

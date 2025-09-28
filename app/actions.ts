@@ -85,6 +85,7 @@ export async function registerUserAction(raw: RegisterPayload) {
 
 
 const SESSION_TTL_SECONDS = 60 * 10;
+
 const loginSchema = z.object({
   email: z.string().email("Enter a valid e-mail address."),
   password: z.string().min(1, "Password is required."),
@@ -125,7 +126,7 @@ export async function loginUserAction(input: z.infer<typeof loginSchema>) {
 
 export async function logoutAction() {
   const jar = await cookies();
-  jar.set("bilvio_session", "", { path: "/", maxAge: 0 });
+  jar.delete("bilvio_session");
   redirect("/login");
 }
 
