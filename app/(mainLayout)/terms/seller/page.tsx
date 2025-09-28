@@ -122,7 +122,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
           bids and completing purchases.
         </p>
         <p>
-          The operator of the Bilvio Platform is CARET Europe OÜ, a company
+          The operator of the Bilvio Platform is Bilvio Europe OÜ, a company
           under Estonian law with its registered office in Tallinn, registered
           address: Lõõtsa 2b, 11415 Tallinn, Estonia, entered in the register
           kept by the Harju County Court under number 16624843, with a share

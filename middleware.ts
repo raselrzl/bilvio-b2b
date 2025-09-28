@@ -2,9 +2,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // Only routes listed here will require a session.
-// Add or remove paths as needed.
 const PROTECTED_PATHS = [
-  "/",            // homepage protected
+  "/",
  "/dashboard",
   "/account",
   "/settings",
