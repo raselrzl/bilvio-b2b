@@ -61,7 +61,7 @@ export default function AppHeader() {
   return (
     <div>
       {/* Top Navbar (unchanged) */}
-      <header className="sticky bg-gray-800 top-0 z-[70] flex h-14 items-center justify-between  px-4">
+      <header className="sticky bg-[#2D3748] top-0 z-[70] flex h-14 items-center justify-between  px-4">
         <div className="flex items-center gap-3">
           <img src="/log3.png" alt="Bilvio" className="h-8 w-[90px] ml-2" />
           <Button
@@ -99,7 +99,7 @@ export default function AppHeader() {
 
       {/* Left icon rail (unchanged) */}
       <aside
-        className="fixed left-0 top-14 z-[60] h-[100vh] w-14 bg-gray-800 text-white"
+        className="fixed left-0 top-14 z-[60] h-[100vh] w-14 bg-[#2D3748] text-white"
         aria-label="Icon navigation"
       >
         <nav className="flex h-full flex-col items-center gap-1 py-2">
@@ -128,7 +128,7 @@ export default function AppHeader() {
 
         <DrawerContent
           className="fixed top-14 left-14 z-[80] h-[calc(100vh)] w-[200px] p-0
-             bg-gray-800 text-white border-none"
+             bg-[#2D3748] text-white border-none"
           style={{ width: 200 }} // <- add this if your drawer lib overrides Tailwind widths
         >
           <DrawerHeader className="px-4 py-3">
