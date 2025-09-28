@@ -26,6 +26,7 @@ import {
   User as UserIcon,
   X,
 } from "lucide-react";
+import Image from "next/image";
 
 type NavItem = {
   href: string;
@@ -64,25 +65,44 @@ export default function AppHeader() {
       {/* Top Navbar */}
       <header className="sticky bg-[#2D3748] top-0 z-[70] flex h-14 items-center justify-between px-4">
         <div className="flex items-center gap-3">
-          <img src="/log3.png" alt="Bilvio" className="h-8 w-[90px] ml-2" />
+          <Link href="/" aria-label="Go home" className="inline-flex">
+            <Image
+              src="/log3.png"
+              alt="Bilvio"
+              width={90}
+              height={32} // ~h-8
+              className="h-8 w-[100px]"
+              priority
+            />
+          </Link>
           <Button
             variant="outline"
             size="icon"
             onClick={() => setOpen((o) => !o)}
             aria-label="Toggle menu"
             aria-expanded={open}
-            className="rounded-full border-none text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50 ml-10"
+            className="rounded-full border-none text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50 ml-8"
           >
             <Menu className="h-10 w-10" />
           </Button>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <span className="hidden sm:inline text-sm font-medium text-white">demo@bilvio.com</span>
-          <Button variant="ghost" size="icon" className="rounded-full text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50">
+          <span className="hidden sm:inline text-sm font-medium text-white">
+            demo@bilvio.com
+          </span>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
+          >
             <Bell className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="icon" className="rounded-full text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
+          >
             <UserIcon className="h-5 w-5" />
           </Button>
         </div>
@@ -120,14 +140,23 @@ export default function AppHeader() {
         <DrawerOverlay className="fixed top-14 left-14 right-0 bottom-0 z-[75] bg-transparent pointer-events-none" />
 
         <DrawerContent
-          className="fixed top-14 left-14 z-[80] h-[calc(100vh)] w-[200px] p-0 bg-[#2D3748] text-white border-none"
+          className="fixed top-14 left-14 z-[80] h-[100vh] w-[200px] p-0 bg-[#2D3748] text-white border-none"
           style={{ width: 200 }}
           onEscapeKeyDown={(e) => e.preventDefault()}
         >
           <DrawerHeader className="px-4 py-3">
             <DrawerTitle className="uppercase font-extrabold text-white">
               <div className="flex items-center gap-3">
-                <img src="/log3.png" alt="Bilvio" className="h-8 w-[90px] ml-2" />
+                <Link href="/" aria-label="Go home" className="inline-flex">
+                  <Image
+                    src="/log3.png"
+                    alt="Bilvio"
+                    width={100}
+                    height={32} // ~h-8
+                    className="h-8 w-[100px]"
+                    priority
+                  />
+                </Link>
                 <Button
                   variant="outline"
                   size="icon"
