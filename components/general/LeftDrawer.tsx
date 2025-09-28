@@ -70,7 +70,7 @@ export default function AppHeader() {
             onClick={() => setOpen((o) => !o)}
             aria-label="Toggle menu"
             aria-expanded={open}
-            className="rounded-none text-white bg-gray-900 border-0 ml-30"
+            className="rounded-full border-none text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50 ml-10"
           >
             <Menu className="h-10 w-10" />
           </Button>
@@ -83,14 +83,14 @@ export default function AppHeader() {
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full text-white bg-gray-900"
+            className="rounded-full text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
           >
             <Bell className="h-5 w-5" />
           </Button>
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full text-white bg-gray-900"
+            className="rounded-full text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
           >
             <UserIcon className="h-5 w-5" />
           </Button>
@@ -145,7 +145,7 @@ export default function AppHeader() {
                   onClick={() => setOpen((o) => !o)}
                   aria-label="Toggle menu"
                   aria-expanded={open}
-                  className="rounded-none text-white bg-gray-900 border-0 ml-30"
+                  className="rounded-full border-none text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50 ml-10"
                 >
                   <Menu className="h-10 w-10" />
                 </Button>
