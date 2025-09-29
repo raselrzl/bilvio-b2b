@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { logoutAction } from "../actions";
 
 export default async function Home() {
-  const jar = await cookies(); // keep using await to match your project typing
+  const jar = await cookies();
   const raw = jar.get("bilvio_session")?.value ?? "";
   const isAuthed = Boolean(raw && raw !== "undefined" && raw !== "null");
 
