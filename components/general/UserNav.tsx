@@ -41,8 +41,8 @@ export default function UserNav() {
 
         <DropdownMenuContent
           align="end"
-          className="w-48"
-          sideOffset={8}
+          className="w-40 rounded-none"
+          sideOffset={10}
         >
           <DropdownMenuLabel>Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
