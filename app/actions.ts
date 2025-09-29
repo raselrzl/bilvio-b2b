@@ -84,7 +84,7 @@ export async function registerUserAction(raw: RegisterPayload) {
 
 
 
-const SESSION_TTL_SECONDS = 60 * 10;
+const SESSION_TTL_SECONDS = 60 * 60 * 24;
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid e-mail address."),

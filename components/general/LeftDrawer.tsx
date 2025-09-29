@@ -27,6 +27,7 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
+import UserNav from "./UserNav";
 
 type NavItem = {
   href: string;
@@ -49,7 +50,6 @@ export default function AppHeader() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  // push content when drawer opens
   useEffect(() => {
     document.body.style.setProperty("--rail-w", "3.5rem"); // w-14
     document.body.style.setProperty("--drawer-w", "200px"); // Drawer width
@@ -87,25 +87,7 @@ export default function AppHeader() {
           </Button>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3">
-          <span className="hidden sm:inline text-sm font-medium text-white">
-            demo@bilvio.com
-          </span>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
-          >
-            <Bell className="h-5 w-5" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
-          >
-            <UserIcon className="h-5 w-5" />
-          </Button>
-        </div>
+       <UserNav />
       </header>
 
       {/* Left icon rail */}
