@@ -19,9 +19,7 @@ export default async function MainLayout({
 
   return (
     <>
-      <AppHeader email={email}>
-        <p></p>
-      </AppHeader>
+      <AppHeader email={email as string} />
       <main className="app-content">{children}</main>
     </>
   );

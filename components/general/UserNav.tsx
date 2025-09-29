@@ -33,7 +33,6 @@ export default function UserNav({ email }: { email: string }) {
             variant="ghost"
             size="icon"
             aria-label="User menu"
-            // ensure trigger is above the drawer layers
             className="relative z-[100] rounded-full text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
           >
             <UserIcon className="h-5 w-5" />
@@ -43,10 +42,9 @@ export default function UserNav({ email }: { email: string }) {
         <DropdownMenuContent
           align="end"
           sideOffset={10}
-          // keep menu above drawer overlay/content
-          className="w-40 rounded-none z-[100] pointer-events-auto"
+          className="w-40 rounded-none z-[100]"  // <- square corners
         >
-          <DropdownMenuLabel>Account</DropdownMenuLabel>
+          <DropdownMenuLabel className="rounded-none">Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
 
           <DropdownMenuItem asChild>
