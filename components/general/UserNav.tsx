@@ -11,11 +11,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { logoutAction } from "@/app/actions";
 
-export default function UserNav() {
+export default function UserNav({ email }: { email: string }) {
   return (
     <div className="flex items-center gap-2 sm:gap-3">
       <span className="hidden sm:inline text-sm font-medium text-white">
-        demo@bilvio.com
+        {email}
       </span>
 
       <Button
@@ -32,8 +32,9 @@ export default function UserNav() {
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
             aria-label="User menu"
+            // ensure trigger is above the drawer layers
+            className="relative z-[100] rounded-full text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
           >
             <UserIcon className="h-5 w-5" />
           </Button>
@@ -41,8 +42,9 @@ export default function UserNav() {
 
         <DropdownMenuContent
           align="end"
-          className="w-40 rounded-none"
           sideOffset={10}
+          // keep menu above drawer overlay/content
+          className="w-40 rounded-none z-[100] pointer-events-auto"
         >
           <DropdownMenuLabel>Account</DropdownMenuLabel>
           <DropdownMenuSeparator />

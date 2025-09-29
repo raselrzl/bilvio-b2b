@@ -46,7 +46,10 @@ const LINKS: NavItem[] = [
   { href: "/settings", label: "Settings", Icon: Settings },
 ];
 
-export default function AppHeader() {
+export default function AppHeader({ email, children }:{
+  email: string;
+  children: React.ReactNode;
+}) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -87,7 +90,7 @@ export default function AppHeader() {
           </Button>
         </div>
 
-       <UserNav />
+       <UserNav email={email} />
       </header>
 
       {/* Left icon rail */}
