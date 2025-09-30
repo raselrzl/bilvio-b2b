@@ -31,12 +31,36 @@ export default async function Profile() {
 
   const dash = (v?: string | null) => (v && v.trim() ? v : "—");
 
+  const countryKey = (user.country ?? "").trim().toLowerCase();
+  // 1) Add this derived currency (right after `const dash = ...`)
+  const currency = (() => {
+    const map: Record<string, string> = {
+      // Sweden
+      sweden: "SEK",
+      sverige: "SEK",
+
+      // Norway
+      norway: "NOK",
+      norge: "NOK",
+      norwegen: "NOK",
+
+      // Finland
+      finland: "EUR",
+      suomi: "EUR",
+
+      // Germany
+      germany: "EUR",
+      deutschland: "EUR",
+    };
+    return map[countryKey] ?? "—";
+  })();
+
   const userRows: Array<{ label: string; value: string }> = [
     { label: "First name", value: "—" /* dash(user.firstName) */ },
     { label: "Last name", value: "—" /* dash(user.lastName) */ },
     { label: "Email", value: dash(user.email) },
     { label: "Phone number", value: dash(user.phone) },
-  ]; 
+  ];
 
   const companyRows: Array<{ label: string; value: string }> = [
     { label: "Company name", value: dash(user.companyName) },
@@ -45,7 +69,7 @@ export default async function Profile() {
     { label: "Post code", value: dash(user.zipCode) },
     { label: "City", value: dash(user.city) },
     { label: "Country", value: dash(user.country) },
-    { label: "Currency", value: "—" /* dash(user.currency) */ },
+    { label: "Currency", value: currency }, // ← here
     { label: "Company site URL", value: "—" /* dash(user.companySiteUrl) */ },
   ];
 
