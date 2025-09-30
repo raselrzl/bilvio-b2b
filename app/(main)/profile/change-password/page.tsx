@@ -25,8 +25,12 @@ export default function ChangePassword({
       </header>
 
       <section className=" bg-white border shadow-sm p-4 mt-4 sm:mx-6 md:mx-8 lg:mx-auto">
-        {ok && <p className="mt-4 text-green-700">Password changed successfully.</p>}
-        {!!error && <p className="mt-4 text-red-600">{decodeURIComponent(error)}</p>}
+        {ok && (
+          <p className="mt-4 text-green-700">Password changed successfully.</p>
+        )}
+        {!!error && (
+          <p className="mt-4 text-red-600">{decodeURIComponent(error)}</p>
+        )}
 
         {/* Responsive Form */}
         <form
@@ -52,9 +56,11 @@ export default function ChangePassword({
               type="password"
               name="password"
               required
-              className="w-full border h-9 border-gray-300 bg-white px-3 py-2 rounded-none focus:outline-none focus:ring-2 focus:ring-green-500"
+              minLength={8}
+              placeholder=" " 
+              className="peer w-full border h-9 border-gray-300 bg-white px-3 py-2 rounded-none focus:outline-none focus:ring-2 focus:ring-green-500"
             />
-            <span className="text-xs">
+            <span className="text-xs peer-[&:not(:placeholder-shown):invalid]:text-red-600">
               Min. 8 characters, with upper, lower, and a number.
             </span>
           </label>
@@ -64,6 +70,8 @@ export default function ChangePassword({
             <input
               type="password"
               name="confirm"
+              minLength={8}
+              placeholder=" "
               required
               className="w-full border h-9 border-gray-300 bg-white px-3 py-2 rounded-none focus:outline-none focus:ring-2 focus:ring-green-500"
             />
