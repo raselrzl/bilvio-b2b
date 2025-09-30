@@ -1,22 +1,52 @@
+import { prisma } from "@/app/utils/db";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
 export const metadata = { title: "Profile • Bilvio" };
 
-export default function Profile() {
+export default async function Profile() {
+  const jar = await cookies();
+  const email = jar.get("bilvio_session")?.value ?? "";
+  if (!email) redirect("/login");
+
+  const user = await prisma.user.findUnique({
+    where: { email },
+    select: {
+      email: true,
+      phone: true,
+      companyName: true,
+      taxNumber: true,
+      street: true,
+      zipCode: true,
+      city: true,
+      country: true,
+      // firstName: true,
+      // lastName: true,
+      // currency: true,
+      // companySiteUrl: true,
+    },
+  });
+
+  if (!user) redirect("/login?error=notfound");
+
+  const dash = (v?: string | null) => (v && v.trim() ? v : "—");
+
   const userRows: Array<{ label: string; value: string }> = [
-    { label: "First name", value: "First name" },
-    { label: "Last name", value: "Last name" },
-    { label: "Email", value: "email@example.com" },
-    { label: "Phone number", value: "0738752087" },
-  ];
+    { label: "First name", value: "—" /* dash(user.firstName) */ },
+    { label: "Last name", value: "—" /* dash(user.lastName) */ },
+    { label: "Email", value: dash(user.email) },
+    { label: "Phone number", value: dash(user.phone) },
+  ]; 
 
   const companyRows: Array<{ label: string; value: string }> = [
-    { label: "Company name", value: "Company Name" },
-    { label: "Tax number", value: "123456789" },
-    { label: "Street", value: "Street" },
-    { label: "Post code", value: "60219" },
-    { label: "City", value: "Norrköping" },
-    { label: "Country", value: "Sweden" },
-    { label: "Currency", value: "SEK" },
-    { label: "Company site URL", value: "https://example.com" },
+    { label: "Company name", value: dash(user.companyName) },
+    { label: "Tax number", value: dash(user.taxNumber) },
+    { label: "Street", value: dash(user.street) },
+    { label: "Post code", value: dash(user.zipCode) },
+    { label: "City", value: dash(user.city) },
+    { label: "Country", value: dash(user.country) },
+    { label: "Currency", value: "—" /* dash(user.currency) */ },
+    { label: "Company site URL", value: "—" /* dash(user.companySiteUrl) */ },
   ];
 
   return (
@@ -30,7 +60,7 @@ export default function Profile() {
           {/* USER DATA */}
           <h2 className="bg-white px-4 py-3 text-xl font-bold">User Data</h2>
 
-          <div className="overflow-x-auto p-4">
+          <div className="overflow-x-auto p-4 text-sm">
             <table className="w-full table-fixed">
               <tbody>
                 {userRows.map((row, idx) => (
@@ -39,7 +69,7 @@ export default function Profile() {
                     className={
                       idx % 2
                         ? "bg-white"
-                        : "bg-gray-50 border-y border-gray-100 "
+                        : "bg-gray-100 border-y border-gray-200 "
                     }
                   >
                     <td className="w-1/2 px-4 py-0 h-9 align-middle whitespace-nowrap">
@@ -57,7 +87,7 @@ export default function Profile() {
           {/* COMPANY DATA */}
           <h2 className="bg-white px-4 py-3 text-xl font-bold">Company Data</h2>
 
-          <div className="overflow-x-auto p-4">
+          <div className="overflow-x-auto p-4 text-sm">
             <table className="w-full table-fixed">
               <tbody>
                 {companyRows.map((row, idx) => (
@@ -66,7 +96,7 @@ export default function Profile() {
                     className={
                       idx % 2
                         ? "bg-white"
-                        : "bg-gray-50 border-y border-gray-100 "
+                        : "bg-gray-100 border-y border-gray-200 "
                     }
                   >
                     <td className="w-1/2 px-4 py-0 h-9 align-middle whitespace-nowrap">

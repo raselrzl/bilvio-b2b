@@ -18,7 +18,7 @@ export default async function MainLayout({
     (await cookies()).get("bilvio_session")?.value ?? "demo@bilvio.com";
 
   return (
-    <div className="">
+    <div className="bg-gray-100 h-[100vh]">
       <AppHeader email={email as string} />
       <main className="app-content">{children}</main>
     </div>
