@@ -1,5 +1,6 @@
 import { prisma } from "@/app/utils/db";
 import { cookies } from "next/headers";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export const metadata = { title: "Profile • Bilvio" };
@@ -134,22 +135,20 @@ export default async function Profile() {
             </table>
           </div>
 
-          <div className="m-4 flex gap-3">
-            <button
-              type="button"
-              className="bg-green-600 text-white px-3 py-1 rounded-xs cursor-pointer hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500  text-sm sm:text-base text-center"
-              aria-label="Edit profile"
+          <div className="m-4 flex flex-col sm:flex-row gap-3">
+            <Link
+              href="/profile/edit"
+              className="bg-green-600 text-white px-3 py-1 rounded-xs cursor-pointer hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base text-center w-full sm:w-auto"
             >
               Edit Profile
-            </button>
+            </Link>
 
-            <button
-              type="button"
-              className="bg-green-600 text-white px-3 py-1 rounded-xs cursor-pointer hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500  text-sm sm:text-base text-center"
-              aria-label="Change password"
+            <Link
+              href="/profile/change-password"
+              className="bg-green-600 text-white px-3 py-1 rounded-xs cursor-pointer hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base text-center w-full sm:w-auto"
             >
               Change Password
-            </button>
+            </Link>
           </div>
         </div>
       </div>
