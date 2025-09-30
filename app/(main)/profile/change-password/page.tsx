@@ -1,6 +1,7 @@
 // app/profile/change-password/page.tsx
 import { changePasswordAction } from "@/app/actions";
 import SubmitButton from "./SubmitButton";
+import ClientPasswordRequired from "./ClientPasswordRequired";
 
 export const metadata = { title: "Change Password • Bilvio" };
 
@@ -24,15 +25,12 @@ export default function ChangePassword({
       </header>
 
       <section className=" bg-white border shadow-sm p-4 mt-4 sm:mx-6 md:mx-8 lg:mx-auto">
-        {ok && (
-          <p className="mt-4 text-green-700">Password changed successfully.</p>
-        )}
-        {!!error && (
-          <p className="mt-4 text-red-600">{decodeURIComponent(error)}</p>
-        )}
+        {ok && <p className="mt-4 text-green-700">Password changed successfully.</p>}
+        {!!error && <p className="mt-4 text-red-600">{decodeURIComponent(error)}</p>}
 
         {/* Responsive Form */}
         <form
+          id="cpwd-form" /* ← only addition to your markup */
           action={changePasswordAction}
           className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-full md:max-w-2xl"
         >
@@ -74,6 +72,9 @@ export default function ChangePassword({
           <div className="pt-2 md:col-span-2">
             <SubmitButton />
           </div>
+
+          {/* mounts required-message logic without changing layout */}
+          <ClientPasswordRequired formId="cpwd-form" />
         </form>
       </section>
     </div>
