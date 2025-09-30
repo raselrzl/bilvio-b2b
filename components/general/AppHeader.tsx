@@ -129,7 +129,7 @@ export default function AppHeader({ email }: { email: string }) {
               </DropdownMenuItem>
 
               <DropdownMenuItem asChild>
-                <Link href="/terms/seller" className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white">
+                <Link href="/regulations/buyer" className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white">
                   <FileText className="mr-2 h-4 w-4 hover:text-white" />
                   <span>Regulations</span>
                 </Link>
