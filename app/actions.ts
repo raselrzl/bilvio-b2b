@@ -131,4 +131,53 @@ export async function logoutAction() {
 }
 
 
+const changePasswordSchema = z.object({
+  current: z.string().min(1, "Current password is required."),
+  password: z
+    .string()
+    .min(8, "Min. 8 characters, with upper, lower, and a number.")
+    .regex(/[a-z]/, "Password must include a lowercase letter.")
+    .regex(/[A-Z]/, "Password must include an uppercase letter.")
+    .regex(/\d/, "Password must include a number."),
+  confirm: z.string().min(1, "Please confirm your password."),
+}).refine(d => d.password === d.confirm, {
+  path: ["confirm"],
+  message: "Passwords do not match.",
+});
+
+export async function changePasswordAction(formData: FormData) {
+  const jar = await cookies();
+  const email = jar.get("bilvio_session")?.value ?? "";
+  if (!email) redirect("/login");
+
+  const data = {
+    current: String(formData.get("current") ?? ""),
+    password: String(formData.get("password") ?? ""),
+    confirm: String(formData.get("confirm") ?? ""),
+  };
+
+  const parsed = changePasswordSchema.safeParse(data);
+  if (!parsed.success) {
+    const first = parsed.error.issues[0]?.message ?? "Invalid input.";
+    redirect(`/profile/change-password?error=${encodeURIComponent(first)}`);
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email },
+    select: { password: true },
+  });
+
+  if (!user || user.password !== data.current) {
+    redirect(`/profile/change-password?error=${encodeURIComponent("Current password is incorrect.")}`);
+  }
+
+  await prisma.user.update({
+    where: { email },
+    data: { password: data.password }, // plain text per your current schema
+  });
+
+  redirect("/profile");
+}
+
+
 

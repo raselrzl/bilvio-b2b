@@ -135,17 +135,17 @@ export default async function Profile() {
             </table>
           </div>
 
-          <div className="m-4 flex flex-col sm:flex-row gap-3">
+          <div className="m-4 flex gap-3">
             <Link
               href="/profile/edit"
-              className="bg-green-600 text-white px-3 py-1 rounded-xs cursor-pointer hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base text-center w-full sm:w-auto"
+              className="bg-green-600 text-white px-3 py-1 rounded-xs cursor-pointer hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base text-center"
             >
               Edit Profile
             </Link>
 
             <Link
               href="/profile/change-password"
-              className="bg-green-600 text-white px-3 py-1 rounded-xs cursor-pointer hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base text-center w-full sm:w-auto"
+              className="bg-green-600 text-white px-3 py-1 rounded-xs cursor-pointer hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base text-center"
             >
               Change Password
             </Link>
