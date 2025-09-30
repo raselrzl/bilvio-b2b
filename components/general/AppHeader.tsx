@@ -84,7 +84,7 @@ export default function AppHeader({ email }: { email: string }) {
             onClick={() => setExpanded(e => !e)}
             aria-label={expanded ? "Collapse menu" : "Expand menu"}
             aria-expanded={expanded}
-            className="rounded-full border-none text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50 ml-8"
+            className="rounded-full border-none cursor-pointer text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50 ml-8"
           >
             {expanded ? <X className="h-10 w-10" /> : <Menu className="h-10 w-10" />}
           </Button>
@@ -99,7 +99,7 @@ export default function AppHeader({ email }: { email: string }) {
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
+            className="rounded-full text-white cursor-pointer bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
             aria-label="Notifications"
           >
             <Bell className="h-5 w-5" />
@@ -110,27 +110,27 @@ export default function AppHeader({ email }: { email: string }) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
+                className="rounded-full text-white  cursor-pointer bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
                 aria-label="User menu"
               >
                 <UserIcon className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="end" className="w-48" sideOffset={8}>
+            <DropdownMenuContent align="end" className="w-40 rounded-none" sideOffset={8}>
               <DropdownMenuLabel>Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
 
               <DropdownMenuItem asChild>
-                <Link href="/profile" className="flex items-center">
-                  <UserIcon className="mr-2 h-4 w-4" />
+                <Link href="/profile" className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white">
+                  <UserIcon className="mr-2 h-4 w-4 hover:text-white" />
                   <span>Profile</span>
                 </Link>
               </DropdownMenuItem>
 
               <DropdownMenuItem asChild>
-                <Link href="/terms/seller" className="flex items-center">
-                  <FileText className="mr-2 h-4 w-4" />
+                <Link href="/terms/seller" className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white">
+                  <FileText className="mr-2 h-4 w-4 hover:text-white" />
                   <span>Regulations</span>
                 </Link>
               </DropdownMenuItem>
@@ -138,7 +138,7 @@ export default function AppHeader({ email }: { email: string }) {
               <DropdownMenuSeparator />
 
               <DropdownMenuItem asChild>
-                <form action={logoutAction} className="w-full">
+                <form action={logoutAction} className="w-full hover:rounded-none hover:bg-[#619aab] hover:text-white">
                   <button type="submit" className="flex w-full items-center cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Logout</span>
