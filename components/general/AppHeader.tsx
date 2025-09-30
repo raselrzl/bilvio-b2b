@@ -49,13 +49,10 @@ const LINKS: NavItem[] = [
 ];
 
 export default function AppHeader({ email }: { email: string }) {
-  // false = collapsed (icons only), true = expanded (drawer with labels)
   const [expanded, setExpanded] = useState(false);
   const pathname = usePathname();
 
-  // Keep page content pushed exactly to the current sidebar width
   useEffect(() => {
-    // default collapsed width and expanded width
     document.documentElement.style.setProperty("--sidebar-w", expanded ? "200px" : "3.5rem");
   }, [expanded]);
 
@@ -64,8 +61,8 @@ export default function AppHeader({ email }: { email: string }) {
 
   return (
     <div>
-      {/* Top Navbar */}
-      <header className="sticky bg-[#2D3748] top-0 z-[70] flex h-14 items-center justify-between px-4">
+      {/* Top Navbar (now truly fixed) */}
+      <header className="fixed inset-x-0 top-0 z-[80] flex h-14 items-center justify-between px-4 bg-[#2D3748]">
         <div className="flex items-center gap-3">
           <Link href="/" aria-label="Go home" className="inline-flex">
             <Image
@@ -90,7 +87,6 @@ export default function AppHeader({ email }: { email: string }) {
           </Button>
         </div>
 
-        {/* Right: email + notifications + user menu */}
         <div className="flex items-center gap-2 sm:gap-3">
           <span className="hidden sm:inline text-sm font-medium text-white">
             {email || "—"}
@@ -110,7 +106,7 @@ export default function AppHeader({ email }: { email: string }) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full text-white  cursor-pointer bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
+                className="rounded-full text-white cursor-pointer bg-gray-900 hover:bg-gray-700 hover:text-gray-50"
                 aria-label="User menu"
               >
                 <UserIcon className="h-5 w-5" />
@@ -123,14 +119,14 @@ export default function AppHeader({ email }: { email: string }) {
 
               <DropdownMenuItem asChild>
                 <Link href="/profile" className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white">
-                  <UserIcon className="mr-2 h-4 w-4 hover:text-white" />
+                  <UserIcon className="mr-2 h-4 w-4" />
                   <span>Profile</span>
                 </Link>
               </DropdownMenuItem>
 
               <DropdownMenuItem asChild>
                 <Link href="/regulations/buyer" className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white">
-                  <FileText className="mr-2 h-4 w-4 hover:text-white" />
+                  <FileText className="mr-2 h-4 w-4" />
                   <span>Regulations</span>
                 </Link>
               </DropdownMenuItem>
@@ -150,10 +146,11 @@ export default function AppHeader({ email }: { email: string }) {
         </div>
       </header>
 
-      {/* Single sidebar that collapses/expands (no overlay; body stays interactive) */}
+      {/* Sidebar follows header height via CSS var */}
       <aside
-        className={`fixed left-0 top-14 z-[60] h-[100vh] bg-[#2D3748] text-white
+        className={`fixed left-0 z-[60] h-[100vh] bg-[#2D3748] text-white
                     transition-[width] duration-200 ${expanded ? "w-[200px]" : "w-14"}`}
+        style={{ top: "var(--header-h)" }}   // replaces top-14
         aria-label="Main navigation"
       >
         <nav className="flex h-full flex-col gap-1 py-2">
@@ -172,7 +169,6 @@ export default function AppHeader({ email }: { email: string }) {
                             ${active ? "bg-[#619aab] text-white" : "hover:bg-gray-700"}`}
               >
                 <Icon className="h-8 w-5" />
-                {/* Show/hide text smoothly when expanding/collapsing */}
                 <span
                   className={`overflow-hidden whitespace-nowrap
                               transition-[opacity,margin] duration-200
@@ -186,13 +182,15 @@ export default function AppHeader({ email }: { email: string }) {
         </nav>
       </aside>
 
-      {/* Global push rules (content always uses current --sidebar-w) */}
+      {/* Global spacing rules */}
       <style jsx global>{`
         :root {
-          --sidebar-w: 3.5rem; /* default collapsed */
+          --sidebar-w: 3.5rem;  /* collapsed width default */
+          --header-h: 3.5rem;   /* equals h-14, keeps layout in sync */
         }
         .app-content {
           margin-left: var(--sidebar-w);
+          padding-top: var(--header-h); /* ensures content starts below fixed header */
           transition: margin-left 200ms ease;
         }
       `}</style>
