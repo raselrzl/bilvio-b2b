@@ -21,6 +21,10 @@ model User {
   city        String
   zipCode     String
 
+  firstName         String?
+  lastName          String?
+  companyWebsiteUrl String?
+
   userConcent Boolean @default(false)
 
   userType       UserType       @default(USER)
@@ -30,6 +34,8 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+
 }
 
 enum UserType {

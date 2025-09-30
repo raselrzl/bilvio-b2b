@@ -21,9 +21,9 @@ export default async function Profile() {
       zipCode: true,
       city: true,
       country: true,
-      // firstName: true,
-      // lastName: true,
-      // companySiteUrl: true,
+      firstName: true,
+      lastName: true,
+      companyWebsiteUrl: true,
     },
   });
 
@@ -56,8 +56,8 @@ export default async function Profile() {
   })();
 
   const userRows: Array<{ label: string; value: string }> = [
-    { label: "First name", value: "—" /* dash(user.firstName) */ },
-    { label: "Last name", value: "—" /* dash(user.lastName) */ },
+    { label: "First name", value: dash(user.firstName) },
+    { label: "Last name", value: dash(user.lastName)},
     { label: "Email", value: dash(user.email) },
     { label: "Phone number", value: dash(user.phone) },
   ];
@@ -69,8 +69,8 @@ export default async function Profile() {
     { label: "Post code", value: dash(user.zipCode) },
     { label: "City", value: dash(user.city) },
     { label: "Country", value: dash(user.country) },
-    { label: "Currency", value: currency }, // ← here
-    { label: "Company site URL", value: "—" /* dash(user.companySiteUrl) */ },
+    { label: "Currency", value: currency },
+    { label: "Company site URL", value: dash(user.companyWebsiteUrl) }
   ];
 
   return (

@@ -1,17 +1,19 @@
 // app/profile/change-password/page.tsx
 import { changePasswordAction } from "@/app/actions";
-import SubmitButton from "./SubmitButton";
+import SubmitButton from "../../../../components/general/SubmitButton";
 import ClientPasswordRequired from "./ClientPasswordRequired";
 
 export const metadata = { title: "Change Password • Bilvio" };
 
-export default function ChangePassword({
+export default async function ChangePassword({
   searchParams,
 }: {
-  searchParams?: { ok?: string; error?: string };
+  searchParams: Promise<{ ok?: string; error?: string }>;
 }) {
-  const ok = searchParams?.ok === "1";
-  const error = searchParams?.error ?? "";
+  const sp = await searchParams;
+  const ok = sp?.ok === "1";
+  const error = sp?.error ?? "";
+
 
   return (
     <div className="max-w-7xl p-2 m-2 sm:mx-6 md:mx-8 lg:mx-auto">

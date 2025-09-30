@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma } from "./utils/db";
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 const registerSchema = z.object({
   email: z.string().email("Enter a valid e-mail address."),
@@ -76,6 +77,9 @@ export async function registerUserAction(raw: RegisterPayload) {
     console.error(e);
     return { ok: false, errors: { form: ["Unexpected error. Please try again."] } };
   }
+
+  revalidatePath("/register");
+  revalidatePath("/");
 
   redirect("/login");
 }
@@ -179,5 +183,61 @@ export async function changePasswordAction(formData: FormData) {
   redirect("/profile");
 }
 
+
+const updateProfileBasicsSchema = z.object({
+  firstName: z.string().min(1, "First name is required."),
+  lastName: z.string().min(1, "Last name is required."),
+  phone: z.string().min(1, "Phone number is required."),
+  companyWebsiteUrl: z
+    .string()
+    .trim()
+    .optional()
+    .transform(v => (v ?? "").trim())
+    .refine(v => v === "" || /^https?:\/\/\S+$/i.test(v), {
+      message: "Enter a valid URL (include http:// or https://).",
+    }),
+});
+
+export async function updateProfileBasicsAction(formData: FormData) {
+  const jar = await cookies();
+  const email = jar.get("bilvio_session")?.value ?? "";
+  if (!email) redirect("/login");
+
+  const input = {
+    firstName: String(formData.get("firstName") ?? "").trim(),
+    lastName: String(formData.get("lastName") ?? "").trim(),
+    phone: String(formData.get("phone") ?? "").trim(),
+    companyWebsiteUrl: String(formData.get("companyWebsiteUrl") ?? "").trim(),
+  };
+
+  const parsed = updateProfileBasicsSchema.safeParse(input);
+  if (!parsed.success) {
+    const first = parsed.error.issues[0]?.message ?? "Invalid input.";
+    redirect(`/profile/edit?error=${encodeURIComponent(first)}`);
+  }
+
+  try {
+    await prisma.user.update({
+      where: { email },
+      data: {
+        firstName: parsed.data.firstName,
+        lastName: parsed.data.lastName,
+        phone: parsed.data.phone,
+        companyWebsiteUrl: parsed.data.companyWebsiteUrl || null,
+      },
+    });
+  } catch (e: any) {
+    if (e?.code === "P2002" && Array.isArray(e?.meta?.target) && e.meta.target.includes("phone")) {
+      redirect(`/profile/edit?error=${encodeURIComponent("Phone number already in use.")}`);
+    }
+    throw e;
+  }
+
+  revalidatePath("/profile");
+  revalidatePath("/profile/edit");
+  revalidatePath("/");
+
+  redirect("/profile");
+}
 
 
