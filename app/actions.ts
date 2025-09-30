@@ -81,7 +81,7 @@ export async function registerUserAction(raw: RegisterPayload) {
   revalidatePath("/register");
   revalidatePath("/");
 
-  redirect("/login");
+  redirect(`/login?ok=1&msg=${encodeURIComponent("Registered successfully. You can sign in now.")}`);
 }
 
 
@@ -180,7 +180,8 @@ export async function changePasswordAction(formData: FormData) {
     data: { password: data.password }, // plain text per your current schema
   });
 
-  redirect("/profile");
+  redirect(`/profile?ok=1&msg=${encodeURIComponent("Password changed successfully.")}`);
+
 }
 
 
@@ -237,7 +238,7 @@ export async function updateProfileBasicsAction(formData: FormData) {
   revalidatePath("/profile/edit");
   revalidatePath("/");
 
-  redirect("/profile");
+  redirect(`/profile?ok=1&msg=${encodeURIComponent("Profile updated successfully.")}`);
 }
 
 

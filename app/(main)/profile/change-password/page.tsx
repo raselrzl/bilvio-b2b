@@ -2,6 +2,7 @@
 import { changePasswordAction } from "@/app/actions";
 import SubmitButton from "../../../../components/general/SubmitButton";
 import ClientPasswordRequired from "./ClientPasswordRequired";
+import Toast from "@/components/general/Toast";
 
 export const metadata = { title: "Change Password • Bilvio" };
 
@@ -27,9 +28,7 @@ export default async function ChangePassword({
       </header>
 
       <section className=" bg-white border shadow-sm p-4 mt-4 sm:mx-6 md:mx-8 lg:mx-auto">
-        {ok && (
-          <p className="mt-4 text-green-700">Password changed successfully.</p>
-        )}
+               
         {!!error && (
           <p className="mt-4 text-red-600">{decodeURIComponent(error)}</p>
         )}

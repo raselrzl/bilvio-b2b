@@ -1,4 +1,5 @@
 import { prisma } from "@/app/utils/db";
+import Toast from "@/components/general/Toast";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -75,6 +76,7 @@ export default async function Profile() {
 
   return (
     <section className="max-w-7xl mx-auto w-full">
+      <Toast />
       {/* Title outside tables */}
       <h1 className="text-2xl md:text-3xl font-extrabold m-4">Profile</h1>
 
