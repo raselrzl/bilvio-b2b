@@ -79,7 +79,7 @@ export default async function ChangePassword({
           </label>
 
           <div className="pt-2 md:col-span-2">
-            <SubmitButton />
+            <SubmitButton text="Update"/>
           </div>
 
           {/* mounts required-message logic without changing layout */}

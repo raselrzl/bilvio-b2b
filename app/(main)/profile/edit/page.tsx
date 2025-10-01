@@ -106,7 +106,7 @@ export default async function EditProfile({
           </label>
 
           <div className="pt-2 md:col-span-2">
-            <SubmitButton />
+            <SubmitButton text="Update" />
           </div>
         </form>
       </section>
