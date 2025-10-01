@@ -58,7 +58,7 @@ export default async function Profile() {
 
   const userRows: Array<{ label: string; value: string }> = [
     { label: "First name", value: dash(user.firstName) },
-    { label: "Last name", value: dash(user.lastName)},
+    { label: "Last name", value: dash(user.lastName) },
     { label: "Email", value: dash(user.email) },
     { label: "Phone number", value: dash(user.phone) },
   ];
@@ -71,7 +71,7 @@ export default async function Profile() {
     { label: "City", value: dash(user.city) },
     { label: "Country", value: dash(user.country) },
     { label: "Currency", value: currency },
-    { label: "Company site URL", value: dash(user.companyWebsiteUrl) }
+    { label: "Company site URL", value: dash(user.companyWebsiteUrl) },
   ];
 
   return (
