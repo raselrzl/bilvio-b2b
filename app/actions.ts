@@ -6,30 +6,34 @@ import { prisma } from "./utils/db";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-const registerSchema = z.object({
-  email: z.string().email("Enter a valid e-mail address."),
-  password: z.string()
-    .min(8, "Min. 8 characters, with upper, lower, and a number.")
-    .regex(/[a-z]/, "Password must include a lowercase letter.")
-    .regex(/[A-Z]/, "Password must include an uppercase letter.")
-    .regex(/\d/, "Password must include a number."),
-  confirm: z.string().min(1, "Please confirm your password."),
-  intent: z.enum(["sales", "purchases"]),
-  taxNumber: z.string().min(1, "Tax number is required."),
-  companyName: z.string().min(1, "Company name is required."),
-  phone: z.string().min(1, "Phone number is required."),
-  street: z.string().min(1, "Street is required."),
-  country: z.string().min(1, "Country is required."),
-  city: z.string().min(1, "City is required."),
-  zip: z.string().min(1, "Zip code is required."),
-  userConcent: z
-    .boolean()
-    .refine(v => v === true, { message: "You must agree to the regulation." }),
-}).refine(d => d.password === d.confirm, {
-  message: "Passwords do not match.",
-  path: ["confirm"],
-});
-
+const registerSchema = z
+  .object({
+    email: z.string().email("Enter a valid e-mail address."),
+    password: z
+      .string()
+      .min(8, "Min. 8 characters, with upper, lower, and a number.")
+      .regex(/[a-z]/, "Password must include a lowercase letter.")
+      .regex(/[A-Z]/, "Password must include an uppercase letter.")
+      .regex(/\d/, "Password must include a number."),
+    confirm: z.string().min(1, "Please confirm your password."),
+    intent: z.enum(["sales", "purchases"]),
+    taxNumber: z.string().min(1, "Tax number is required."),
+    companyName: z.string().min(1, "Company name is required."),
+    phone: z.string().min(1, "Phone number is required."),
+    street: z.string().min(1, "Street is required."),
+    country: z.string().min(1, "Country is required."),
+    city: z.string().min(1, "City is required."),
+    zip: z.string().min(1, "Zip code is required."),
+    userConcent: z
+      .boolean()
+      .refine((v) => v === true, {
+        message: "You must agree to the regulation.",
+      }),
+  })
+  .refine((d) => d.password === d.confirm, {
+    message: "Passwords do not match.",
+    path: ["confirm"],
+  });
 
 export type RegisterPayload = z.infer<typeof registerSchema>;
 
@@ -75,18 +79,21 @@ export async function registerUserAction(raw: RegisterPayload) {
       return { ok: false, errors };
     }
     console.error(e);
-    return { ok: false, errors: { form: ["Unexpected error. Please try again."] } };
+    return {
+      ok: false,
+      errors: { form: ["Unexpected error. Please try again."] },
+    };
   }
 
   revalidatePath("/register");
   revalidatePath("/");
 
-  redirect(`/login?ok=1&msg=${encodeURIComponent("Registered successfully. You can sign in now.")}`);
+  redirect(
+    `/login?ok=1&msg=${encodeURIComponent(
+      "Registered successfully. You can sign in now."
+    )}`
+  );
 }
-
-
-
-
 
 const SESSION_TTL_SECONDS = 60 * 60 * 24;
 
@@ -120,13 +127,11 @@ export async function loginUserAction(input: z.infer<typeof loginSchema>) {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: SESSION_TTL_SECONDS, 
+    maxAge: SESSION_TTL_SECONDS,
   });
 
   redirect("/");
 }
-
-
 
 export async function logoutAction() {
   const jar = await cookies();
@@ -134,20 +139,21 @@ export async function logoutAction() {
   redirect("/login");
 }
 
-
-const changePasswordSchema = z.object({
-  current: z.string().min(1, "Current password is required."),
-  password: z
-    .string()
-    .min(8, "Min. 8 characters, with upper, lower, and a number.")
-    .regex(/[a-z]/, "Password must include a lowercase letter.")
-    .regex(/[A-Z]/, "Password must include an uppercase letter.")
-    .regex(/\d/, "Password must include a number."),
-  confirm: z.string().min(1, "Please confirm your password."),
-}).refine(d => d.password === d.confirm, {
-  path: ["confirm"],
-  message: "Passwords do not match.",
-});
+const changePasswordSchema = z
+  .object({
+    current: z.string().min(1, "Current password is required."),
+    password: z
+      .string()
+      .min(8, "Min. 8 characters, with upper, lower, and a number.")
+      .regex(/[a-z]/, "Password must include a lowercase letter.")
+      .regex(/[A-Z]/, "Password must include an uppercase letter.")
+      .regex(/\d/, "Password must include a number."),
+    confirm: z.string().min(1, "Please confirm your password."),
+  })
+  .refine((d) => d.password === d.confirm, {
+    path: ["confirm"],
+    message: "Passwords do not match.",
+  });
 
 export async function changePasswordAction(formData: FormData) {
   const jar = await cookies();
@@ -172,7 +178,11 @@ export async function changePasswordAction(formData: FormData) {
   });
 
   if (!user || user.password !== data.current) {
-    redirect(`/profile/change-password?error=${encodeURIComponent("Current password is incorrect.")}`);
+    redirect(
+      `/profile/change-password?error=${encodeURIComponent(
+        "Current password is incorrect."
+      )}`
+    );
   }
 
   await prisma.user.update({
@@ -180,10 +190,10 @@ export async function changePasswordAction(formData: FormData) {
     data: { password: data.password }, // plain text per your current schema
   });
 
-  redirect(`/profile?ok=1&msg=${encodeURIComponent("Password changed successfully.")}`);
-
+  redirect(
+    `/profile?ok=1&msg=${encodeURIComponent("Password changed successfully.")}`
+  );
 }
-
 
 const updateProfileBasicsSchema = z.object({
   firstName: z.string().min(1, "First name is required."),
@@ -193,8 +203,8 @@ const updateProfileBasicsSchema = z.object({
     .string()
     .trim()
     .optional()
-    .transform(v => (v ?? "").trim())
-    .refine(v => v === "" || /^https?:\/\/\S+$/i.test(v), {
+    .transform((v) => (v ?? "").trim())
+    .refine((v) => v === "" || /^https?:\/\/\S+$/i.test(v), {
       message: "Enter a valid URL (include http:// or https://).",
     }),
 });
@@ -228,8 +238,16 @@ export async function updateProfileBasicsAction(formData: FormData) {
       },
     });
   } catch (e: any) {
-    if (e?.code === "P2002" && Array.isArray(e?.meta?.target) && e.meta.target.includes("phone")) {
-      redirect(`/profile/edit?error=${encodeURIComponent("Phone number already in use.")}`);
+    if (
+      e?.code === "P2002" &&
+      Array.isArray(e?.meta?.target) &&
+      e.meta.target.includes("phone")
+    ) {
+      redirect(
+        `/profile/edit?error=${encodeURIComponent(
+          "Phone number already in use."
+        )}`
+      );
     }
     throw e;
   }
@@ -238,7 +256,7 @@ export async function updateProfileBasicsAction(formData: FormData) {
   revalidatePath("/profile/edit");
   revalidatePath("/");
 
-  redirect(`/profile?ok=1&msg=${encodeURIComponent("Profile updated successfully.")}`);
+  redirect(
+    `/profile?ok=1&msg=${encodeURIComponent("Profile updated successfully.")}`
+  );
 }
-
-
