@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { logoutAction } from "../actions";
+import Image from "next/image";
 
 export default async function Home() {
   const jar = await cookies();
@@ -9,10 +10,22 @@ export default async function Home() {
   const isAuthed = Boolean(raw && raw !== "undefined" && raw !== "null");
 
   return (
-    <div className="text-center">
-      <p className="text-xl uppercase font-bold">BILVIO Under development</p>
+    <div className="flex items-center justify-center text-center">
 
-      <div className="mt-4 flex flex-col items-center">
+       <Link href="/" className="flex items-center gap-2" aria-label="Go to homepage">
+          <Image
+            src="/log1.png"
+            alt="Logo"
+            width={200}
+            height={100}
+            priority
+            className="h-18 w-auto"
+          />
+        </Link>
+        
+      <p className="text-xl uppercase font-bold">Under development</p>
+
+    {/*   <div className="mt-4 flex flex-col items-center">
         <span>Currently working on login page, click here to check{" "}</span>
 
         {!isAuthed ? (
@@ -53,7 +66,7 @@ export default async function Home() {
         >
           Terms
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 }
