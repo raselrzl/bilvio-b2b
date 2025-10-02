@@ -19,7 +19,7 @@ export default async function Home() {
             width={200}
             height={100}
             priority
-            className="h-18 w-auto"
+            className="h-20 w-auto"
           />
         </Link>
         
