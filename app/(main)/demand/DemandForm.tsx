@@ -24,22 +24,22 @@ export default function CreateDemandForm({
   resetText?: string;
   defaultValues?: Partial<{
     make: string;
-    gearbox: "AUTOMATIC" | "manual";
+    gearbox: "automatic" | "manual";
     fuel: "diesel" | "electric" | "LPG";
     priceFrom: number | string;
     priceTo: number | string;
     demand: number | string;
-    status: "DRAFT" | "ACTIVE";
+    status: "draft" | "active";
   }>;
 }) {
   const [make, setMake] = useState<string | undefined>(defaultValues?.make);
-  const [gearbox, setGearbox] = useState<"AUTOMATIC" | "manual" | undefined>(
+  const [gearbox, setGearbox] = useState<"automatic" | "manual" | undefined>(
     defaultValues?.gearbox
   );
   const [fuel, setFuel] = useState<"diesel" | "electric" | "LPG" | undefined>(
     defaultValues?.fuel
   );
-  const [status, setStatus] = useState<"DRAFT" | "ACTIVE" | undefined>(
+  const [status, setStatus] = useState<"draft" | "active" | undefined>(
     defaultValues?.status
   );
 
@@ -59,14 +59,14 @@ export default function CreateDemandForm({
 
     const payload = {
       make: (data.get("make") as string) || undefined,
-      gearbox: (data.get("gearbox") as "AUTOMATIC" | "manual") || undefined,
+      gearbox: (data.get("gearbox") as "automatic" | "manual") || undefined,
       fuel: (data.get("fuel") as "diesel" | "electric" | "LPG") || undefined,
       priceFrom: data.get("priceFrom")
         ? Number(data.get("priceFrom"))
         : undefined,
       priceTo: data.get("priceTo") ? Number(data.get("priceTo")) : undefined,
       demand: data.get("demand") ? Number(data.get("demand")) : undefined,
-      status: (data.get("status") as "DRAFT" | "active") || undefined,
+      status: (data.get("status") as "draft" | "active") || undefined,
     };
 
     // eslint-disable-next-line no-console
@@ -117,7 +117,7 @@ export default function CreateDemandForm({
               <SelectValue placeholder="Gearbox type" />
             </SelectTrigger>
             <SelectContent className="rounded-xs">
-              <SelectItem value="AUTOMATIC">AUTOMATIC</SelectItem>
+              <SelectItem value="automatic">automatic</SelectItem>
               <SelectItem value="manual">manual</SelectItem>
             </SelectContent>
           </Select>
@@ -197,8 +197,8 @@ export default function CreateDemandForm({
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent className="rounded-xs">
-              <SelectItem value="DRAFT">DRAFT</SelectItem>
-              <SelectItem value="ACTIVE">ACTIVE</SelectItem>
+              <SelectItem value="draft">draft</SelectItem>
+              <SelectItem value="active">active</SelectItem>
             </SelectContent>
           </Select>
         </div>
