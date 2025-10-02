@@ -24,22 +24,22 @@ export default function CreateDemandForm({
   resetText?: string;
   defaultValues?: Partial<{
     make: string;
-    gearbox: "automatic" | "manual";
+    gearbox: "AUTOMATIC" | "manual";
     fuel: "diesel" | "electric" | "LPG";
     priceFrom: number | string;
     priceTo: number | string;
     demand: number | string;
-    status: "draft" | "active";
+    status: "DRAFT" | "ACTIVE";
   }>;
 }) {
   const [make, setMake] = useState<string | undefined>(defaultValues?.make);
-  const [gearbox, setGearbox] = useState<"automatic" | "manual" | undefined>(
+  const [gearbox, setGearbox] = useState<"AUTOMATIC" | "manual" | undefined>(
     defaultValues?.gearbox
   );
   const [fuel, setFuel] = useState<"diesel" | "electric" | "LPG" | undefined>(
     defaultValues?.fuel
   );
-  const [status, setStatus] = useState<"draft" | "active" | undefined>(
+  const [status, setStatus] = useState<"DRAFT" | "ACTIVE" | undefined>(
     defaultValues?.status
   );
 
@@ -59,14 +59,14 @@ export default function CreateDemandForm({
 
     const payload = {
       make: (data.get("make") as string) || undefined,
-      gearbox: (data.get("gearbox") as "automatic" | "manual") || undefined,
+      gearbox: (data.get("gearbox") as "AUTOMATIC" | "manual") || undefined,
       fuel: (data.get("fuel") as "diesel" | "electric" | "LPG") || undefined,
       priceFrom: data.get("priceFrom")
         ? Number(data.get("priceFrom"))
         : undefined,
       priceTo: data.get("priceTo") ? Number(data.get("priceTo")) : undefined,
       demand: data.get("demand") ? Number(data.get("demand")) : undefined,
-      status: (data.get("status") as "draft" | "active") || undefined,
+      status: (data.get("status") as "DRAFT" | "active") || undefined,
     };
 
     // eslint-disable-next-line no-console
@@ -97,7 +97,7 @@ export default function CreateDemandForm({
             >
               <SelectValue placeholder="Make name" />
             </SelectTrigger>
-            <SelectContent className="max-h-72">
+            <SelectContent className="max-h-72 rounded-xs">
               <SelectItem value="AUDI">AUDI</SelectItem>
               <SelectItem value="BMW">BMW</SelectItem>
               <SelectItem value="EVO">EVO</SelectItem>
@@ -116,8 +116,8 @@ export default function CreateDemandForm({
             >
               <SelectValue placeholder="Gearbox type" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="automatic">automatic</SelectItem>
+            <SelectContent className="rounded-xs">
+              <SelectItem value="AUTOMATIC">AUTOMATIC</SelectItem>
               <SelectItem value="manual">manual</SelectItem>
             </SelectContent>
           </Select>
@@ -133,7 +133,7 @@ export default function CreateDemandForm({
             >
               <SelectValue placeholder="Fuel type" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-xs">
               <SelectItem value="diesel">diesel</SelectItem>
               <SelectItem value="electric">electric</SelectItem>
               <SelectItem value="LPG">LPG</SelectItem>
@@ -196,9 +196,9 @@ export default function CreateDemandForm({
             >
               <SelectValue placeholder="Status" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="draft">draft</SelectItem>
-              <SelectItem value="active">active</SelectItem>
+            <SelectContent className="rounded-xs">
+              <SelectItem value="DRAFT">DRAFT</SelectItem>
+              <SelectItem value="ACTIVE">ACTIVE</SelectItem>
             </SelectContent>
           </Select>
         </div>
