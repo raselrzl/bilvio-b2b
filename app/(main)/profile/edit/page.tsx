@@ -102,7 +102,7 @@ export default async function EditProfile({
               defaultValue={user.companyWebsiteUrl ?? ""}
               className="w-full border h-9 border-gray-300 bg-white px-3 py-2 rounded-none focus:outline-none focus:ring-2 focus:ring-green-500"
             />
-            <span className="text-xs">Include http:// or https://</span>
+            <span className="text-xs">example.com</span>
           </label>
 
           <div className="pt-2 md:col-span-2">
