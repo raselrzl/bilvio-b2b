@@ -251,7 +251,8 @@ export default function AppHeader({ email }: { email: string }) {
                       }`}
                   >
                     {label}
-                    <span className="ml-3">{">"}</span>
+                    {expanded && offersOpen ?(<span className="ml-6 text-white text-xl">{"⤻"}</span>):(<span className="ml-6 text-white text-xl">{"⤼"}</span>)}
+                    
                   </span>
                 </Link>
 

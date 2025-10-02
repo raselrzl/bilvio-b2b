@@ -96,7 +96,7 @@ export default async function EditProfile({
           <label className="grid gap-1 md:col-span-2 min-w-0">
             <span className="text-sm font-medium">Company Website URL (optional)</span>
             <input
-              type="url"
+              type="string"
               name="companyWebsiteUrl"
               placeholder="https://example.com"
               defaultValue={user.companyWebsiteUrl ?? ""}

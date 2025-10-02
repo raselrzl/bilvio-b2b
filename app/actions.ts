@@ -200,13 +200,15 @@ const updateProfileBasicsSchema = z.object({
   lastName: z.string().min(1, "Last name is required."),
   phone: z.string().min(1, "Phone number is required."),
   companyWebsiteUrl: z
-    .string()
-    .trim()
-    .optional()
-    .transform((v) => (v ?? "").trim())
-    .refine((v) => v === "" || /^https?:\/\/\S+$/i.test(v), {
-      message: "Enter a valid URL (include http:// or https://).",
-    }),
+  .string()
+  .trim()
+  .optional()
+  .refine((v) => {
+    if (!v) return true; // Allow empty
+    return /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v); // Basic domain pattern
+  }, {
+    message: "Enter a valid website (e.g., example.com)",
+  }),
 });
 
 export async function updateProfileBasicsAction(formData: FormData) {
