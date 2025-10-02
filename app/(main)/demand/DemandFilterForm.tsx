@@ -13,7 +13,7 @@ import {
 import { X } from "lucide-react";
 import SubmitButton from "@/components/general/SubmitButton";
 
-export default function CreateDemandForm({
+export default function DemandFilterForm({
   action, // optional; if omitted we console.log on client
   applyText = "Apply",
   resetText = "Reset",

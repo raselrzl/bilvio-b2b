@@ -1,5 +1,5 @@
 import Link from "next/link";
-import CreateDemandForm from "./DemandForm";
+import CreateDemandForm from "./DemandFilterForm";
 import { Button } from "@/components/ui/button";
 import { FileWarningIcon, PlusCircle } from "lucide-react";
 import Error from "next/error";
@@ -10,7 +10,7 @@ export default function DemandPage() {
   return (
     <div className="max-w-7xl mx-auto w-full">
       {/* Header row: same horizontal padding as content below */}
-      <div className="flex items-center justify-between pl-8 px-8 sm:px-4 md:px-6 mt-4">
+      <div className="flex items-center justify-between px-2 sm:px-4 md:px-6 mt-4">
         <h1 className="text-2xl md:text-3xl font-extrabold ">Demands</h1>
 
         <Link href="/buyer/offers/create">
