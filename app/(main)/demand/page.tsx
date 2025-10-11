@@ -1,8 +1,7 @@
 import Link from "next/link";
 import CreateDemandForm from "./DemandFilterForm";
 import { Button } from "@/components/ui/button";
-import { FileWarningIcon, PlusCircle, TriangleAlert } from "lucide-react";
-import Error from "next/error";
+import { PlusCircle, TriangleAlert } from "lucide-react";
 
 export const metadata = { title: "Demand • Bilvio" };
 
@@ -34,7 +33,7 @@ export default function DemandPage() {
       <div className="px-2 sm:px-4 md:px-6 mt-4">
         <div className="bg-amber-100 border-1 border-amber-300 shadow-sm p-4">
           <div className="flex flex-col md:flex-row justify-center items-center text-amber-600">
-            <TriangleAlert className="mr-4"/>
+            <TriangleAlert className="mr-4" />
             <p>
               Unfortunatetly you did not create any demands that meet your
               criteria{" "}

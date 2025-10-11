@@ -17,10 +17,12 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
 
   const [errors, setErrors] = useState<Errors>({});
-  const [touched, setTouched] = useState<{ email: boolean; password: boolean }>({
-    email: false,
-    password: false,
-  });
+  const [touched, setTouched] = useState<{ email: boolean; password: boolean }>(
+    {
+      email: false,
+      password: false,
+    }
+  );
   const [submitted, setSubmitted] = useState(false);
 
   const search = useSearchParams();
@@ -75,19 +77,27 @@ export default function LoginForm() {
   }
 
   const showEmailError = (touched.email || submitted) && !!errors.email;
-  const showPasswordError = (touched.password || submitted) && !!errors.password;
+  const showPasswordError =
+    (touched.password || submitted) && !!errors.password;
 
   return (
     <div className="w-full px-8 md:pl-32">
       <h1 className="text-4xl uppercase font-extrabold mb-10">Login</h1>
 
-      <form onSubmit={onSubmit} className="grid gap-4" aria-busy={loading} noValidate>
+      <form
+        onSubmit={onSubmit}
+        className="grid gap-4"
+        aria-busy={loading}
+        noValidate
+      >
         {/* Email */}
         <div className="grid gap-1.5 group">
           <Label
             htmlFor="email"
             className={`transition-colors ${
-              showEmailError ? "text-red-600" : "group-focus-within:text-blue-600"
+              showEmailError
+                ? "text-red-600"
+                : "group-focus-within:text-blue-600"
             }`}
           >
             *Email
@@ -121,7 +131,9 @@ export default function LoginForm() {
           <Label
             htmlFor="password"
             className={`transition-colors ${
-              showPasswordError ? "text-red-600" : "group-focus-within:text-blue-600"
+              showPasswordError
+                ? "text-red-600"
+                : "group-focus-within:text-blue-600"
             }`}
           >
             *Password
@@ -144,7 +156,11 @@ export default function LoginForm() {
             className={inputCls(!!password, showPasswordError)}
           />
           {showPasswordError && (
-            <p id="password-error" role="alert" className="text-sm text-red-600">
+            <p
+              id="password-error"
+              role="alert"
+              className="text-sm text-red-600"
+            >
               {errors.password}
             </p>
           )}
@@ -153,7 +169,10 @@ export default function LoginForm() {
         {/* Forgot link */}
         <p className="text-sm text-muted-foreground text-right">
           Can’t log in?{" "}
-          <Link href="/reset-password" className="text-black hover:text-black/75 font-bold underline">
+          <Link
+            href="/reset-password"
+            className="text-black hover:text-black/75 font-bold underline"
+          >
             Reset password
           </Link>
         </p>
@@ -166,7 +185,10 @@ export default function LoginForm() {
             disabled={loading}
           >
             {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <>
+                {" "}
+                Login <Loader2 className="h-4 w-4 animate-spin" />
+              </>
             ) : (
               <>
                 Login
@@ -179,7 +201,10 @@ export default function LoginForm() {
         {/* Register link */}
         <p className="text-sm text-muted-foreground text-center">
           Don’t have account?{" "}
-          <Link href="/register" className="text-black hover:text-black/75 font-bold underline">
+          <Link
+            href="/register"
+            className="text-black hover:text-black/75 font-bold underline"
+          >
             Register
           </Link>
         </p>
