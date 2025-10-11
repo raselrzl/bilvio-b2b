@@ -63,7 +63,7 @@ export default function OrdersPage() {
       </div>
 
       {/* Filter Form */}
-      <div className="px-2 sm:px-4 md:px-6 mt-4 bg-gray-600 mx-2">
+      <div className="px-2 sm:px-4 md:px-6 mt-4 bg-gray-500 mx-2">
         <div className="p-4">
           <OrderFilterForm onFilterChange={(f) => setFilters(f)} />
         </div>
