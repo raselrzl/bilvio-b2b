@@ -633,12 +633,12 @@ const Article10: React.FC = () => (
 const Annexes: React.FC = () => (
   <article id="annexes" className="space-y-3 text-justify">
     <h2 className="text-xl font-bold">ANNEXES</h2>
-    <ul className="list-disc pl-6 space-y-1">
+    <ul className="list-disc pl-6 space-y-1 text-xs">
       <li>Attachment No. 1 – Fees and Provisions</li>
       <li>Attachment No. 2 – Privacy and Cookie Policy</li>
     </ul>
 
-    <h3 className="text-lg font-semibold">
+    <h3 className="text-sm font-semibold">
       Attachment No. 1 – Fees and Provisions
     </h3>
     <p className="text-justify text-sm">
