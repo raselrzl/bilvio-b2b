@@ -114,14 +114,14 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       {/* Article 1 */}
       <article id="article-1" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">Article 1. General provisions</h2>
-        <p>
+        <p className="text-sm">
           These Terms and Conditions of the Bilvio Platform for Buyers
           (hereinafter the &quot;Terms and Conditions&quot;) set out the rules
           for using the transaction platform operated on the Bilvio domain
           (hereinafter the &quot;Bilvio Platform&quot;), including submitting
           bids and completing purchases.
         </p>
-        <p>
+        <p className="text-sm">
           The operator of the Bilvio Platform is Bilvio Europe OÜ, a company
           under Estonian law with its registered office in Tallinn, registered
           address: Lõõtsa 2b, 11415 Tallinn, Estonia, entered in the register
@@ -129,13 +129,13 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
           capital of 1,000,000 euros, tax identification number: EE102562446
           (hereinafter the &quot;Operator&quot; or &quot;Seller&quot;).
         </p>
-        <p>
+        <p className="text-sm">
           The Operator provides services to users of the Bilvio Platform
           (hereinafter &quot;Users&quot; or &quot;Buyers&quot;) in electronic
           form, including the paid services listed in Appendix No. 1 of these
           Terms and Conditions.
         </p>
-        <p>
+        <p className="text-sm">
           The Bilvio Platform can only be used via a device with Internet access
           and a standard browser (Internet Explorer, Microsoft Edge, Google
           Chrome, Mozilla Firefox, Opera or Safari) in their current versions.
@@ -147,14 +147,14 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       {/* Article 2 */}
       <article id="article-2" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">Article 2. Account registration</h2>
-        <p>
+        <p className="text-sm">
           Only persons who carry out business activities may become Users. An
           entrepreneur is any natural or legal person who, in contracts to which
           these Terms and Conditions apply, acts for purposes related to their
           business or professional activities. All actions on behalf of Users
           may be performed exclusively by duly authorized representatives.
         </p>
-        <p>
+        <p className="text-sm">
           To use the functionalities of the Bilvio Platform and make purchases,
           the User must be registered (have an Account) by completing an
           electronic form on the Platform. If the User is also a
@@ -162,49 +162,49 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
           functionalities are combined within one account; the role depends on
           the objective nature of the action at a given moment.
         </p>
-        <p>
+        <p className="text-sm">
           When registering and using the Platform, the User must provide
           required, truthful data and statements. After submitting the form, the
           User will receive an e-mail describing how to confirm registration and
           other required information. After confirmation, the User can log in
           with the e-mail and password provided during registration.
         </p>
-        <p>
+        <p className="text-sm">
           Using automated solutions to access the Account or making the Account
           available to other persons is at the User’s own risk.
         </p>
-        <p>
+        <p className="text-sm">
           The contract for electronic services (Account creation) is concluded
           when the User gains access to the Account. The Account contains data
           provided in the registration form. The User must immediately update
           any changes via the appropriate form and is responsible for
           incomplete, outdated, or false data.
         </p>
-        <p>
+        <p className="text-sm">
           The User must keep the password secret and promptly notify the
           Operator of unauthorized access and circumstances. If the User
           violates the Terms and Conditions, law, or good practices (e.g.,
           provides false/incomplete data or uses Platform materials without
           consent), the Operator may terminate or suspend the contract.
         </p>
-        <p>
+        <p className="text-sm">
           It is prohibited to collect/process data from the Platform for
           transfer elsewhere, or to use the names &quot;Bilvio&quot; or the
           Operator’s distinctive graphics without consent.
         </p>
-        <p>
+        <p className="text-sm">
           The Operator may verify User data for identification or to confirm
           declarations of will, including by requesting documents or a bank
           transfer. For documents in languages other than Polish or English, an
           officially certified translation into Polish or English may be
           requested.
         </p>
-        <p>
+        <p className="text-sm">
           If the Operator has legitimate concerns about Account security or
           transactions (e.g., takeover, complaints, violations, or unpaid fees),
           the Operator may:
         </p>
-        <ul className="list-disc pl-6 space-y-1">
+        <ul className="list-disc pl-6 space-y-1 text-xs">
           <li>
             condition Account use on proving credibility/entrepreneur status or
             fulfilling an obligation,
@@ -214,12 +214,12 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
             suspend (deactivate) an Account for a fixed or indefinite period.
           </li>
         </ul>
-        <p>
+        <p className="text-sm">
           The Account is maintained for an indefinite period. The User may
           request cancellation at any time (via form or other verifiable
           method). The User may not terminate if the User:
         </p>
-        <ul className="list-disc pl-6 space-y-1">
+        <ul className="list-disc pl-6 space-y-1 text-xs">
           <li>has submitted/received an offer on the Platform,</li>
           <li>is completing a transaction,</li>
           <li>
@@ -233,19 +233,19 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
         <h2 className="text-xl font-bold">
           Article 3. Publication of the Order and Product Information
         </h2>
-        <p>
+        <p className="text-sm">
           The Platform publishes information about motor vehicles (the
           &quot;Products&quot;) and their sale/delivery terms. Selecting
           Products and confirming willingness to purchase is an offer to
           conclude a purchase contract (the &quot;Order&quot;).
         </p>
-        <p>
+        <p className="text-sm">
           The Buyer selects Products by adding them to a wish list and may
           search using filters. Inclusion in the wish list is not a reservation.
           If availability is exhausted before confirmation, the Order will not
           be accepted.
         </p>
-        <p>
+        <p className="text-sm">
           The Buyer must provide a complete, correct delivery address and a
           phone number that remains unchanged until delivery. The delivery
           address cannot be changed after placing the Order.
@@ -255,12 +255,12 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       {/* Article 4 */}
       <article id="article-4" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">Article 4. Transactions</h2>
-        <p>
+        <p className="text-sm">
           Purchases under the Account must be related to the Buyer’s business
           activity. By accepting the Product terms, the Buyer submits an offer
           to purchase.
         </p>
-        <p>
+        <p className="text-sm">
           After placing an Order, the Buyer receives an e-mail confirmation.
           Acceptance or rejection will be communicated no later than the end of
           the next business day (considering supplier or Operator holidays). The
@@ -268,7 +268,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
           Seller confirmation, a purchase contract (the &quot;Transaction&quot;)
           is concluded.
         </p>
-        <p>
+        <p className="text-sm">
           If the Seller cannot fulfill the contract due to unavailability,
           nondelivery, damage, or loss, the Seller will immediately inform the
           Buyer, withdraw, and return payments. The Buyer will be informed of
@@ -281,7 +281,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
         <h2 className="text-xl font-bold">
           Article 5. Deposit and Payment Transaction
         </h2>
-        <p>
+        <p className="text-sm">
           Payments are made to the Operator’s bank account specified in the
           Order confirmation. The Buyer must pay the deposit immediately after
           generation, but no later than within 2 business days, based on the
@@ -289,13 +289,13 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
           value (at least the value of one car). Failure to pay cancels the
           Order.
         </p>
-        <p>
+        <p className="text-sm">
           After deposit payment, the Operator issues a deposit invoice for the
           full Order amount. The Buyer must pay amounts in that invoice no later
           than 2 working days (payments may be divided by availability if all
           vehicles are not available simultaneously).
         </p>
-        <p>
+        <p className="text-sm">
           Purchases are documented by invoice. The Buyer consents to tax
           documents being made available in the Account and notified via e-mail.
           All payments/billing must use the bank accounts specified at
@@ -310,50 +310,50 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       {/* Article 6 */}
       <article id="article-6" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">Article 6. Delivery of Products</h2>
-        <p>
+        <p className="text-sm">
           The Operator organizes transport to the warehouse specified in the
           Order and prepares documents necessary to use the Product. The place
           of performance is where the Product will be collected (or should be
           collected per the Buyer’s decision).
         </p>
-        <p>
+        <p className="text-sm">
           The Buyer must provide via the Platform a copy of the CMR consignment
           note confirming delivery and acceptance protocols. Delivery time is
           stated in the Order summary with a tolerance of up to 30 business
           days, provided timely payment.
         </p>
-        <p>
+        <p className="text-sm">
           Products are delivered exclusively to addresses in countries/locations
           specified by the Seller. The Operator informs the Buyer of delivery
           details (date, transport, carrier).
         </p>
-        <p>
+        <p className="text-sm">
           Delivered at Place (DAP – Incoterms 2020) applies: the Operator is
           responsible for transport to the place designated by the Buyer and
           pays costs except customs and border fees in the destination country.
         </p>
-        <p>
+        <p className="text-sm">
           The Buyer must check Products on collection/delivery. For damage
           likely during transport, the Buyer must issue a damage report, enter
           remarks on the CMR, provide photo documentation, and immediately
           inform the Operator.
         </p>
-        <p>
+        <p className="text-sm">
           Claims for transport damage must be reported via the Platform no later
           than 2 business days from receipt and include:
         </p>
-        <ul className="list-disc pl-6 space-y-1">
+        <ul className="list-disc pl-6 space-y-1 text-xs">
           <li>a scanned CMR with damage note, signed by the carrier,</li>
           <li>photo documentation,</li>
           <li>repair cost calculation.</li>
         </ul>
-        <p>
-          The Operator responds within 5 working days. If userConcentd, the Buyer will
-          be asked to send an accounting document for reimbursement. If not
-          userConcentd, the Operator may request a revised calculation or prepare one
-          based on documentation.
+        <p className="text-sm">
+          The Operator responds within 5 working days. If userConcentd, the
+          Buyer will be asked to send an accounting document for reimbursement.
+          If not userConcentd, the Operator may request a revised calculation or
+          prepare one based on documentation.
         </p>
-        <p>
+        <p className="text-sm">
           The Seller is not liable for failure to accept the Product due to
           reasons attributable to the Buyer (e.g., incorrect/incomplete
           address). The Operator provides tools to manage the transaction;
@@ -367,14 +367,14 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
         <h2 className="text-xl font-bold">
           Article 7. Protection of personal data
         </h2>
-        <p>
+        <p className="text-sm">
           The Operator is the administrator of personal data of Users and
           persons designated by Users and processes data in accordance with
           European law solely for purposes related to activities within the
           Platform (including concluding/fulfilling purchase contracts,
           communication, complaints) and archiving transactions.
         </p>
-        <p>
+        <p className="text-sm">
           Personal data is processed to: (a) conclude a contract with the
           Operator; (b) fulfill the contract for the User; (c) fulfill the
           Operator’s legitimate interests (e.g., protection against claims or
@@ -382,20 +382,20 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
           Providing data is voluntary, but failure to provide certain data may
           prevent proper service.
         </p>
-        <p>
+        <p className="text-sm">
           Data may be provided to third countries only if they meet European law
           requirements. Data is stored for the period necessary to fulfill
           orders or maintain the Account, and may be processed thereafter due to
           legal obligations or legitimate interests.
         </p>
-        <p>
+        <p className="text-sm">
           Data subjects have rights (access, rectification, deletion,
           portability, restriction, objection, withdrawal of consent). The
           Operator protects personal data against disclosure, loss, or
           unauthorized change using appropriate technical/organizational
           measures.
         </p>
-        <p>
+        <p className="text-sm">
           For matters not covered, the Personal Data Protection and Cookies
           Policy (Annex No. 2) applies. The User must fulfill the information
           obligation toward persons whose data the User provided to the
@@ -406,17 +406,17 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       {/* Article 8 */}
       <article id="article-8" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">Article 8. Complaints procedure</h2>
-        <p>
+        <p className="text-sm">
           The User may file a complaint if the Operator or Seller fails to
           fulfill or improperly fulfills obligations under these Terms and
           Conditions, or if the Operator’s actions conflict with them.
         </p>
-        <p>
+        <p className="text-sm">
           Complaints can be submitted via the Platform contact form, by e-mail
           to contact@Bilvio, or in writing to: EDP, ul. Krzemowa 1, 62-002
           Złotniki, Poland.
         </p>
-        <p>
+        <p className="text-sm">
           The complaint must include contact details (as on the Platform), a
           description of the relevant Transaction, other pertinent
           circumstances, and a specific claim. If additions are needed, the
@@ -431,12 +431,12 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
         <h2 className="text-xl font-bold">
           Article 9. Disclaimer (accessibility of the Bilvio Platform)
         </h2>
-        <p>
+        <p className="text-sm">
           The Operator may cancel/stop publication of Product information if it
           conflicts with the Terms and Conditions (concluded Transactions remain
           valid). If the User violates the Terms, the Operator may:
         </p>
-        <ul className="list-disc pl-6 space-y-1">
+        <ul className="list-disc pl-6 space-y-1 text-xs">
           <li>warn the User via e-mail,</li>
           <li>give the User a warning via e-mail,</li>
           <li>
@@ -454,7 +454,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
             impose a contractual penalty in accordance with Appendix No. 1.
           </li>
         </ul>
-        <p>
+        <p className="text-sm">
           The User must immediately comply with restrictions or obligations
           imposed. In accordance with Annex No. 1, compensation may be awarded
           to Buyers who suffer damage due to Sellers’ dishonest actions (e.g.,
@@ -466,7 +466,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       {/* Article 10 */}
       <article id="article-10" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">Article 10. Final provisions</h2>
-        <p>
+        <p className="text-sm">
           The Operator will inform the User within the Platform about changes to
           these Terms and Conditions. Changes take effect on the date specified,
           not earlier than 7 days from issue, except technical/informational
@@ -475,30 +475,30 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
           current version. Changed Terms apply to a registered User who does not
           terminate the Account userConcentment before the effective date.
         </p>
-        <p>
+        <p className="text-sm">
           For statistical/quality reasons, the Operator uses information
           (cookies) stored on the User’s device; details are in Annex No. 2.
           Users decide cookie settings via their browser.
         </p>
-        <p>
+        <p className="text-sm">
           Users may not use graphic elements (including the &quot;Bilvio&quot;
           logo), layout, or other IP without explicit written consent.
         </p>
-        <p>
+        <p className="text-sm">
           If any provision is invalid, the remainder remains in force. The
           parties will replace it with a new provision of similar purpose.
         </p>
-        <p>
+        <p className="text-sm">
           The Terms are created in Polish, English, Czech, French, German, and
           Hungarian. In case of discrepancies, the Polish version prevails.
         </p>
-        <p>
+        <p className="text-sm">
           The parties are not liable for consequences of force majeure (fire,
           flood, terrorist attack, natural disasters, epidemics, etc.). The
           affected party must immediately notify the other; failure or delay in
           notification may preclude invoking force majeure.
         </p>
-        <p>
+        <p className="text-sm">
           Purchase contracts between the User and the Operator are governed by
           these Terms and Conditions and Polish law. The UN CISG (Vienna
           Convention, April 11, 1980) does not apply. Disputes are finally
@@ -511,14 +511,14 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       {/* Annexes */}
       <article id="annexes" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">ANNEXES</h2>
-        <ul className="list-disc pl-6 space-y-1">
+        <ul className="list-disc pl-6 space-y-1 text-xs">
           <li>Appendix No. 1 – Fees and commissions</li>
           <li>Appendix No. 2 – Privacy and Cookie Policy</li>
         </ul>
         <h3 className="text-lg font-semibold">
           Appendix No. 1 – Fees and commissions
         </h3>
-        <p>
+        <p className="text-sm">
           The Operator receives a fee for completing the transaction in the form
           of a &quot;success fee&quot;, which is included in the price of the
           vehicle.
