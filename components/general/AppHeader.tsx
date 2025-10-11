@@ -1,7 +1,6 @@
-// components/AppHeader.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -50,8 +49,9 @@ const LINKS: NavItem[] = [
 
 export default function AppHeader({ email }: { email: string }) {
   const [expanded, setExpanded] = useState(false);
-  const [offersOpen, setOffersOpen] = useState(false); // starts collapsed
+  const [offersOpen, setOffersOpen] = useState(false);
   const pathname = usePathname();
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     document.documentElement.style.setProperty(
@@ -60,12 +60,32 @@ export default function AppHeader({ email }: { email: string }) {
     );
   }, [expanded]);
 
+  // Close dropdown when clicking outside (collapsed menu only)
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOffersOpen(false);
+      }
+    }
+
+    if (!expanded && offersOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [offersOpen, expanded]);
+
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <div>
-      {/* Top Navbar (fixed) */}
+      {/* Top Navbar */}
       <header className="fixed inset-x-0 top-0 z-[80] flex h-14 items-center justify-between px-4 bg-[#2D3748]">
         <div className="flex items-center gap-3">
           <Link href="/" aria-label="Go home" className="inline-flex">
@@ -87,11 +107,7 @@ export default function AppHeader({ email }: { email: string }) {
             aria-expanded={expanded}
             className="rounded-full border-none cursor-pointer text-white bg-gray-900 hover:bg-gray-700 hover:text-gray-50 ml-8"
           >
-            {expanded ? (
-              <X className="h-10 w-10" />
-            ) : (
-              <Menu className="h-10 w-10" />
-            )}
+            {expanded ? <X className="h-10 w-10" /> : <Menu className="h-10 w-10" />}
           </Button>
         </div>
 
@@ -120,46 +136,25 @@ export default function AppHeader({ email }: { email: string }) {
                 <UserIcon className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
-
-            <DropdownMenuContent
-              align="end"
-              className="w-40 rounded-none"
-              sideOffset={8}
-            >
+            <DropdownMenuContent align="end" className="w-40 rounded-none" sideOffset={8}>
               <DropdownMenuLabel>Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-
               <DropdownMenuItem asChild>
-                <Link
-                  href="/profile"
-                  className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white"
-                >
+                <Link href="/profile" className="flex items-center hover:bg-[#619aab] hover:text-white">
                   <UserIcon className="mr-2 h-4 w-4" />
                   <span>Profile</span>
                 </Link>
               </DropdownMenuItem>
-
               <DropdownMenuItem asChild>
-                <Link
-                  href="/regulations/buyer"
-                  className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white"
-                >
+                <Link href="/regulations/buyer" className="flex items-center hover:bg-[#619aab] hover:text-white">
                   <FileText className="mr-2 h-4 w-4" />
                   <span>Regulations</span>
                 </Link>
               </DropdownMenuItem>
-
               <DropdownMenuSeparator />
-
               <DropdownMenuItem asChild>
-                <form
-                  action={logoutAction}
-                  className="w-full hover:rounded-none hover:bg-[#619aab] hover:text-white"
-                >
-                  <button
-                    type="submit"
-                    className="flex w-full items-center cursor-pointer"
-                  >
+                <form action={logoutAction} className="w-full hover:bg-[#619aab] hover:text-white">
+                  <button type="submit" className="flex w-full items-center cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Logout</span>
                   </button>
@@ -178,11 +173,10 @@ export default function AppHeader({ email }: { email: string }) {
         style={{ top: "var(--header-h)" }}
         aria-label="Main navigation"
       >
-        <nav className="flex h-full flex-col gap-1 py-2">
+        <nav className="flex h-full flex-col gap-1 py-2 relative">
           {LINKS.map(({ href, label, Icon }) => {
             const active = isActive(href);
 
-            // Regular items except "Offers search"
             if (href !== "/offers-search") {
               return (
                 <Link
@@ -191,25 +185,15 @@ export default function AppHeader({ email }: { email: string }) {
                   title={label}
                   aria-label={label}
                   aria-current={active ? "page" : undefined}
-                  className={`group grid items-center
-                    ${
-                      expanded
-                        ? "grid-cols-[2rem_1fr] px-3"
-                        : "grid-cols-1 justify-items-center"
-                    }
-                    h-8 transition
-                    ${
-                      active ? "bg-[#619aab] text-white" : "hover:bg-gray-700"
-                    }`}
+                  className={`group grid items-center ${
+                    expanded ? "grid-cols-[2rem_1fr] px-3" : "grid-cols-1 justify-items-center"
+                  } h-8 transition ${active ? "bg-[#619aab] text-white" : "hover:bg-gray-700"}`}
                 >
                   <Icon className="h-8 w-5" />
                   <span
-                    className={`overflow-hidden whitespace-nowrap transition-[opacity,margin] duration-200
-                      ${
-                        expanded
-                          ? "opacity-100 ml-2"
-                          : "opacity-0 -ml-2 pointer-events-none"
-                      }`}
+                    className={`overflow-hidden whitespace-nowrap transition-[opacity,margin] duration-200 ${
+                      expanded ? "opacity-100 ml-2" : "opacity-0 -ml-2 pointer-events-none"
+                    }`}
                   >
                     {label}
                   </span>
@@ -217,114 +201,87 @@ export default function AppHeader({ email }: { email: string }) {
               );
             }
 
-            // Offers search with toggleable submenu
             return (
-              <div key={href} className="contents">
-                <Link
-                  href={href}
-                  title={label}
-                  aria-label={label}
-                  aria-current={active ? "page" : undefined}
-                  aria-expanded={expanded && offersOpen}
-                  onClick={(e) => {
-                    e.preventDefault(); // do not navigate
-                    setOffersOpen((v) => !v); // toggle submenu
-                  }}
-                  className={`group grid items-center
-                    ${
-                      expanded
-                        ? "grid-cols-[2rem_1fr] px-3"
-                        : "grid-cols-1 justify-items-center"
-                    }
-                    h-8 transition
-                    ${
-                      active ? "bg-[#619aab] text-white" : "hover:bg-gray-700"
-                    }`}
+              <div key={href} className="relative">
+                <button
+                  type="button"
+                  onClick={() => setOffersOpen((v) => !v)}
+                  className={`w-full group grid items-center ${
+                    expanded ? "grid-cols-[2rem_1fr] px-3" : "grid-cols-1 justify-items-center"
+                  } h-8 transition text-left ${active ? "bg-[#619aab] text-white" : "hover:bg-gray-700"}`}
                 >
                   <Icon className="h-8 w-5" />
                   <span
-                    className={`overflow-hidden whitespace-nowrap transition-[opacity,margin] duration-200
-                      ${
-                        expanded
-                          ? "opacity-100 ml-2"
-                          : "opacity-0 -ml-2 pointer-events-none"
-                      }`}
+                    className={`overflow-hidden whitespace-nowrap transition-[opacity,margin] duration-200 ${
+                      expanded ? "opacity-100 ml-2" : "opacity-0 -ml-2 pointer-events-none"
+                    }`}
                   >
                     {label}
-                    {expanded && offersOpen ?(<span className="ml-6 text-white text-xl">{"⤻"}</span>):(<span className="ml-6 text-white text-xl">{"⤼"}</span>)}
-                    
+                    {expanded && offersOpen ? (
+                      <span className="ml-6 text-white text-xl">⤻</span>
+                    ) : (
+                      <span className="ml-6 text-white text-xl">⤼</span>
+                    )}
                   </span>
-                </Link>
+                </button>
 
-                {/* Submenu: only when expanded AND toggled open */}
-                {expanded && offersOpen ? (
+                {/* Submenu (expanded sidebar) */}
+                {expanded && offersOpen && (
                   <div className="px-3 mt-1">
-                    {/* New cars */}
                     <Link
                       href="/offers-search/new"
-                      className={`flex items-center gap-2 h-8
-                        ${expanded ? "pl-8 px-2" : "pl-0 justify-center"}
-                        ${
-                          isActive("/offers-search/new")
-                            ? "text-white"
-                            : "hover:bg-gray-700"
-                        }
-                        ${expanded ? "rounded-none" : ""}`}
-                      title="New cars"
-                      aria-current={
-                        isActive("/offers-search/new") ? "page" : undefined
-                      }
+                      className={`flex items-center gap-2 h-8 pl-8 ${
+                        isActive("/offers-search/new") ? "text-white" : "hover:bg-gray-700"
+                      }`}
                     >
-                      {/* No circle when expanded (by request) */}
-                      <span
-                        className={`inline-block h-3.5 w-3.5 rounded-full border ${
-                          isActive("/offers-search/new")
-                            ? "bg-white border-white"
-                            : "border-white/70"
-                        }`}
-                      />
+                      <span className="inline-block h-3.5 w-3.5 rounded-full border border-white" />
                       <span className="text-sm">New cars</span>
                     </Link>
-
-                    {/* Used cars */}
                     <Link
                       href="/offers-search/used"
-                      className={`flex items-center gap-2 h-8
-                        ${expanded ? "pl-8 px-2" : "pl-0 justify-center"}
-                        ${
-                          isActive("/offers-search/used")
-                            ? "text-white"
-                            : "hover:bg-gray-700"
-                        }
-                        ${expanded ? "rounded-none" : ""}`}
-                      title="Used cars"
-                      aria-current={
-                        isActive("/offers-search/used") ? "page" : undefined
-                      }
+                      className={`flex items-center gap-2 h-8 pl-8 ${
+                        isActive("/offers-search/used") ? "text-white" : "hover:bg-gray-700"
+                      }`}
                     >
-                      {/* No circle when expanded (by request) */}
-                      <span
-                        className={`inline-block h-3.5 w-3.5 rounded-full border ${
-                          isActive("/offers-search/used")
-                            ? "bg-white border-white"
-                            : "border-white/70"
-                        }`}
-                      />
-                      <span className="text-sm"> Used cars</span>
+                      <span className="inline-block h-3.5 w-3.5 rounded-full border border-white" />
+                      <span className="text-sm">Used cars</span>
                     </Link>
                   </div>
-                ) : null}
+                )}
+
+                {/* Dropdown (collapsed sidebar) */}
+                {!expanded && offersOpen && (
+                  <div
+                    ref={dropdownRef}
+                    className="absolute left-14 top-0 bg-[#2D3748] border border-white/10 rounded shadow-lg z-[9999] w-40"
+                  >
+                    <Link
+                      href="/offers-search/new"
+                      className="block px-4 py-2 text-sm hover:bg-gray-700"
+                      onClick={() => setOffersOpen(false)}
+                    >
+                      New cars
+                    </Link>
+                    <Link
+                      href="/offers-search/used"
+                      className="block px-4 py-2 text-sm hover:bg-gray-700"
+                      onClick={() => setOffersOpen(false)}
+                    >
+                      Used cars
+                    </Link>
+                  </div>
+                )}
               </div>
             );
           })}
         </nav>
       </aside>
 
-      {/* Global spacing rules */}
+      {/* Global spacing */}
       <style jsx global>{`
         :root {
-          --sidebar-w: 3.5rem; /* collapsed width default */
-          --header-h: 3.5rem; /* equals h-14, keeps layout in sync */
+          --sidebar-w: 3.5rem;
+          --header-h: 3.5rem;
         }
         .app-content {
           margin-left: var(--sidebar-w);

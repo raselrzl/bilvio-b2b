@@ -112,7 +112,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       </nav>
 
       {/* Article 1 */}
-      <article id="article-1" className="space-y-3">
+      <article id="article-1" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">Article 1. General provisions</h2>
         <p>
           These Terms and Conditions of the Bilvio Platform for Buyers
@@ -145,7 +145,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       </article>
 
       {/* Article 2 */}
-      <article id="article-2" className="space-y-3">
+      <article id="article-2" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">Article 2. Account registration</h2>
         <p>
           Only persons who carry out business activities may become Users. An
@@ -229,7 +229,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       </article>
 
       {/* Article 3 */}
-      <article id="article-3" className="space-y-3">
+      <article id="article-3" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">
           Article 3. Publication of the Order and Product Information
         </h2>
@@ -253,7 +253,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       </article>
 
       {/* Article 4 */}
-      <article id="article-4" className="space-y-3">
+      <article id="article-4" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">Article 4. Transactions</h2>
         <p>
           Purchases under the Account must be related to the Buyer’s business
@@ -277,7 +277,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       </article>
 
       {/* Article 5 */}
-      <article id="article-5" className="space-y-3">
+      <article id="article-5" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">
           Article 5. Deposit and Payment Transaction
         </h2>
@@ -308,7 +308,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       </article>
 
       {/* Article 6 */}
-      <article id="article-6" className="space-y-3">
+      <article id="article-6" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">Article 6. Delivery of Products</h2>
         <p>
           The Operator organizes transport to the warehouse specified in the
@@ -363,7 +363,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       </article>
 
       {/* Article 7 */}
-      <article id="article-7" className="space-y-3">
+      <article id="article-7" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">
           Article 7. Protection of personal data
         </h2>
@@ -404,7 +404,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       </article>
 
       {/* Article 8 */}
-      <article id="article-8" className="space-y-3">
+      <article id="article-8" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">Article 8. Complaints procedure</h2>
         <p>
           The User may file a complaint if the Operator or Seller fails to
@@ -427,7 +427,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       </article>
 
       {/* Article 9 */}
-      <article id="article-9" className="space-y-3">
+      <article id="article-9" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">
           Article 9. Disclaimer (accessibility of the Bilvio Platform)
         </h2>
@@ -464,7 +464,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       </article>
 
       {/* Article 10 */}
-      <article id="article-10" className="space-y-3">
+      <article id="article-10" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">Article 10. Final provisions</h2>
         <p>
           The Operator will inform the User within the Platform about changes to
@@ -509,7 +509,7 @@ export default function BuyerTermsConditions({ className = "" }: Props) {
       </article>
 
       {/* Annexes */}
-      <article id="annexes" className="space-y-3">
+      <article id="annexes" className="space-y-3 text-justify">
         <h2 className="text-xl font-bold">ANNEXES</h2>
         <ul className="list-disc pl-6 space-y-1">
           <li>Appendix No. 1 – Fees and commissions</li>
