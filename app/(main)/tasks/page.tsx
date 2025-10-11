@@ -24,7 +24,7 @@ type Task = {
 
 // Mock task data
 const mockTasks: Task[] = [
-  {
+/*   {
     id: 1,
     status: "todo",
     taskType: "Inspect vehicle before delivery",
@@ -71,7 +71,7 @@ const mockTasks: Task[] = [
     transportNumber: "TRN-004",
     deadline: "2025-09-15",
     expired: true,
-  },
+  }, */
 ];
 
 export default function TasksPage() {
