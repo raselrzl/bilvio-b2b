@@ -24,11 +24,9 @@ const registerSchema = z
     country: z.string().min(1, "Country is required."),
     city: z.string().min(1, "City is required."),
     zip: z.string().min(1, "Zip code is required."),
-    userConcent: z
-      .boolean()
-      .refine((v) => v === true, {
-        message: "You must agree to the regulation.",
-      }),
+    userConcent: z.boolean().refine((v) => v === true, {
+      message: "You must agree to the regulation.",
+    }),
   })
   .refine((d) => d.password === d.confirm, {
     message: "Passwords do not match.",
@@ -200,15 +198,18 @@ const updateProfileBasicsSchema = z.object({
   lastName: z.string().min(1, "Last name is required."),
   phone: z.string().min(1, "Phone number is required."),
   companyWebsiteUrl: z
-  .string()
-  .trim()
-  .optional()
-  .refine((v) => {
-    if (!v) return true; // Allow empty
-    return /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v); // Basic domain pattern
-  }, {
-    message: "Enter a valid website (e.g., example.com)",
-  }),
+    .string()
+    .trim()
+    .optional()
+    .refine(
+      (v) => {
+        if (!v) return true; // Allow empty
+        return /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v); // Basic domain pattern
+      },
+      {
+        message: "Enter a valid website (e.g., example.com)",
+      }
+    ),
 });
 
 export async function updateProfileBasicsAction(formData: FormData) {
