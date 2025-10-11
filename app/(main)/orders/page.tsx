@@ -58,19 +58,19 @@ export default function OrdersPage() {
   return (
     <div className="max-w-7xl mx-auto w-full mt-4">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl md:text-3xl font-extrabold">Orders</h1>
+      <div className="flex items-center justify-between px-2 sm:px-4 md:px-6 mt-4">
+        <h1 className="text-2xl md:text-3xl font-extrabold ">Orders</h1>
       </div>
 
       {/* Filter Form */}
-      <div className="px-2 sm:px-4 md:px-6 mt-4 bg-gray-600">
+      <div className="px-2 sm:px-4 md:px-6 mt-4 bg-gray-600 mx-2">
         <div className="p-4">
           <OrderFilterForm onFilterChange={(f) => setFilters(f)} />
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="pt-6 bg-gray-300">
+      <div className="pt-6 bg-gray-300 mx-2">
         <div className="flex flex-wrap">
           {tabs.map((tab) => (
             <button
@@ -87,7 +87,7 @@ export default function OrdersPage() {
       </div>
 
       {/* Tab Content */}
-      <div className="px-2 sm:px-4 md:px-6 pt-4 bg-white p-2">
+      <div className="px-2 sm:px-4 md:px-6 pt-4 bg-white p-2 mx-2">
         {filteredOrders.length === 0 ? (
           <div className="bg-amber-100 border border-amber-300 shadow-sm p-4 text-amber-600 flex items-center">
             <p>Unfortunately we did not find any orders that meet your criteria.</p>
