@@ -70,7 +70,7 @@ export default function OrdersPage() {
       </div>
 
       {/* Tabs */}
-      <div className="pt-6 bg-gray-300 mx-2">
+      <div className="pt-6 mx-2">
         <div className="flex flex-wrap">
           {tabs.map((tab) => (
             <button
