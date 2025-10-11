@@ -76,7 +76,7 @@ export default function OrdersPage() {
           {tabs.map((tab) => (
             <button
               key={tab}
-              className={`px-4 py-2 font-medium border-t-1 ${
+              className={`px-4 py-2 font-medium text-sm border-t-1 ${
                 activeTab === tab ? "border-[#619aab] border-t-2 text-[#619aab] bg-white rounded-t-xs" : "bg-gray-300 border-gray-200 border-t-1 border-l-1 text-black hover:text-gray-700 rounded-t-xs cursor-pointer"
               }`}
               onClick={() => setActiveTab(tab)}
