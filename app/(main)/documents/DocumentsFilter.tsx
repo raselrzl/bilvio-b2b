@@ -148,7 +148,7 @@ export default function DocumentFilterForm({
             <X className="h-4 w-4 mr-2" /> Clear
           </Button>
         </div>
-        <div className="flex flex-row">
+        <div className="flex flex-row mx-2 lg:mx-0">
           <div className="w-[150px]">
             <Select
               value={sortOrder}
