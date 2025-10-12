@@ -17,6 +17,7 @@ type Order = {
 // Mock data, replace with your API data
 const mockOrders: Order[] = [
   { id: 1, type: "new", makeModel: "Audi A4", orderNumber: "ORD001", vin: "VIN001", status: "new" },
+  { id: 6, type: "new", makeModel: "Audi A4", orderNumber: "ORD001", vin: "VIN001", status: "new" },
   { id: 2, type: "used", makeModel: "BMW X5", orderNumber: "ORD002", vin: "VIN002", status: "accepted" },
   { id: 3, type: "new", makeModel: "Volvo XC90", orderNumber: "ORD003", vin: "VIN003", status: "completed" },
   { id: 4, type: "used", makeModel: "EVO X", orderNumber: "ORD004", vin: "VIN004", status: "rejected" },
