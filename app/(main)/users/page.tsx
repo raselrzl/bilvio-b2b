@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import UserFilterForm from "./UserFilterForm";
 
-export const metadata = { title: "Users • Bilvio" };
-
 async function getUsers() {
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
