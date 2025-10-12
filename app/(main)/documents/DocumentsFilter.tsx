@@ -148,7 +148,7 @@ export default function DocumentFilterForm({
             <X className="h-4 w-4 mr-2" /> Clear
           </Button>
         </div>
-        <div className="flex flex-row mx-2 2xl:mx-0 items-end">
+        <div className="flex flex-row mx-2 2xl:mx-0 items-end px-4 2xl:px-0">
           <div className="w-[150px]">
             <Select
               value={sortOrder}
@@ -170,7 +170,7 @@ export default function DocumentFilterForm({
       </form>
 
       {/* Cards */}
-      <div className="grid grid-cols-1 gap-4 mt-6 px-2">
+      <div className="grid grid-cols-1 gap-4 mt-6 px-6 2xl:px-2">
         {filteredDocs.length > 0 ? (
           filteredDocs.map((doc) => (
             <div
