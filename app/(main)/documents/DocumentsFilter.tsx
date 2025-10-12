@@ -179,7 +179,7 @@ export default function DocumentFilterForm({
             >
               {/* PDF icon + Document number */}
               <div className="flex items-center gap-2 text-lg font-bold">
-                <span>📄Document number:</span>
+                <span>📄 Document number:</span>
                 <span>{doc.number}</span>
               </div>
 
