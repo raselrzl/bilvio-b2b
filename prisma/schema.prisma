@@ -48,7 +48,9 @@ enum UserType {
 enum ApprovalStatus {
   PENDING
   APPROVED
-  REJECT
+  REJECTED
+  ACTIVE
+  INACTIVE
 }
 
 enum Intent {

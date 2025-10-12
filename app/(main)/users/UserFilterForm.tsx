@@ -15,7 +15,7 @@ import { X } from "lucide-react";
 interface User {
   id: string;
   email: string;
-  UserID:string | null;
+  UserID: string | null;
   firstName: string | null;
   lastName: string | null;
   approvalStatus: string;
@@ -37,7 +37,7 @@ export default function UserFilterForm({
   const [sortOrder, setSortOrder] = useState<"asc" | "desc" | undefined>();
   const [showing, setShowing] = useState<number>(10);
 
-  // Filter logic
+  // 🔹 Filtering logic
   useEffect(() => {
     let filtered = [...initialUsers];
 
@@ -85,7 +85,7 @@ export default function UserFilterForm({
       <form className="space-y-4 mt-6 px-0 2xl:px-2">
         {/* Row 1: Email + Status + Clear */}
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2 items-end mt-4 py-4 px-2 sm:px-4 md:px-6 bg-gray-500 max-w-[100%] lg:max-w-[1500px]">
-          <div className="">
+          <div>
             <Input
               type="text"
               placeholder="Email"
@@ -103,10 +103,13 @@ export default function UserFilterForm({
               <SelectContent>
                 <SelectItem value="PENDING">Pending</SelectItem>
                 <SelectItem value="APPROVED">Approved</SelectItem>
-                <SelectItem value="REJECT">Rejected</SelectItem>
+                <SelectItem value="REJECTED">Rejected</SelectItem>
+                <SelectItem value="ACTIVE">Active</SelectItem>
+                <SelectItem value="INACTIVE">Inactive</SelectItem>
               </SelectContent>
             </Select>
           </div>
+
           <div className="hidden lg:block" />
           <div className="hidden lg:block" />
           <div className="flex justify-end">
@@ -129,7 +132,7 @@ export default function UserFilterForm({
               onValueChange={(v) => setSortOrder(v as "asc" | "desc")}
             >
               <SelectTrigger className={selectClass(sortOrder)}>
-                <SelectValue placeholder="Sort Order" />
+                <SelectValue placeholder="Sort order" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="asc">Ascending</SelectItem>
@@ -179,7 +182,9 @@ export default function UserFilterForm({
             {users.length > 0 ? (
               users.map((user) => (
                 <tr key={user.id} className="hover:bg-gray-100">
-                  <td className="border px-4 py-1 uppercase font-bold">{user.UserID}</td>
+                  <td className="border px-4 py-1 uppercase font-bold">
+                    {user.UserID}
+                  </td>
                   <td className="border px-4 py-1">{user.approvalStatus}</td>
                   <td className="border px-4 py-1">{user.email}</td>
                   <td className="border px-4 py-1">
@@ -194,7 +199,10 @@ export default function UserFilterForm({
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="bg-amber-100 border text-cente border-amber-300 shadow-sm p-4 text-amber-600 flex items-center">
+                <td
+                  colSpan={5}
+                  className="bg-amber-100 border text-center border-amber-300 shadow-sm p-4 text-amber-600"
+                >
                   No users found
                 </td>
               </tr>

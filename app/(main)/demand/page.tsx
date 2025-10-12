@@ -13,7 +13,7 @@ export default function DemandPage() {
         <h1 className="text-2xl md:text-3xl font-extrabold ">Demands</h1>
 
         <Link href="/buyer/offers/create">
-          <Button className="rounded-2xl border shadow inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-black cursor-pointer">
+          <Button className="rounded-xs inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white cursor-pointer">
             <PlusCircle className="h-5 w-5" aria-hidden="true" />
             <span>Add demand</span>
           </Button>
@@ -39,7 +39,7 @@ export default function DemandPage() {
               criteria{" "}
             </p>
             <Link href="/buyer/offers/create">
-              <Button className="rounded-2xl border shadow inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-black cursor-pointer ml-4">
+              <Button className="rounded-xs inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white cursor-pointer ml-4">
                 <PlusCircle className="h-5 w-5" aria-hidden="true" />
                 <span>Add demand</span>
               </Button>
