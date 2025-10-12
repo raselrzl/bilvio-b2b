@@ -125,7 +125,7 @@ export default function UserFilterForm({
         </div>
 
         {/* Row 2: Sort & Show */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2 items-end px-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2 items-end mx-2 lg:mx-0">
           <div>
             <Select
               value={sortOrder}
@@ -156,6 +156,9 @@ export default function UserFilterForm({
                 <SelectItem value="100">Show 100</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          <div className="mt-2 px-2 text-sm text-gray-700">
+            Showing {users.length} of {initialUsers.length} users
           </div>
         </div>
       </form>
@@ -209,6 +212,9 @@ export default function UserFilterForm({
             )}
           </tbody>
         </table>
+      </div>
+      <div className="mt-2 px-2 text-sm text-gray-700">
+        Showing {users.length} of {initialUsers.length} users
       </div>
     </div>
   );
