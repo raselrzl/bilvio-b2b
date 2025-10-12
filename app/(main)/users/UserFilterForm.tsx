@@ -15,6 +15,7 @@ import { X } from "lucide-react";
 interface User {
   id: string;
   email: string;
+  UserID:string | null;
   firstName: string | null;
   lastName: string | null;
   approvalStatus: string;
@@ -178,7 +179,7 @@ export default function UserFilterForm({
             {users.length > 0 ? (
               users.map((user) => (
                 <tr key={user.id} className="hover:bg-gray-100">
-                  <td className="border px-4 py-1">{user.id.slice(0, 8)}...</td>
+                  <td className="border px-4 py-1 uppercase font-bold">{user.UserID}</td>
                   <td className="border px-4 py-1">{user.approvalStatus}</td>
                   <td className="border px-4 py-1">{user.email}</td>
                   <td className="border px-4 py-1">

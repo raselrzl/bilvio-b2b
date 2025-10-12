@@ -47,10 +47,29 @@ export async function registerUserAction(raw: RegisterPayload) {
   }
 
   const data = parsed.data;
+  function generateMixedId() {
+    const chars = "BILVIO0123456789";
+    let result = "";
+    for (let i = 0; i < 6; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+
+  let userID: string;
+  while (true) {
+    const newId = generateMixedId();
+    const exists = await prisma.user.findUnique({ where: { UserID: newId } });
+    if (!exists) {
+      userID = newId;
+      break;
+    }
+  }
 
   try {
     await prisma.user.create({
       data: {
+        UserID: userID,
         email: data.email,
         password: data.password, // saving as plain string per your request
         taxNumber: data.taxNumber,
