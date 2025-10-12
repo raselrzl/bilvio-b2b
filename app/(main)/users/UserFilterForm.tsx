@@ -157,7 +157,7 @@ export default function UserFilterForm({
               </SelectContent>
             </Select>
           </div>
-          <div className="mt-2 px-2 text-sm text-gray-700">
+          <div className="mt-2 px-2 text-xs text-gray-700">
             Showing {users.length} of {initialUsers.length} users
           </div>
         </div>
@@ -213,7 +213,7 @@ export default function UserFilterForm({
           </tbody>
         </table>
       </div>
-      <div className="mt-2 px-2 text-sm text-gray-700">
+      <div className="mt-2 text-xs text-gray-700 mx-2">
         Showing {users.length} of {initialUsers.length} users
       </div>
     </div>

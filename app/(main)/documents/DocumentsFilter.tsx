@@ -148,7 +148,7 @@ export default function DocumentFilterForm({
             <X className="h-4 w-4 mr-2" /> Clear
           </Button>
         </div>
-        <div className="flex flex-row mx-2 2xl:mx-0">
+        <div className="flex flex-row mx-2 2xl:mx-0 items-end">
           <div className="w-[150px]">
             <Select
               value={sortOrder}
@@ -163,7 +163,7 @@ export default function DocumentFilterForm({
               </SelectContent>
             </Select>
           </div>
-          <div className="mt-2 text-sm text-muted-foreground ml-8">
+          <div className="mt-2 px-2 text-xs text-gray-700">
             Showing {filteredDocs.length} of {documents.length} entries
           </div>
         </div>
@@ -214,9 +214,9 @@ export default function DocumentFilterForm({
       </div>
 
       {/* Pagination info */}
-      <div className="mt-2 text-sm text-muted-foreground ml-3">
-        Showing {filteredDocs.length} of {documents.length} entries
-      </div>
+      <div className="mt-2 px-2 text-xs text-gray-700">
+            Showing {filteredDocs.length} of {documents.length} entries
+          </div>
     </div>
   );
 }
