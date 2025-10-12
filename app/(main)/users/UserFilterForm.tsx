@@ -125,7 +125,7 @@ export default function UserFilterForm({
         </div>
 
         {/* Row 2: Sort & Show */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2 items-end mx-2 lg:mx-0">
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2 items-end mx-4 2xl:mx-0">
           <div className="mx-2 2xl:mx-0">
             <Select
               value={sortOrder}
@@ -141,7 +141,7 @@ export default function UserFilterForm({
             </Select>
           </div>
 
-          <div>
+          <div className="mx-2 2xl:mx-0">
             <Select
               value={String(showing)}
               onValueChange={(v) => setShowing(Number(v))}
@@ -164,7 +164,7 @@ export default function UserFilterForm({
       </form>
 
       {/* 🔹 User Table */}
-      <div className="overflow-x-auto mt-6 border bg-gray-50 rounded-sm mx-2">
+      <div className="overflow-x-auto mt-6 border bg-gray-50 rounded-sm mx-6 2xl:mx-2">
         <table className="min-w-full border-collapse text-sm">
           <thead className="bg-white text-black uppercase border-b">
             <tr>
@@ -213,7 +213,7 @@ export default function UserFilterForm({
           </tbody>
         </table>
       </div>
-      <div className="mt-2 text-xs text-gray-700 mx-2">
+      <div className="mt-2 text-xs text-gray-700 mx-6 2xl:mx-3">
         Showing {users.length} of {initialUsers.length} users
       </div>
     </div>
