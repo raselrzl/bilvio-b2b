@@ -126,7 +126,7 @@ export default function UserFilterForm({
 
         {/* Row 2: Sort & Show */}
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2 items-end mx-2 lg:mx-0">
-          <div>
+          <div className="mx-2 2xl:mx-0">
             <Select
               value={sortOrder}
               onValueChange={(v) => setSortOrder(v as "asc" | "desc")}
