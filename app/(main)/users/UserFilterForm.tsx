@@ -81,9 +81,9 @@ export default function UserFilterForm({
   return (
     <div className="w-full max-w-7xl space-y-4">
       {/* 🔹 Filter Section */}
-      <form className="space-y-4 mt-6">
+      <form className="space-y-4 mt-6 px-0 2xl:px-2">
         {/* Row 1: Email + Status + Clear */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2 items-end bg-gray-500 px-8 py-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2 items-end mt-4 py-4 px-2 sm:px-4 md:px-6 bg-gray-500 max-w-[100%] lg:max-w-[1500px]">
           <div className="">
             <Input
               type="text"
@@ -157,7 +157,7 @@ export default function UserFilterForm({
       </form>
 
       {/* 🔹 User Table */}
-      <div className="overflow-x-auto mt-6 border bg-gray-50 rounded-sm">
+      <div className="overflow-x-auto mt-6 border bg-gray-50 rounded-sm mx-2">
         <table className="min-w-full border-collapse text-sm">
           <thead className="bg-white text-black uppercase border-b">
             <tr>

@@ -21,7 +21,7 @@ export default async function UsersPage() {
 
   return (
     <div className="max-w-7xl mx-auto w-full">
-      <div className="flex items-center justify-between px-2 sm:px-4 md:px-6 mt-4">
+      <div className="flex items-center justify-between px-2 2xl:px-2 mt-6">
         <h1 className="text-2xl md:text-3xl font-extrabold">Users</h1>
         <Link href="/admin/users/create">
           <Button className="rounded-xs inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white cursor-pointer">
@@ -31,7 +31,7 @@ export default async function UsersPage() {
         </Link>
       </div>
 
-      <div className="px-2 sm:px-4 md:px-6 mt-4">
+      <div className="">
         <UserFilterForm initialUsers={users} />
       </div>
     </div>
