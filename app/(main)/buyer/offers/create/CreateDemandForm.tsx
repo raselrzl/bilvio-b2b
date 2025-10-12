@@ -271,10 +271,10 @@ export default function CreateDemandForm({
       {/* bottom actions: unchanged */}
       <div className="flex flex-wrap items-center gap-2 pt-2">
         <SubmitButton name="intent" value="create" text="Create" />
-        <Button type="submit" name="intent" value="draft" variant="secondary" className="rounded-xs">
+        <Button type="submit" name="intent" value="draft" variant="secondary" className="rounded-xs cursor-pointer">
           Save as draft
         </Button>
-        <Button asChild variant="destructive" className="rounded-xs">
+        <Button asChild variant="destructive" className="rounded-xs bg-amber-600 hover:bg-amber-500">
           <Link href="/demand">Cancel</Link>
         </Button>
       </div>
