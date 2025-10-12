@@ -138,19 +138,7 @@ export default function DocumentFilterForm({
               <SelectItem value="Expected/Deleted">Expected/Deleted</SelectItem>
             </SelectContent>
           </Select>
-
-          <Select
-            value={sortOrder}
-            onValueChange={(v) => setSortOrder(v as "asc" | "desc")}
-          >
-            <SelectTrigger className={selectClass(String(sortOrder))}>
-              <SelectValue placeholder="Sort Order" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="asc">Oldest</SelectItem>
-              <SelectItem value="desc">Newest</SelectItem>
-            </SelectContent>
-          </Select>
+          <div></div>
 
           <Button
             variant="outline"
@@ -159,6 +147,25 @@ export default function DocumentFilterForm({
           >
             <X className="h-4 w-4 mr-2" /> Clear
           </Button>
+        </div>
+        <div className="flex flex-row">
+          <div className="w-[150px]">
+            <Select
+              value={sortOrder}
+              onValueChange={(v) => setSortOrder(v as "asc" | "desc")}
+            >
+              <SelectTrigger className={selectClass(String(sortOrder))}>
+                <SelectValue placeholder="Sort Order" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="asc">Oldest</SelectItem>
+                <SelectItem value="desc">Newest</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="mt-2 text-sm text-muted-foreground ml-8">
+            Showing {filteredDocs.length} of {documents.length} entries
+          </div>
         </div>
       </form>
 
@@ -178,8 +185,12 @@ export default function DocumentFilterForm({
 
               {/* Document details */}
               <div className="flex flex-wrap text-sm text-gray-700 p-2 rounded-sm gap-2">
-                <div className="bg-gray-100 py-1 px-2 items-center justify-center">Document Type: {doc.type}</div>
-                <div className="bg-gray-100 py-1 px-2 items-center justify-center">Document Kind: {doc.kind}</div>
+                <div className="bg-gray-100 py-1 px-2 items-center justify-center">
+                  Document Type: {doc.type}
+                </div>
+                <div className="bg-gray-100 py-1 px-2 items-center justify-center">
+                  Document Kind: {doc.kind}
+                </div>
                 <div className="bg-gray-100 py-1 px-2 items-center justify-center">
                   Created at: {new Date(doc.createdAt).toLocaleDateString()}
                 </div>
