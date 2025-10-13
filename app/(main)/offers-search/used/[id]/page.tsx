@@ -284,9 +284,9 @@ export default async function UsedCarOfferDetailsPage({
                   </div>
 
                   {/* Final Price */}
-                  <div className="col-span-3 bg-black text-white text-lg font-bold p-2 text-start">
-                    Price: {formatCurrency(discountedNet)} SEK NET /{" "}
-                    {formatCurrency(discountedGross)} SEK GROSS
+                   <div className="col-span-3 flex items-center bg-black text-white text-lg font-bold py-2 px-6 text-start">
+                    Price: {formatCurrency(discountedNet)} <p className="text-sm mt-1 ml-3 text-gray-400"> SEK NET {" "}</p>/{" "}
+                    {formatCurrency(discountedGross)} <p className="text-sm mt-1 ml-3 text-gray-400">SEK GROSS</p>
                   </div>
                 </>
               );
