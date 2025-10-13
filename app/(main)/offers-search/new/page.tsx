@@ -4,36 +4,70 @@ import OffersSearchNewCar from "./OffersSearchNewCar";
 export const metadata = { title: "OffersSearchNewCar • Bilvio" };
 
 // Dummy product generator
-function generateDummyOffers(count: number) {
-  const carNames = ["Toyota Corolla", "Honda Civic", "BMW 3 Series", "Audi A4"];
+// utils/generateDummyOffers.ts
+
+export function generateDummyOffers(count: number) {
+  const carNames = [
+    "Toyota Corolla",
+    "Honda Civic",
+    "BMW 3 Series",
+    "Audi A4",
+    "Mercedes C-Class",
+    "Mazda 3",
+    "Volkswagen Golf",
+    "Hyundai Elantra",
+    "Kia Ceed",
+  ];
+
   const fuels = ["Petrol", "Diesel", "Hybrid", "Electric"];
   const types = ["Interesting", "Not Interesting", "Later", "Super"];
   const stockStatus = ["In Stock", "Out of Stock"];
-  const colours = ["Red", "Blue", "Black", "White", "Silver", "Green"];
+  const colours = ["Red", "Blue", "Black", "White", "Silver", "Gray", "Green"];
   const availability = ["Immediately", "Later"];
+  const gearboxOptions = ["Automatic", "Manual"];
+  const trimLevels = ["Essential", "Comfort", "Premium", "Luxury", "Sport"];
+  const engineSizes = ["1.0", "1.2", "1.4", "1.5", "1.6", "2.0"];
+  const horsepowerRange = [70, 90, 110, 130, 150, 180, 200];
 
-  return Array.from({ length: count }).map((_, i) => ({
-    id: i + 1,
-    name: carNames[Math.floor(Math.random() * carNames.length)],
-    gearbox: Math.random() > 0.5 ? "Automatic" : "Manual",
-    fuel: fuels[Math.floor(Math.random() * fuels.length)],
-    price: Math.floor(Math.random() * 50000) + 5000,
-    offerNumber: `OFF-${1000 + i}`,
-    createdAt: new Date(
-      Date.now() - Math.floor(Math.random() * 10000000000)
-    ).toISOString(),
-    discount: Math.floor(Math.random() * 30),
-    type: types[Math.floor(Math.random() * types.length)],
-    stock: stockStatus[Math.floor(Math.random() * stockStatus.length)],
-    colour: colours[Math.floor(Math.random() * colours.length)],
-    quantity: Math.floor(Math.random() * 20) + 1,
-    mileage: Math.floor(Math.random() * 200000), // in km
-    firstRegistration: new Date(
-      Date.now() - Math.floor(Math.random() * 31536000000 * 10)
-    ).toISOString(), // up to 10 years old
-    availability: availability[Math.floor(Math.random() * availability.length)],
-  }));
+  const now = Date.now();
+
+  return Array.from({ length: count }).map((_, i) => {
+    const random = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)];
+    const randomNumber = (min: number, max: number) =>
+      Math.floor(Math.random() * (max - min + 1)) + min;
+
+    const engineSize = random(engineSizes);
+    const hp = random(horsepowerRange);
+    const fuel = random(fuels);
+
+    return {
+      id: i + 1,
+      name: random(carNames),
+      gearbox: random(gearboxOptions),
+      fuel,
+      price: randomNumber(8000, 75000),
+      offerNumber: `OFF-${1000 + i}`,
+      createdAt: new Date(
+        now - randomNumber(1000000000, 10000000000)
+      ).toISOString(),
+      discount: randomNumber(5, 25),
+      type: random(types),
+      stock: random(stockStatus),
+      colour: random(colours),
+      quantity: randomNumber(1, 20),
+      mileage: randomNumber(5000, 200000),
+      firstRegistration: new Date(
+        now - randomNumber(31536000000, 31536000000 * 10)
+      ).toISOString(),
+      availability: random(availability),
+      trim: random(trimLevels),
+      engineSpec: `${engineSize} ${fuel} ${hp} HP`,
+      vat: randomNumber(0, 25), // VAT percentage
+      transportCost: randomNumber(4000, 12000), // SEK NET
+    };
+  });
 }
+
 
 
 export default function OffersSearchNewCarServer() {

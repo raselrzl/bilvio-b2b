@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-    BellDot,
+  BellDot,
   Calendar,
   Clock,
   ClockPlus,
@@ -40,6 +40,10 @@ interface Offer {
   mileage: number;
   firstRegistration: string;
   availability: string;
+  trim: string;
+  engineSpec: string;
+  vat: number;
+  transportCost: number;
 }
 
 // Helper functions to format numbers/dates deterministically
@@ -282,7 +286,7 @@ export default function OffersFilterForm({
                     </p>
                   </div>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between text-sm text-gray-700">
                   <div className="flex gap-4 items-center justify-center">
                     <p>{offer.offerNumber}</p>
                     <div className="flex text-md items-center justify-center ">
@@ -300,24 +304,27 @@ export default function OffersFilterForm({
                       </p>
                     </div>
                   </div>
-                  <div className="items-end justify-end">
-                    <p>0% VAT</p>
+                  <div className="items-end justify-end ">
+                    <p>{offer.vat}% VAT</p>
                   </div>
                 </div>
                 <div className="items-end justify-end text-end text-gray-600 text-sm">
-                  <p>estimated transport cost 6 790 SEK NET</p>
+                  <p>
+                    estimated transport cost {formatNumber(offer.transportCost)}{" "}
+                    SEK NET
+                  </p>
                 </div>
                 <div className="flex flex-wrap text-sm text-gray-700 p-2 rounded-sm gap-2">
                   <div className="flex gap-2">
                     {" "}
                     <div className="bg-gray-100 py-1 px-2 text-black font-semibold">
-                      1.2 Petrol 84 HP
+                      {offer.engineSpec}
                     </div>
                     <div className="bg-gray-100 py-1 px-2 text-black font-semibold">
                       {offer.gearbox} 5
                     </div>
                     <div className="bg-gray-100 py-1 px-2 text-black font-semibold">
-                      Essential
+                      {offer.trim}
                     </div>
                   </div>
 
@@ -375,7 +382,7 @@ export default function OffersFilterForm({
                     href="#"
                     className="text-sm font-semibold hover:underline"
                   >
-                    Send message 
+                    Send message
                   </Link>
                   <BellDot />
                 </div>
@@ -386,7 +393,7 @@ export default function OffersFilterForm({
                     asChild
                     className="bg-[#619aab] text-white hover:bg-[#528a99] rounded-2xl px-4 py-2 text-sm font-semibold"
                   >
-                    <a href={`/offers/${offer.id}`}>View offer  {" >>"}</a>
+                    <a href={`/offers/${offer.id}`}>View offer {" >>"}</a>
                   </Button>
                 </div>
               </div>
