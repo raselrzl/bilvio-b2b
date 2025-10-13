@@ -370,7 +370,7 @@ export default function OffersFilterForm({
                   <Input
                     type="text"
                     placeholder="Write a note..."
-                    className="pl-10 pr-3 h-9 text-sm border-gray-300 rounded-md w-full"
+                    className="pl-10 pr-3 h-9 text-sm border-gray-300 rounded-xs w-full"
                   />
                   <SquarePen className="absolute right-2 top-2.5 h-4 w-4 text-gray-500" />
                   <p className="ml-4 text-xs text-gray-500">0/2000</p>
