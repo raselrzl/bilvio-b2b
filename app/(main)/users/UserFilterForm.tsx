@@ -213,6 +213,7 @@ export default function UserFilterForm({
           </tbody>
         </table>
       </div>
+
       <div className="mt-2 text-xs text-gray-700 mx-6 2xl:mx-3">
         Showing {users.length} of {initialUsers.length} users
       </div>
