@@ -270,7 +270,12 @@ export default async function UsedCarOfferDetailsPage({
                   </div>
 
                   {/* Discount */}
-                  <div className="font-semibold p-2 bg-white">Discount:</div>
+                   <div className="font-semibold p-2 bg-white flex">
+                    <p className="bg-amber-400 px-2 text-sm rounded-xs font-bold">
+                      {offer.discount}%
+                    </p>
+                    Discount:
+                  </div>
                   <div className="p-2 text-center bg-white text-red-600">
                     -{formatCurrency(discountValue)} SEK
                   </div>
