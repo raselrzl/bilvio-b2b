@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -52,7 +52,7 @@ export default function AppHeader({ email }: { email: string }) {
   const [expanded, setExpanded] = useState(false);
   const [offersOpen, setOffersOpen] = useState(false); // starts collapsed
   const pathname = usePathname();
-
+  const router = useRouter();
   useEffect(() => {
     document.documentElement.style.setProperty(
       "--sidebar-w",
@@ -227,8 +227,15 @@ export default function AppHeader({ email }: { email: string }) {
                   aria-current={active ? "page" : undefined}
                   aria-expanded={expanded && offersOpen}
                   onClick={(e) => {
-                    e.preventDefault(); // do not navigate
-                    setOffersOpen((v) => !v); // toggle submenu
+                    e.preventDefault();
+
+                    if (!expanded) {
+                      // 🟩 When collapsed: go directly to new offers page
+                      router.push("/offers-search/new");
+                    } else {
+                      // 🟦 When expanded: toggle submenu instead
+                      setOffersOpen((v) => !v);
+                    }
                   }}
                   className={`group grid items-center
                     ${
@@ -251,8 +258,11 @@ export default function AppHeader({ email }: { email: string }) {
                       }`}
                   >
                     {label}
-                    {expanded && offersOpen ?(<span className="ml-6 text-white text-xl">{"⤻"}</span>):(<span className="ml-6 text-white text-xl">{"⤼"}</span>)}
-                    
+                    {expanded && offersOpen ? (
+                      <span className="ml-6 text-white text-xl">{"⤻"}</span>
+                    ) : (
+                      <span className="ml-6 text-white text-xl">{"⤼"}</span>
+                    )}
                   </span>
                 </Link>
 
