@@ -7,6 +7,9 @@ export default async function OffersSearchNewCarServer() {
   // Fetch products from the database
   const products = await prisma.product.findMany({
     orderBy: { createdAt: "desc" },
+    where: {
+      productCondition: "NEW", // <-- only new products
+    },
     take: 20, // get latest 20 products
     select: {
       id: true,

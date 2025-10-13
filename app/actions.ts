@@ -292,6 +292,7 @@ const productSchema = z.object({
   price: z.number().min(0, "Price must be positive"),
   discount: z.number().min(0).max(100, "Discount must be 0-100"),
   type: z.enum(["SUPER", "INTERESTING", "NOT_INTERESTING", "LATER"]),
+  productCondition:z.enum(["NEW", "USED"]),
   stock: z.enum(["IN_STOCK", "OUT_OF_STOCK"]),
   colour: z.string().min(1, "Colour is required"),
   quantity: z.number().min(0, "Quantity must be positive"),

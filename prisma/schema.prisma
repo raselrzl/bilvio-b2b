@@ -85,6 +85,8 @@ model Product {
   updatedAt        DateTime @updatedAt
   userId           String?
   user             User?    @relation("UserProducts", fields: [userId], references: [id])
+
+  productCondition ProductCondition
 }
 
 enum FuelType {
@@ -93,7 +95,7 @@ enum FuelType {
   HYBRID
   ELECTRIC
 }
-
+ 
 enum Gearbox {
   AUTOMATIC
   MANUAL
@@ -114,6 +116,11 @@ enum OfferType {
   INTERESTING
   NOT_INTERESTING
   LATER
+}
+
+enum ProductCondition {
+  USED
+  NEW
 }
 
 

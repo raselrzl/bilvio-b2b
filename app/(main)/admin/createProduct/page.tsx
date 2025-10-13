@@ -25,87 +25,96 @@ export default function ProductForm({ userId }: { userId?: string }) {
   );
   const [price, setPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
-  const [type, setType] = useState<"SUPER" | "INTERESTING" | "NOT_INTERESTING" | "LATER">("SUPER");
+  const [type, setType] = useState<
+    "SUPER" | "INTERESTING" | "NOT_INTERESTING" | "LATER"
+  >("SUPER");
   const [stock, setStock] = useState<"IN_STOCK" | "OUT_OF_STOCK">("IN_STOCK");
   const [colour, setColour] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [mileage, setMileage] = useState(0);
   const [firstRegistration, setFirstRegistration] = useState("");
-  const [availability, setAvailability] = useState<"IMMEDIATELY" | "LATER">("IMMEDIATELY");
+  const [availability, setAvailability] = useState<"IMMEDIATELY" | "LATER">(
+    "IMMEDIATELY"
+  );
   const [trim, setTrim] = useState("");
   const [engineSpec, setEngineSpec] = useState("");
   const [vat, setVat] = useState(0);
   const [transportCost, setTransportCost] = useState(0);
-  const [productionYear, setProductionYear] = useState(new Date().getFullYear());
+  const [productionYear, setProductionYear] = useState(
+    new Date().getFullYear()
+  );
   const [loading, setLoading] = useState(false);
+  const [productCondition, setProductCondition] = useState<"NEW" | "USED">(
+    "NEW"
+  );
 
   const inputClass = (value: string | number | undefined) =>
     `h-9 w-full rounded-xs bg-white placeholder-gray-400 focus:outline-none focus:ring-0 focus:border-0 ${
       value ? "bg-[#619aab] text-white placeholder-white" : ""
     }`;
 
- const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
 
-  try {
-    const result = await createProductAction({
-      name,
-      offerNumber,
-      gearbox,
-      fuel,
-      price,
-      discount,
-      type,
-      stock,
-      colour,
-      quantity,
-      mileage,
-      firstRegistration,
-      availability,
-      trim,
-      engineSpec,
-      vat,
-      transportCost,
-      productionYear,
-      userId,
-    });
+    try {
+      const result = await createProductAction({
+        name,
+        offerNumber,
+        gearbox,
+        fuel,
+        price,
+        discount,
+        type,
+        stock,
+        colour,
+        quantity,
+        mileage,
+        firstRegistration,
+        availability,
+        trim,
+        engineSpec,
+        vat,
+        transportCost,
+        productionYear,
+        userId,
+        productCondition,
+      });
 
-    if (result.ok) {
-      toast.success("Product created successfully!");
-      router.refresh(); // refresh server components for real-time data
+      if (result.ok) {
+        toast.success("Product created successfully!");
+        router.refresh(); // refresh server components for real-time data
 
-      // Reset form
-      setName("");
-      setOfferNumber("");
-      setGearbox("AUTOMATIC");
-      setFuel("PETROL");
-      setPrice(0);
-      setDiscount(0);
-      setType("SUPER");
-      setStock("IN_STOCK");
-      setColour("");
-      setQuantity(0);
-      setMileage(0);
-      setFirstRegistration("");
-      setAvailability("IMMEDIATELY");
-      setTrim("");
-      setEngineSpec("");
-      setVat(0);
-      setTransportCost(0);
-      setProductionYear(new Date().getFullYear());
-    } else {
-      toast.error("Failed to create product.");
-      console.log(result.errors);
+        // Reset form
+        setName("");
+        setOfferNumber("");
+        setGearbox("AUTOMATIC");
+        setFuel("PETROL");
+        setPrice(0);
+        setDiscount(0);
+        setType("SUPER");
+        setStock("IN_STOCK");
+        setColour("");
+        setQuantity(0);
+        setMileage(0);
+        setFirstRegistration("");
+        setAvailability("IMMEDIATELY");
+        setTrim("");
+        setEngineSpec("");
+        setVat(0);
+        setTransportCost(0);
+        setProductionYear(new Date().getFullYear());
+      } else {
+        toast.error("Failed to create product.");
+        console.log(result.errors);
+      }
+    } catch (err) {
+      toast.error("Something went wrong!");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    toast.error("Something went wrong!");
-    console.error(err);
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   return (
     <div className="w-full max-w-7xl mx-auto bg-gray-50 p-6 mt-8 rounded shadow space-y-6">
@@ -114,6 +123,23 @@ export default function ProductForm({ userId }: { userId?: string }) {
         onSubmit={handleSubmit}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
       >
+        <div className="flex flex-col gap-1">
+          <Label>Product Condition</Label>
+          <Select
+            value={productCondition}
+            onValueChange={(v) => setProductCondition(v as "NEW" | "USED")}
+            required
+          >
+            <SelectTrigger className={inputClass(productCondition)}>
+              <SelectValue placeholder="Select Condition" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="NEW">NEW</SelectItem>
+              <SelectItem value="USED">USED</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         <div className="flex flex-col gap-1">
           <Label>Car Name</Label>
           <Input
@@ -203,7 +229,9 @@ export default function ProductForm({ userId }: { userId?: string }) {
           <Select
             value={type}
             onValueChange={(v) =>
-              setType(v as "SUPER" | "INTERESTING" | "NOT_INTERESTING" | "LATER")
+              setType(
+                v as "SUPER" | "INTERESTING" | "NOT_INTERESTING" | "LATER"
+              )
             }
             required
           >
