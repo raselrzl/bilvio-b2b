@@ -296,7 +296,7 @@ export default async function UsedCarOfferDetailsPage({
       </div>
 
       {/* Bottom actions */}
-      <div className="bg-white px-2 pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="bg-white py-6 px-2 pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         {/* Input note */}
         <div className="relative flex-1 max-w-sm w-full">
           <Input
