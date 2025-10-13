@@ -216,55 +216,76 @@ export default async function UsedCarOfferDetailsPage({
               Gross
             </div>
 
-            {/* Table rows */}
-            {[
-              "Catalogue Base Price",
-              "Options",
-              "Total Catalogue",
-              "Discount",
-            ].map((label, index) => {
-              const netValue = Math.floor(Math.random() * 20000 + 10000); // Random net if needed
-              const grossValue = Math.floor(netValue * 1.25); // Example gross = net + VAT 25%
-              return (
-                <React.Fragment key={label}>
-                  {/* Zebra stripe background */}
-                  <div
-                    className={`font-semibold p-2 ${
-                      index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                    }`}
-                  >
-                    {label}:
-                  </div>
-                  <div
-                    className={`p-2 text-center ${
-                      index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                    }`}
-                  >
-                    {label === "Discount"
-                      ? `${Math.floor(Math.random() * 15 + 5)}%`
-                      : `${formatNumber(netValue)} SEK`}
-                  </div>
-                  <div
-                    className={`p-2 text-center ${
-                      index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                    }`}
-                  >
-                    {label === "Discount"
-                      ? `${Math.floor(Math.random() * 15 + 5)}%`
-                      : `${formatNumber(grossValue)} SEK`}
-                  </div>
-                </React.Fragment>
-              );
-            })}
+            {(() => {
+              const baseNet = offer.price;
+              const optionsNet = offer.transportCost; // assuming "Options" = transport cost
+              const totalCatalogueNet = baseNet + optionsNet;
+              const discountValue = (totalCatalogueNet * offer.discount) / 100;
+              const discountedNet = totalCatalogueNet - discountValue;
 
-            {/* Final Price row */}
-            <div className="col-span-3 bg-black text-white text-lg font-bold p-2 text-start">
-              Price:{" "}
-              {formatNumber(
-                offer.price || Math.floor(Math.random() * 30000 + 15000)
-              )}{" "}
-              SEK NET
-            </div>
+              const baseGross = baseNet * (1 + offer.vat / 100);
+              const optionsGross = optionsNet * (1 + offer.vat / 100);
+              const totalCatalogueGross =
+                totalCatalogueNet * (1 + offer.vat / 100);
+              const discountedGross =
+                totalCatalogueGross - discountValue * (1 + offer.vat / 100);
+
+              const formatCurrency = (num: number) =>
+                num.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                });
+
+              return (
+                <>
+                  {/* Catalogue Base Price */}
+                  <div className="font-semibold p-2 bg-gray-100">
+                    Catalogue Base Price:
+                  </div>
+                  <div className="p-2 text-center bg-gray-100">
+                    {formatCurrency(baseNet)} SEK
+                  </div>
+                  <div className="p-2 text-center bg-gray-100">
+                    {formatCurrency(baseGross)} SEK
+                  </div>
+
+                  {/* Options */}
+                  <div className="font-semibold p-2 bg-white">Options:</div>
+                  <div className="p-2 text-center bg-white">
+                    {formatCurrency(optionsNet)} SEK
+                  </div>
+                  <div className="p-2 text-center bg-white">
+                    {formatCurrency(optionsGross)} SEK
+                  </div>
+
+                  {/* Total Catalogue */}
+                  <div className="font-semibold p-2 bg-gray-100">
+                    Total Catalogue:
+                  </div>
+                  <div className="p-2 text-center bg-gray-100">
+                    {formatCurrency(totalCatalogueNet)} SEK
+                  </div>
+                  <div className="p-2 text-center bg-gray-100">
+                    {formatCurrency(totalCatalogueGross)} SEK
+                  </div>
+
+                  {/* Discount */}
+                  <div className="font-semibold p-2 bg-white">Discount:</div>
+                  <div className="p-2 text-center bg-white text-red-600">
+                    -{formatCurrency(discountValue)} SEK
+                  </div>
+                  <div className="p-2 text-center bg-white text-red-600">
+                    -{formatCurrency(discountValue * (1 + offer.vat / 100))} SEK
+                  </div>
+
+                  {/* Final Price */}
+                  <div className="col-span-3 bg-black text-white text-lg font-bold p-2 text-start">
+                    Price: {formatCurrency(discountedNet)} SEK NET /{" "}
+                    {formatCurrency(discountedGross)} SEK GROSS
+                  </div>
+                </>
+              );
+            })()}
           </div>
         </div>
       </div>
