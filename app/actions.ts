@@ -282,3 +282,64 @@ export async function updateProfileBasicsAction(formData: FormData) {
     `/profile?ok=1&msg=${encodeURIComponent("Profile updated successfully.")}`
   );
 }
+
+
+const productSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  offerNumber: z.string().min(1, "Offer number is required"),
+  gearbox: z.enum(["AUTOMATIC", "MANUAL"]),
+  fuel: z.enum(["PETROL", "DIESEL", "HYBRID", "ELECTRIC"]),
+  price: z.number().min(0, "Price must be positive"),
+  discount: z.number().min(0).max(100, "Discount must be 0-100"),
+  type: z.enum(["SUPER", "INTERESTING", "NOT_INTERESTING", "LATER"]),
+  stock: z.enum(["IN_STOCK", "OUT_OF_STOCK"]),
+  colour: z.string().min(1, "Colour is required"),
+  quantity: z.number().min(0, "Quantity must be positive"),
+  mileage: z.number().min(0, "Mileage must be positive"),
+  firstRegistration: z.string(), // ISO date string
+  availability: z.enum(["IMMEDIATELY", "LATER"]),
+  trim: z.string().min(1, "Trim is required"),
+  engineSpec: z.string().min(1, "Engine spec is required"),
+  vat: z.number().min(0, "VAT must be positive"),
+  transportCost: z.number().min(0, "Transport cost must be positive"),
+  productionYear: z.number().min(1900).max(new Date().getFullYear()),
+  userId: z.string().optional(),
+});
+
+export type ProductPayload = z.infer<typeof productSchema>;
+
+export async function createProductAction(raw: ProductPayload) {
+  const parsed = productSchema.safeParse(raw);
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string[]> = {};
+    for (const issue of parsed.error.issues) {
+      const key = (issue.path[0] ?? "form").toString();
+      (fieldErrors[key] ||= []).push(issue.message);
+    }
+    return { ok: false, errors: fieldErrors };
+  }
+
+  try {
+    await prisma.product.create({
+      data: {
+        ...parsed.data,
+        firstRegistration: new Date(parsed.data.firstRegistration),
+      },
+    });
+  } catch (e: any) {
+    if (e?.code === "P2002" && Array.isArray(e?.meta?.target)) {
+      const errors: Record<string, string[]> = {};
+      for (const field of e.meta.target as string[]) {
+        (errors[field] ||= []).push(`${field} already exists`);
+      }
+      return { ok: false, errors };
+    }
+    console.error(e);
+    return { ok: false, errors: { form: ["Unexpected error."] } };
+  }
+
+  revalidatePath("/admin/createProduct");
+  revalidatePath("/");
+
+  redirect(`/admin/createProduct?ok=1&msg=${encodeURIComponent("Product created successfully.")}`);
+}

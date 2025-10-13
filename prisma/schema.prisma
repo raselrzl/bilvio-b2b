@@ -36,6 +36,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  products Product[]  @relation("UserProducts")
+
 
 }
 
@@ -57,3 +59,61 @@ enum Intent {
   SALES
   PURCHASES
 }
+
+
+model Product {
+  id               String   @id @default(cuid())
+  offerNumber      String   @unique
+  name             String
+  gearbox          Gearbox
+  fuel             FuelType
+  price            Float
+  discount         Float
+  type             OfferType
+  stock            StockStatus
+  colour           String
+  quantity         Int
+  mileage          Int
+  firstRegistration DateTime
+  availability     Availability
+  trim             String
+  engineSpec       String
+  vat              Float
+  transportCost    Float
+  productionYear   Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  userId           String?
+  user             User?    @relation("UserProducts", fields: [userId], references: [id])
+}
+
+enum FuelType {
+  PETROL
+  DIESEL
+  HYBRID
+  ELECTRIC
+}
+
+enum Gearbox {
+  AUTOMATIC
+  MANUAL
+}
+
+enum StockStatus {
+  IN_STOCK
+  OUT_OF_STOCK
+}
+
+enum Availability {
+  IMMEDIATELY
+  LATER
+}
+
+enum OfferType {
+  SUPER
+  INTERESTING
+  NOT_INTERESTING
+  LATER
+}
+
+
