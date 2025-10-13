@@ -144,7 +144,7 @@ export default function OffersSearchUsedCarServer() {
 
   return (
     <div className="max-w-7xl mx-auto w-full">
-      <div className="flex items-center justify-between px-2 2xl:px-2 mt-6">
+      <div className="flex items-center justify-between px-6 2xl:px-0 mt-6">
         <h1 className="text-2xl md:text-3xl font-extrabold">Offers Search</h1>
       </div>
 
