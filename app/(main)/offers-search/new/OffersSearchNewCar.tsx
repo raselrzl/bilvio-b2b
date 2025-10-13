@@ -10,7 +10,19 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import { X } from "lucide-react";
+import {
+    BellDot,
+  Calendar,
+  Clock,
+  ClockPlus,
+  Eye,
+  Heart,
+  SquarePen,
+  ThumbsDown,
+  ThumbsUp,
+  X,
+} from "lucide-react";
+import Link from "next/link";
 
 interface Offer {
   id: number;
@@ -31,7 +43,8 @@ interface Offer {
 }
 
 // Helper functions to format numbers/dates deterministically
-const formatNumber = (num: number) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const formatNumber = (num: number) =>
+  num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 const formatDate = (dateStr: string) => dateStr.split("T")[0]; // YYYY-MM-DD
 
 export default function OffersFilterForm({
@@ -60,12 +73,15 @@ export default function OffersFilterForm({
       filtered = filtered.filter((o) =>
         o.name.toLowerCase().includes(nameFilter.toLowerCase())
       );
-    if (gearboxFilter) filtered = filtered.filter((o) => o.gearbox === gearboxFilter);
+    if (gearboxFilter)
+      filtered = filtered.filter((o) => o.gearbox === gearboxFilter);
     if (fuelFilter) filtered = filtered.filter((o) => o.fuel === fuelFilter);
     if (priceFrom) filtered = filtered.filter((o) => o.price >= priceFrom);
     if (priceTo) filtered = filtered.filter((o) => o.price <= priceTo);
     if (offerNumberFilter)
-      filtered = filtered.filter((o) => o.offerNumber.includes(offerNumberFilter));
+      filtered = filtered.filter((o) =>
+        o.offerNumber.includes(offerNumberFilter)
+      );
     if (createdAfter)
       filtered = filtered.filter((o) => o.createdAt >= createdAfter);
     if (createdBefore)
@@ -141,7 +157,10 @@ export default function OffersFilterForm({
             onChange={(e) => setNameFilter(e.target.value)}
             className={inputClass(nameFilter)}
           />
-          <Select value={gearboxFilter} onValueChange={(v) => setGearboxFilter(v)}>
+          <Select
+            value={gearboxFilter}
+            onValueChange={(v) => setGearboxFilter(v)}
+          >
             <SelectTrigger className={selectClass(gearboxFilter)}>
               <SelectValue placeholder="Gearbox" />
             </SelectTrigger>
@@ -210,7 +229,11 @@ export default function OffersFilterForm({
           </Select>
           <div></div>
           <div></div>
-          <Button variant="outline" className="rounded-xs" onClick={handleReset}>
+          <Button
+            variant="outline"
+            className="rounded-xs"
+            onClick={handleReset}
+          >
             <X className="h-4 w-4 mr-2" /> Clear
           </Button>
         </div>
@@ -235,31 +258,137 @@ export default function OffersFilterForm({
               key={offer.id}
               className="relative border rounded-xs p-4 bg-white shadow hover:shadow-md transition"
             >
-              <div className="flex items-center gap-2 text-lg font-bold">
-                <span>🚗 Car Name:</span>
-                <span>{offer.name}</span>
-              </div>
+              <div>
+                {" "}
+                <div className="flex flex-wrap items-center justify-between">
+                  <div>
+                    <h1 className="text-xl font-bold">{offer.name}</h1>
+                  </div>
+                  <div className="flex gap-2">
+                    <Heart className="h-5 w-5" />
+                    <ThumbsUp className="h-5 w-5" />
+                    <ThumbsDown className="h-5 w-5" />
+                    <ClockPlus className="h-5 w-5" />
+                  </div>
+                  <div className="bg-amber-400 px-2 text-sm rounded-xs font-bold">
+                    <p>{offer.discount}%</p>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <p className="text-lg font-bold">
+                      {formatNumber(offer.price)}{" "}
+                    </p>
+                    <p className="ml-2 text-sm mt-1 font-bold text-gray-600">
+                      SEK NET
+                    </p>
+                  </div>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <div className="flex gap-4 items-center justify-center">
+                    <p>{offer.offerNumber}</p>
+                    <div className="flex text-md items-center justify-center ">
+                      <Calendar className="h-4 w-4 mr-1" />
+                      <p className="text-center">
+                        {formatDate(offer.firstRegistration)}
+                      </p>
+                    </div>
+                    <div className="flex text-md items-center justify-center ">
+                      <p>
+                        <Eye className="h-4 w-4 mr-1" />
+                      </p>
+                      <p className="text-center">
+                        {formatDate(offer.createdAt)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="items-end justify-end">
+                    <p>0% VAT</p>
+                  </div>
+                </div>
+                <div className="items-end justify-end text-end text-gray-600 text-sm">
+                  <p>estimated transport cost 6 790 SEK NET</p>
+                </div>
+                <div className="flex flex-wrap text-sm text-gray-700 p-2 rounded-sm gap-2">
+                  <div className="flex gap-2">
+                    {" "}
+                    <div className="bg-gray-100 py-1 px-2 text-black font-semibold">
+                      1.2 Petrol 84 HP
+                    </div>
+                    <div className="bg-gray-100 py-1 px-2 text-black font-semibold">
+                      {offer.gearbox} 5
+                    </div>
+                    <div className="bg-gray-100 py-1 px-2 text-black font-semibold">
+                      Essential
+                    </div>
+                  </div>
 
-              <div className="flex flex-wrap text-sm text-gray-700 p-2 rounded-sm gap-2">
-                <div className="bg-gray-100 py-1 px-2">Gearbox: {offer.gearbox}</div>
-                <div className="bg-gray-100 py-1 px-2">Fuel: {offer.fuel}</div>
-                <div className="bg-gray-100 py-1 px-2">
-                  Price: ${formatNumber(offer.price)}
+                  <div className="flex gap-2 bg-gray-100 py-1 px-2">
+                    Type: <p className="font-semibold">{offer.stock}</p>
+                  </div>
+
+                  <div className="flex gap-2 bg-gray-100 py-1 px-2">
+                    Colour: <p className="font-semibold">{offer.colour}</p>
+                  </div>
+
+                  <div className="flex gap-2 bg-gray-100 py-1 px-2">
+                    Quantity: <p className="font-semibold">{offer.quantity}</p>
+                  </div>
+
+                  <div className="flex gap-2 bg-gray-100 py-1 px-2">
+                    Mileage:{" "}
+                    <p className="font-semibold">
+                      {formatNumber(offer.mileage)} km
+                    </p>
+                  </div>
+                  <div className="flex gap-2 bg-gray-100 py-1 px-2">
+                    Fuel: <p className="font-semibold">{offer.fuel}</p>
+                  </div>
+
+                  <div className="flex gap-2 bg-gray-100 py-1 px-2">
+                    First registration:{" "}
+                    <p className="font-semibold">
+                      {" "}
+                      around an availability date at seller warehouse
+                    </p>
+                  </div>
+
+                  <div className="flex gap-2 bg-gray-100 py-1 px-2">
+                    Availability:{" "}
+                    <p className="font-semibold">{offer.availability}</p>
+                  </div>
                 </div>
-                <div className="bg-gray-100 py-1 px-2">Offer #: {offer.offerNumber}</div>
-                <div className="bg-gray-100 py-1 px-2">Discount: {offer.discount}%</div>
-                <div className="bg-gray-100 py-1 px-2">Type: {offer.type}</div>
-                <div className="bg-gray-100 py-1 px-2">Stock: {offer.stock}</div>
-                <div className="bg-gray-100 py-1 px-2">Colour: {offer.colour}</div>
-                <div className="bg-gray-100 py-1 px-2">Quantity: {offer.quantity}</div>
-                <div className="bg-gray-100 py-1 px-2">
-                  Mileage: {formatNumber(offer.mileage)} km
+              </div>
+              <div className="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between gap-4">
+                {/* 1️⃣ Input with icon */}
+                <div className="relative flex-1 max-w-sm">
+                  <Input
+                    type="text"
+                    placeholder="Write a note..."
+                    className="pl-10 pr-3 h-9 text-sm border-gray-300 rounded-md w-full"
+                  />
+                  <SquarePen className="absolute right-2 top-2.5 h-4 w-4 text-gray-500" />
+                  <p className="ml-4 text-xs text-gray-500">0/2000</p>
                 </div>
-                <div className="bg-gray-100 py-1 px-2">
-                  First Registration: {formatDate(offer.firstRegistration)}
+
+                {/* 2️⃣ Send message link */}
+                <div className="flex">
+                  <Link
+                    href="#"
+                    className="text-sm font-semibold hover:underline"
+                  >
+                    Send message 
+                  </Link>
+                  <BellDot />
                 </div>
-                <div className="bg-gray-100 py-1 px-2">Availability: {offer.availability}</div>
-                <div className="bg-gray-100 py-1 px-2">Created: {formatDate(offer.createdAt)}</div>
+
+                {/* 3️⃣ View offer button */}
+                <div>
+                  <Button
+                    asChild
+                    className="bg-[#619aab] text-white hover:bg-[#528a99] rounded-2xl px-4 py-2 text-sm font-semibold"
+                  >
+                    <a href={`/offers/${offer.id}`}>View offer  {" >>"}</a>
+                  </Button>
+                </div>
               </div>
             </div>
           ))
