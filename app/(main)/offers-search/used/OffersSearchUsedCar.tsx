@@ -442,7 +442,7 @@ export default function OffersUsedCarFilterForm({
                     asChild
                     className="bg-[#619aab] text-white hover:bg-[#528a99] rounded-2xl px-4 py-2 text-sm font-semibold"
                   >
-                    <a href={`/offers/${offer.id}`}>View offer {" >>"}</a>
+                    <a href={`/offers-search/used/${offer.id}`}>View offer {" >>"}</a>
                   </Button>
                 </div>
               </div>
