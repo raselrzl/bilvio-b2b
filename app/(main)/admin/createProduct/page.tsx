@@ -44,36 +44,38 @@ export default function ProductForm({ userId }: { userId?: string }) {
       value ? "bg-[#619aab] text-white placeholder-white" : ""
     }`;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      await createProductAction({
-        name,
-        offerNumber,
-        gearbox,
-        fuel,
-        price,
-        discount,
-        type,
-        stock,
-        colour,
-        quantity,
-        mileage,
-        firstRegistration,
-        availability,
-        trim,
-        engineSpec,
-        vat,
-        transportCost,
-        productionYear,
-        userId,
-      });
+  try {
+    const result = await createProductAction({
+      name,
+      offerNumber,
+      gearbox,
+      fuel,
+      price,
+      discount,
+      type,
+      stock,
+      colour,
+      quantity,
+      mileage,
+      firstRegistration,
+      availability,
+      trim,
+      engineSpec,
+      vat,
+      transportCost,
+      productionYear,
+      userId,
+    });
 
+    if (result.ok) {
       toast.success("Product created successfully!");
+      router.refresh(); // refresh server components for real-time data
 
-      // reset form
+      // Reset form
       setName("");
       setOfferNumber("");
       setGearbox("AUTOMATIC");
@@ -92,14 +94,18 @@ export default function ProductForm({ userId }: { userId?: string }) {
       setVat(0);
       setTransportCost(0);
       setProductionYear(new Date().getFullYear());
-
-      router.refresh(); // refresh page to show new product
-    } catch (err) {
-      toast.error("Something went wrong!");
-    } finally {
-      setLoading(false);
+    } else {
+      toast.error("Failed to create product.");
+      console.log(result.errors);
     }
-  };
+  } catch (err) {
+    toast.error("Something went wrong!");
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="w-full max-w-7xl mx-auto bg-gray-50 p-6 mt-8 rounded shadow space-y-6">

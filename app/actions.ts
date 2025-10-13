@@ -308,7 +308,9 @@ const productSchema = z.object({
 
 export type ProductPayload = z.infer<typeof productSchema>;
 
-export async function createProductAction(raw: ProductPayload) {
+export async function createProductAction(
+  raw: ProductPayload
+): Promise<{ ok: boolean; errors?: Record<string, string[]> }> {
   const parsed = productSchema.safeParse(raw);
   if (!parsed.success) {
     const fieldErrors: Record<string, string[]> = {};
@@ -326,6 +328,11 @@ export async function createProductAction(raw: ProductPayload) {
         firstRegistration: new Date(parsed.data.firstRegistration),
       },
     });
+
+    revalidatePath("/admin/createProduct");
+    revalidatePath("/");
+
+    return { ok: true }; // always returns an object
   } catch (e: any) {
     if (e?.code === "P2002" && Array.isArray(e?.meta?.target)) {
       const errors: Record<string, string[]> = {};
@@ -337,9 +344,5 @@ export async function createProductAction(raw: ProductPayload) {
     console.error(e);
     return { ok: false, errors: { form: ["Unexpected error."] } };
   }
-
-  revalidatePath("/admin/createProduct");
-  revalidatePath("/");
-
-  redirect(`/admin/createProduct?ok=1&msg=${encodeURIComponent("Product created successfully.")}`);
 }
+
