@@ -17,10 +17,9 @@ import {
 import { Input } from "@/components/ui/input";
 import React from "react";
 
-// Real offers
 export const offers = [
   {
-    id: 1,
+    id: 1111111111,
     name: "Toyota Corolla",
     gearbox: "Automatic",
     fuel: "Petrol",
@@ -42,7 +41,7 @@ export const offers = [
     productionYear: 2020,
   },
   {
-    id: 2,
+    id: 222222222222,
     name: "Honda Civic",
     gearbox: "Manual",
     fuel: "Diesel",
@@ -64,7 +63,7 @@ export const offers = [
     productionYear: 2019,
   },
   {
-    id: 3,
+    id: 33333333333333,
     name: "BMW 3 Series",
     gearbox: "Automatic",
     fuel: "Hybrid",
@@ -76,13 +75,13 @@ export const offers = [
     stock: "In Stock",
     colour: "Black",
     quantity: 2,
-    mileage: 38000,
+    mileage: 30000,
     firstRegistration: "2021-02-10T00:00:00.000Z",
     availability: "Immediately",
     trim: "Luxury",
     engineSpec: "2.0 Hybrid 180 HP",
     vat: 25,
-    transportCost: 8000,
+    transportCost: 9000,
     productionYear: 2021,
   },
 ];
@@ -100,7 +99,7 @@ const formatNumber = (num: number) =>
 
 const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString();
 
-export default async function UsedCarOfferDetailsPage({
+export default async function NewCarOfferDetailsPage({
   params,
 }: {
   params: { id: string };
@@ -109,7 +108,9 @@ export default async function UsedCarOfferDetailsPage({
 
   return (
     <section className="max-w-7xl mx-auto px-6 my-6">
-      <h1 className="text-2xl md:text-3xl font-extrabold mb-6">Used car</h1>
+      <h1 className="text-2xl md:text-3xl font-extrabold mb-6">
+        New cars
+      </h1>
       {/* Header */}
       <div className="border-t border-l border-r p-4 bg-white">
         <div className="flex flex-wrap items-center justify-between mb-2">
@@ -206,7 +207,7 @@ export default async function UsedCarOfferDetailsPage({
           <div className="grid grid-cols-3 text-sm text-gray-700 border overflow-hidden">
             {/* Header */}
             <div className="flex col-span-3 bg-white text-xl font-bold p-3 items-center">
-              Price Analysis <CircleQuestionMark className="h-5 w-5 ml-2" />
+              Price Analysis <CircleQuestionMark className="h-5 w-5 ml-2"/>
             </div>
 
             {/* Sub-header for Net / Gross */}
