@@ -294,7 +294,7 @@ export default function OffersUsedCarFilterForm({
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-2 items-end mt-2 px-2">
           <div>
             <h1 className="text-2xl text-gray-600 md:text-3xl font-extrabold">
-              New cars
+              Used cars
             </h1>
           </div>
           <div className="mt-2 px-2 text-xs text-gray-700">
