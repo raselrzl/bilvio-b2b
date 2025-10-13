@@ -169,8 +169,8 @@ export default function OffersFilterForm({
               <SelectValue placeholder="Gearbox" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Automatic">Automatic</SelectItem>
-              <SelectItem value="Manual">Manual</SelectItem>
+              <SelectItem value="AUTOMATIC">Automatic</SelectItem>
+              <SelectItem value="MANUAL">Manual</SelectItem>
             </SelectContent>
           </Select>
           <Select value={fuelFilter} onValueChange={(v) => setFuelFilter(v)}>
@@ -178,10 +178,10 @@ export default function OffersFilterForm({
               <SelectValue placeholder="Fuel Type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Petrol">Petrol</SelectItem>
-              <SelectItem value="Diesel">Diesel</SelectItem>
-              <SelectItem value="Hybrid">Hybrid</SelectItem>
-              <SelectItem value="Electric">Electric</SelectItem>
+              <SelectItem value="PETROL">Petrol</SelectItem>
+              <SelectItem value="DIESEL">Diesel</SelectItem>
+              <SelectItem value="HYBRID">Hybrid</SelectItem>
+              <SelectItem value="ELECTRIC">Electric</SelectItem>
             </SelectContent>
           </Select>
           <Input
@@ -211,6 +211,7 @@ export default function OffersFilterForm({
             onChange={(e) => setCreatedAfter(e.target.value)}
             className={inputClass(createdAfter)}
           />
+          
           <Input
             type="date"
             placeholder="Created Before"
