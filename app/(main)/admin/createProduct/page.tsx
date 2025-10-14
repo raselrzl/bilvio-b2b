@@ -83,7 +83,8 @@ export default function ProductForm({ userId }: { userId?: string }) {
 
       if (result.ok) {
         toast.success("Product created successfully!");
-        router.refresh(); // refresh server components for real-time data
+        router.refresh();
+        router.push("/admin/createProduct");
 
         // Reset form
         setName("");
