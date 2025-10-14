@@ -63,9 +63,10 @@ async function getOfferById(id: string) {
 export default async function NewCarOfferDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const offer = await getOfferById(params.id);
+  const { id } = await params;
+  const offer = await getOfferById(id);
 
   const baseNet = offer.price;
   const optionsNet = offer.transportCost;
