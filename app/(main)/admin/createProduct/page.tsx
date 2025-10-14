@@ -388,7 +388,7 @@ export default function ProductForm({ userId }: { userId?: string }) {
 
         <Button
           type="submit"
-          className="col-span-full cursor-pointer bg-[#619aab] text-white hover:bg-[#528a99] rounded-xl h-10 mt-2 flex items-center justify-center"
+          className="col-span-full cursor-pointer bg-[#619aab] text-white hover:bg-[#528a99] rounded-xs h-10 mt-2 flex items-center justify-center"
           disabled={loading}
         >
           {loading && (
