@@ -357,13 +357,13 @@ export default function AllProducts({
                     <p>{offer.vat}% VAT</p>
                   </div>
                 </div>
-                <div className="items-end justify-end text-end text-gray-600 text-sm">
+                <div className="items-end justify-end text-end text-gray-600 text-sm capitalize">
                   <p>
                     estimated transport cost {formatNumber(offer.transportCost)}{" "}
                     SEK NET
                   </p>
                 </div>
-                <div className="flex flex-wrap text-sm text-gray-700 p-2 rounded-sm gap-2">
+                <div className="flex flex-wrap text-sm text-gray-700 p-2 rounded-sm gap-2 capitalize">
                   <div className="flex gap-2">
                     {" "}
                     <div className="bg-gray-100 py-1 px-2 text-black font-semibold">
@@ -454,7 +454,7 @@ export default function AllProducts({
           </div>
         )}
       </div>
-      <div className="mt-2 px-2 text-xs text-gray-700">
+      <div className="mt-2 px-6 2xl:px-2 text-xs text-gray-700">
         Showing {filteredOffers.length} of {offers.length} entries
       </div>
     </div>
