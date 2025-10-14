@@ -25,7 +25,7 @@ import {
 import Link from "next/link";
 
 interface Offer {
-  id: number;
+  id: string;
   name: string;
   gearbox: string;
   fuel: string;

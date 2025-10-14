@@ -16,82 +16,42 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import React from "react";
+import { prisma } from "@/app/utils/db";
 
-// Real offers
-export const offers = [
-  {
-    id: 1,
-    name: "Toyota Corolla",
-    gearbox: "Automatic",
-    fuel: "Petrol",
-    price: 22000,
-    offerNumber: "OFF-1001",
-    createdAt: "2023-07-15T10:12:00.000Z",
-    discount: 10,
-    type: "Interesting",
-    stock: "In Stock",
-    colour: "Silver",
-    quantity: 5,
-    mileage: 45000,
-    firstRegistration: "2020-03-20T00:00:00.000Z",
-    availability: "Immediately",
-    trim: "Comfort",
-    engineSpec: "1.5 Petrol 130 HP",
-    vat: 15,
-    transportCost: 6000,
-    productionYear: 2020,
-  },
-  {
-    id: 2,
-    name: "Honda Civic",
-    gearbox: "Manual",
-    fuel: "Diesel",
-    price: 19500,
-    offerNumber: "OFF-1002",
-    createdAt: "2023-03-11T15:40:00.000Z",
-    discount: 8,
-    type: "Later",
-    stock: "In Stock",
-    colour: "Blue",
-    quantity: 3,
-    mileage: 58000,
-    firstRegistration: "2019-09-18T00:00:00.000Z",
-    availability: "Later",
-    trim: "Essential",
-    engineSpec: "1.6 Diesel 120 HP",
-    vat: 20,
-    transportCost: 5500,
-    productionYear: 2019,
-  },
-  {
-    id: 3,
-    name: "BMW 3 Series",
-    gearbox: "Automatic",
-    fuel: "Hybrid",
-    price: 38500,
-    offerNumber: "OFF-1003",
-    createdAt: "2023-09-01T08:22:00.000Z",
-    discount: 12,
-    type: "Super",
-    stock: "In Stock",
-    colour: "Black",
-    quantity: 2,
-    mileage: 38000,
-    firstRegistration: "2021-02-10T00:00:00.000Z",
-    availability: "Immediately",
-    trim: "Luxury",
-    engineSpec: "2.0 Hybrid 180 HP",
-    vat: 25,
-    transportCost: 8000,
-    productionYear: 2021,
-  },
-];
+async function getOfferById(id: string) {
+  const offer = await prisma.product.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      gearbox: true,
+      fuel: true,
+      price: true,
+      offerNumber: true,
+      createdAt: true,
+      discount: true,
+      type: true,
+      stock: true,
+      colour: true,
+      quantity: true,
+      mileage: true,
+      firstRegistration: true,
+      availability: true,
+      trim: true,
+      engineSpec: true,
+      vat: true,
+      transportCost: true,
+      productionYear: true,
+    },
+  });
 
-// Fetch offer by ID
-async function getOfferById(id: number) {
-  const offer = offers.find((o) => o.id === id);
   if (!offer) notFound();
-  return offer;
+
+  return {
+    ...offer,
+    firstRegistration: offer.firstRegistration.toISOString(),
+    createdAt: offer.createdAt.toISOString(),
+  };
 }
 
 // Helpers
@@ -103,9 +63,10 @@ const formatDate = (dateStr: string) => new Date(dateStr).toLocaleDateString();
 export default async function UsedCarOfferDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const offer = await getOfferById(Number(params.id));
+  const { id } = await params;
+  const offer = await getOfferById(id);
 
   return (
     <section className="max-w-7xl mx-auto px-6 my-6">
