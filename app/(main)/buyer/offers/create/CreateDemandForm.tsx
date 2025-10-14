@@ -244,24 +244,12 @@ export default function CreateDemandForm({
 
       <div className="flex flex-wrap items-center gap-2 pt-2">
         <SubmitButton text="Save" />
-
-        <Button
-          type="submit"
-          name="intent"
-          value="draft"
-          variant="secondary"
-          className="rounded-xs cursor-pointer"
+        <Link
+          href="/demand"
+          className="rounded-xs bg-amber-600 hover:bg-amber-500 px-4 py-1"
         >
-          Save as draft
-        </Button>
-
-        <Button
-          asChild
-          variant="destructive"
-          className="rounded-xs bg-amber-600 hover:bg-amber-500"
-        >
-          <Link href="/demand">Cancel</Link>
-        </Button>
+          Cancel
+        </Link>
       </div>
     </form>
   );
