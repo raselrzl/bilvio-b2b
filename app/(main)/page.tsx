@@ -1,72 +1,53 @@
-// app/page.tsx
-import Link from "next/link";
-import { cookies } from "next/headers";
-import { logoutAction } from "../actions";
-import Image from "next/image";
+import { prisma } from "@/app/utils/db";
+import OffersUsedCarFilterForm from "./offers-search/used/OffersSearchUsedCar";
+import AllProducts from "@/components/general/AllProduct";
 
-export default async function Home() {
-  const jar = await cookies();
-  const raw = jar.get("bilvio_session")?.value ?? "";
-  const isAuthed = Boolean(raw && raw !== "undefined" && raw !== "null");
+export const metadata = { title: "OffersSearchNewCar • Bilvio" };
+
+
+export default async function MainPage() {
+  // Fetch products from the database
+  const products = await prisma.product.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 20, // get latest 20 products
+    select: {
+      id: true,
+      name: true,
+      gearbox: true,
+      fuel: true,
+      price: true,
+      offerNumber: true,
+      createdAt: true,
+      discount: true,
+      type: true,
+      stock: true,
+      colour: true,
+      quantity: true,
+      mileage: true,
+      firstRegistration: true,
+      availability: true,
+      trim: true,
+      engineSpec: true,
+      vat: true,
+      transportCost: true,
+      productionYear: true,
+    },
+  });
+
+  // Transform Prisma Date objects to ISO strings
+  const formattedProducts = products.map((p) => ({
+    ...p,
+    firstRegistration: p.firstRegistration.toISOString(),
+    createdAt: p.createdAt.toISOString(),
+  }));
+
+
 
   return (
-    <div className="flex items-center justify-center text-center">
-
-       <Link href="/" className="flex items-center gap-2" aria-label="Go to homepage">
-          <Image
-            src="/log1.png"
-            alt="Logo"
-            width={200}
-            height={100}
-            priority
-            className="h-20 w-auto"
-          />
-        </Link>
-        
-      <p className="text-xl uppercase font-bold">Under development</p>
-
-    {/*   <div className="mt-4 flex flex-col items-center">
-        <span>Currently working on login page, click here to check{" "}</span>
-
-        {!isAuthed ? (
-          <>
-            <Link
-              href="/login"
-              className="text-black hover:text-black/75 font-bold underline mt-4"
-            >
-              Login
-            </Link>
-            <Link
-              href="/register"
-              className="text-black hover:text-black/75 font-bold underline mt-4"
-            >
-              Register
-            </Link>
-          </>
-        ) : (
-          <form action={logoutAction} className="mt-6">
-            <button
-              type="submit"
-              className="w-[150px] rounded-3xl border border-black px-6 py-2 font-bold hover:bg-black hover:text-white transition"
-            >
-              Logout
-            </button>
-          </form>
-        )}
-
-        <Link
-          href="/reset-password"
-          className="text-black hover:text-black/75 font-bold underline mt-4"
-        >
-          Reset Password
-        </Link>
-        <Link
-          href="/terms/seller"
-          className="text-black hover:text-black/75 font-bold underline mt-4"
-        >
-          Terms
-        </Link>
-      </div> */}
+    <div className="max-w-7xl mx-auto w-full">
+      <div className="mt-6">
+        <AllProducts initialOffers={formattedProducts}  />
+      </div>
     </div>
   );
 }
