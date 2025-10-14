@@ -28,6 +28,7 @@ import {
   Bell,
   User as UserIcon,
   LogOut,
+  SquarePlus,
 } from "lucide-react";
 import { logoutAction } from "@/app/actions";
 
@@ -146,6 +147,18 @@ export default function AppHeader({ email }: { email: string }) {
                 >
                   <FileText className="mr-2 h-4 w-4" />
                   <span>Regulations</span>
+                </Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator />
+
+               <DropdownMenuItem asChild>
+                <Link
+                  href="/admin/createProduct"
+                  className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white"
+                >
+                  <SquarePlus className="mr-2 h-4 w-4" />
+                  <span>Admin/Add Car</span>
                 </Link>
               </DropdownMenuItem>
 
