@@ -38,7 +38,7 @@ export default async function DemandPage() {
 
   return (
     <div className="max-w-7xl mx-auto w-full">
-      <div className="flex items-center justify-between px-2 2xl:px-0 mt-4">
+      <div className="flex items-center justify-between px-6 2xl:px-0 mt-4">
         <h1 className="text-2xl md:text-3xl font-extrabold ">Demands</h1>
 
         <Link href="/buyer/offers/create">
