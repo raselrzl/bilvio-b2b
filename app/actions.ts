@@ -347,3 +347,83 @@ export async function createProductAction(
   }
 }
 
+
+
+// DEMAND ACTIONS
+
+const demandSchema = z.object({
+  make: z.string().optional(),
+  gearbox: z.string().optional(),
+  fuel: z.string().optional(),
+  priceFrom: z.string().optional(),
+  priceTo: z.string().optional(),
+  demand: z.string().optional(),
+  modelYear: z.string().optional(),
+  country: z.string().optional(),
+  quantity: z.string().optional(),
+  warehouse: z.string().optional(),
+  wltpCo2: z.string().optional(),
+  note: z.string().optional(),
+  intent: z.enum(["create", "draft"]),
+});
+
+export async function createDemandAction(formData: FormData) {
+  const parsed = demandSchema.safeParse({
+    make: formData.get("make"),
+    gearbox: formData.get("gearbox"),
+    fuel: formData.get("fuel"),
+    priceFrom: formData.get("priceFrom"),
+    priceTo: formData.get("priceTo"),
+    demand: formData.get("demand"),
+    modelYear: formData.get("modelYear"),
+    country: formData.get("country"),
+    quantity: formData.get("quantity"),
+    warehouse: formData.get("warehouse"),
+    wltpCo2: formData.get("wltpCo2"),
+    note: formData.get("note"),
+    intent: formData.get("intent"),
+  });
+
+  if (!parsed.success) {
+    const first = parsed.error.issues[0]?.message ?? "Invalid form input.";
+    throw new Error(first);
+  }
+
+  // Check cookie session
+  const jar = await cookies();
+  const userEmail = jar.get("bilvio_session")?.value ?? "";
+  if (!userEmail) throw new Error("Unauthorized — please log in.");
+
+  // Fetch user
+  const user = await prisma.user.findUnique({
+    where: { email: userEmail },
+    select: { id: true },
+  });
+
+  if (!user) throw new Error("User not found.");
+
+  const data = parsed.data;
+  const intent = data.intent;
+
+  await prisma.demand.create({
+    data: {
+      make: data.make || null,
+      gearbox: data.gearbox || null,
+      fuel: data.fuel || null,
+      priceFrom: data.priceFrom ? Number(data.priceFrom) : null,
+      priceTo: data.priceTo ? Number(data.priceTo) : null,
+      demand: data.demand ? Number(data.demand) : null,
+      modelYear: data.modelYear ? Number(data.modelYear) : null,
+      country: data.country || null,
+      quantity: data.quantity ? Number(data.quantity) : null,
+      warehouse: data.warehouse || null,
+      wltpCo2: data.wltpCo2 ? Number(data.wltpCo2) : null,
+      note: data.note || null,
+      status: intent === "draft" ? "DRAFT" : "SAVED",
+      userId: user.id,
+    },
+  });
+
+  revalidatePath("/demand");
+  redirect("/demand");
+}
