@@ -27,6 +27,7 @@ import {
   NotebookPen,
   MessageCircle,
   Save,
+  Car,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -237,7 +238,7 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
                 <div className="flex justify-between text-sm text-gray-700 mt-2">
                   <div className="flex gap-4">
                     <div className="flex items-center gap-1">
-                      <ListChevronsUpDown className="h-3 w-3" />
+                      <Car className="h-4 w-4" />
                       Demand
                     </div>
 
