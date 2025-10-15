@@ -34,7 +34,7 @@ export function OrderSection({ productId }: { productId: string }) {
         className="border-t mt-6 pt-4 bg-white p-4 shadow-sm flex flex-col"
       >
         <div className="flex gap-2 mb-6">
-          <h2 className="text-lg font-bold ml-4">Order This product</h2>
+          <h2 className="text-lg font-bold">Order This product</h2>
           <ShoppingBag />
         </div>
         <div className="flex items-center justify-center gap-4">
