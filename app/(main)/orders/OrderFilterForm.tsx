@@ -19,40 +19,34 @@ export default function OrderFilterForm({
 }: {
   onFilterChange?: (filters: {
     type?: "new" | "used";
-    makeModel?: string;
+    productName?: string;
     orderNumber?: string;
-    vin?: string;
   }) => void;
   defaultValues?: Partial<{
     type: "new" | "used";
-    makeModel: string;
+    productName: string;
     orderNumber: string;
-    vin: string;
   }>;
   resetText?: string;
 }) {
   const [type, setType] = useState<"new" | "used" | undefined>(
     defaultValues?.type
   );
-  const [makeModel, setMakeModel] = useState(defaultValues?.makeModel ?? "");
-  const [orderNumber, setOrderNumber] = useState(
-    defaultValues?.orderNumber ?? ""
-  );
-  const [vin, setVin] = useState(defaultValues?.vin ?? "");
+  const [productName, setProductName] = useState(defaultValues?.productName ?? "");
+  const [orderNumber, setOrderNumber] = useState(defaultValues?.orderNumber ?? "");
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      const filters = { type, makeModel, orderNumber, vin };
-      onFilterChange?.(filters);
+      onFilterChange?.({ type, productName, orderNumber });
     }, 300);
+
     return () => clearTimeout(timeout);
-  }, [type, makeModel, orderNumber, vin, onFilterChange]);
+  }, [type, productName, orderNumber, onFilterChange]);
 
   const handleResetUI = () => {
     setType(undefined);
-    setMakeModel("");
+    setProductName("");
     setOrderNumber("");
-    setVin("");
   };
 
   const inputClass = (value: string | undefined) =>
@@ -67,34 +61,30 @@ export default function OrderFilterForm({
 
   return (
     <form className="w-full max-w-7xl space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 items-end">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 items-end">
         {/* Type */}
         <div>
           <Select value={type} onValueChange={(v) => setType(v as any)}>
-            <SelectTrigger
-              id="type"
-              className={selectClass(type)}
-              aria-label="Type"
-            >
+            <SelectTrigger id="type" className={selectClass(type)} aria-label="Type">
               <SelectValue placeholder="Type" />
             </SelectTrigger>
             <SelectContent className="rounded-xs">
-              <SelectItem value="new">New cars</SelectItem>
-              <SelectItem value="used">Used cars</SelectItem>
+              <SelectItem value="new">New</SelectItem>
+              <SelectItem value="used">Used</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
-        {/* Make & Model */}
+        {/* Product Name */}
         <div>
           <Input
-            id="makeModel"
-            name="makeModel"
+            id="productName"
+            name="productName"
             type="text"
-            value={makeModel}
-            onChange={(e) => setMakeModel(e.target.value)}
-            className={inputClass(makeModel)}
-            placeholder="Make, Model"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+            className={inputClass(productName)}
+            placeholder="Product Name"
           />
         </div>
 
@@ -111,20 +101,7 @@ export default function OrderFilterForm({
           />
         </div>
 
-        {/* VIN */}
-        <div>
-          <Input
-            id="vin"
-            name="vin"
-            type="text"
-            value={vin}
-            onChange={(e) => setVin(e.target.value)}
-            className={inputClass(vin)}
-            placeholder="VIN"
-          />
-        </div>
-
-        {/* Reset button */}
+        {/* Reset Button */}
         <div className="w-full flex justify-end">
           <Button
             type="button"
