@@ -297,10 +297,10 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
 
                   {/* 3️⃣ View offer button */}
                   <div className="flex gap-2">
-                    <EyeIcon className="bg-gray-200 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700" />
-                    <NotebookPen className="bg-gray-200 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700" />
-                    <MessageCircle className="bg-gray-200 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700" />
-                    <Save className="bg-gray-200 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-600" />
+                    <EyeIcon className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700" />
+                    <NotebookPen className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700" />
+                    <MessageCircle className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700" />
+                    <Save className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-600" />
                   </div>
                 </div>
               </div>
