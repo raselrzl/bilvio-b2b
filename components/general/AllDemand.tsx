@@ -300,10 +300,10 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
 
                   {/* 3️⃣ View offer button */}
                   <div className="flex gap-2">
-                    <EyeIcon className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700 hover:text-gray-900" />
-                    <NotebookPen className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700 hover:text-gray-900" />
-                    <MessageCircle className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700 hover:text-gray-900" />
-                    <Save className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-600 hover:text-gray-900" />
+                    <EyeIcon className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700 hover:bg-gray-200 " />
+                    <NotebookPen className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700 hover:bg-gray-200" />
+                    <MessageCircle className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700 hover:bg-gray-200" />
+                    <Save className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-600 hover:bg-gray-200" />
                   </div>
                 </div>
               </div>
