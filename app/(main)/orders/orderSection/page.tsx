@@ -29,18 +29,18 @@ export function OrderSection({ productId }: { productId: string }) {
 
   return (
     <div className="mt-6">
-     <div className="flex gap-2">
-         <h2 className="text-lg font-bold ml-4">Order this product</h2>
-      <ShoppingBag />
-     </div>
       <form
         onSubmit={handleOrder}
-        className="border-t mt-6 pt-4 bg-white p-4 shadow-sm flex items-center justify-center"
+        className="border-t mt-6 pt-4 bg-white p-4 shadow-sm flex flex-col"
       >
-        <div className="flex items-center gap-4">
+        <div className="flex gap-2 mb-6">
+          <h2 className="text-lg font-bold ml-4">Order This product</h2>
+          <ShoppingBag />
+        </div>
+        <div className="flex items-center justify-center gap-4">
           <div className="flex gap-2">
             <label className="text-sm text-gray-700 font-medium mt-2">
-              Quantity
+              Quantity*
             </label>
             <Input
               type="number"
@@ -56,7 +56,12 @@ export function OrderSection({ productId }: { productId: string }) {
             disabled={isPending}
             className="bg-green-600 text-white hover:bg-green-500 rounded-xs px-4 py-2 text-sm font-semibold"
           >
-          {isPending ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : "Place Order"} </Button>
+            {isPending ? (
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+            ) : (
+              "Place Order"
+            )}{" "}
+          </Button>
         </div>
       </form>
     </div>
