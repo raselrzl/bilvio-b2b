@@ -427,3 +427,77 @@ export async function createDemandAction(formData: FormData) {
   revalidatePath("/demand");
   redirect("/demand");
 }
+
+
+const orderSchema = z.object({
+  productId: z.string().min(1),
+  quantity: z.number().min(1),
+});
+
+export async function createOrderAction(formData: FormData) {
+  const productId = formData.get("productId") as string;
+  const quantity = Number(formData.get("quantity"));
+
+  const parsed = orderSchema.safeParse({ productId, quantity });
+  if (!parsed.success) {
+    return { ok: false, message: "Invalid input data" };
+  }
+
+  // Get user from cookie
+  const jar = await cookies();
+  const userEmail = jar.get("bilvio_session")?.value ?? "";
+
+  if (!userEmail) return { ok: false, message: "Unauthorized" };
+
+  const user = await prisma.user.findUnique({
+    where: { email: userEmail },
+    select: { id: true },
+  });
+
+  if (!user) return { ok: false, message: "User not found" };
+
+  // Get product details
+  const product = await prisma.product.findUnique({
+    where: { id: productId },
+    select: { id: true, price: true, discount: true },
+  });
+
+  if (!product) return { ok: false, message: "Product not found" };
+
+  // Price calculation
+  const unitPrice = product.price - (product.price * product.discount) / 100;
+  const totalPrice = unitPrice * quantity;
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      // Generate unique order number
+      const orderNumber = `ORD-${Date.now().toString().slice(-6)}`;
+
+      // Create order
+      const order = await tx.order.create({
+        data: {
+          userId: user.id,
+          orderNumber,
+          status: "NEW",
+        },
+      });
+
+      // Create order item
+      await tx.orderItem.create({
+        data: {
+          orderId: order.id,
+          productId,
+          quantity,
+          unitPrice,
+          totalPrice,
+        },
+      });
+    });
+
+    revalidatePath("/buyer/orders");
+    return { ok: true, message: "Order placed successfully!" };
+  } catch (e) {
+    console.error("❌ Order creation error:", e);
+    return { ok: false, message: "Something went wrong while creating the order" };
+  }
+}
