@@ -19,6 +19,14 @@ import {
   Calendar,
   TriangleAlert,
   PlusCircle,
+  ListChevronsUpDown,
+  SquarePen,
+  BellDot,
+  EyeIcon,
+  NotebookIcon,
+  NotebookPen,
+  MessageCircle,
+  Save,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -224,27 +232,22 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
                   <h1 className="text-xl font-bold">
                     {demand.make ?? "Unknown"}
                   </h1>
-                  <div className="flex gap-2">
-                    <Heart className="h-5 w-5" />
-                    <ThumbsUp className="h-5 w-5" />
-                    <ThumbsDown className="h-5 w-5" />
-                    <ClockPlus className="h-5 w-5" />
-                  </div>
                 </div>
 
                 <div className="flex justify-between text-sm text-gray-700 mt-2">
                   <div className="flex gap-4">
                     <div className="flex items-center gap-1">
+                      <ListChevronsUpDown className="h-3 w-3" />
+                      Demand
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <p># {demand.demand}</p>
+                    </div>
+                    <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
                       <p>{formatDate(demand.createdAt)}</p>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Eye className="h-4 w-4" />
-                      <p>{demand.status?.toLowerCase() ?? "draft"}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p>Quantity: {formatNumber(demand.demand ?? 0)}</p>
                   </div>
                 </div>
 
@@ -262,16 +265,42 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
                       {demand.modelYear}
                     </div>
                   )}
-                  {demand.country && (
+                  {/*      {demand.country && (
                     <div className="bg-gray-100 py-1 px-2">
                       {demand.country}
                     </div>
-                  )}
-                  {demand.warehouse && (
+                  )} */}
+                  {/*    {demand.warehouse && (
                     <div className="bg-gray-100 py-1 px-2">
                       {demand.warehouse}
                     </div>
+                  )} */}
+
+                  {demand.demand && (
+                    <div className="bg-gray-100 py-1 px-2">
+                      Quantity: {formatNumber(demand.demand ?? 0)}
+                    </div>
                   )}
+                </div>
+                <div className="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between gap-4">
+                  {/* 1️⃣ Input with icon */}
+                  <div className="relative flex-1 max-w-sm">
+                    <Input
+                      type="text"
+                      placeholder="Write a note..."
+                      className="pl-10 pr-3 h-9 text-sm border-gray-300 rounded-xs w-full"
+                    />
+                    <SquarePen className="absolute right-2 top-2.5 h-4 w-4 text-gray-500" />
+                    <p className="ml-4 text-xs text-gray-500">0/2000</p>
+                  </div>
+
+                  {/* 3️⃣ View offer button */}
+                  <div className="flex gap-2">
+                    <EyeIcon className="bg-gray-200 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700" />
+                    <NotebookPen className="bg-gray-200 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700" />
+                    <MessageCircle className="bg-gray-200 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700" />
+                    <Save className="bg-gray-200 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-600" />
+                  </div>
                 </div>
               </div>
             ))
