@@ -219,6 +219,9 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
           </button>
         </div>
       </div>
+      <div className="mt-2 px-6 2xl:px-2 text-xs text-gray-700">
+        Showing {filteredDemands.length} of {demands.length} entries
+      </div>
 
       {/* Demand cards */}
       <div className="px-6 2xl:px-0">
@@ -297,10 +300,10 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
 
                   {/* 3️⃣ View offer button */}
                   <div className="flex gap-2">
-                    <EyeIcon className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700" />
-                    <NotebookPen className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700" />
-                    <MessageCircle className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700" />
-                    <Save className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-600" />
+                    <EyeIcon className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700 hover:text-gray-900" />
+                    <NotebookPen className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700 hover:text-gray-900" />
+                    <MessageCircle className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700 hover:text-gray-900" />
+                    <Save className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-600 hover:text-gray-900" />
                   </div>
                 </div>
               </div>
