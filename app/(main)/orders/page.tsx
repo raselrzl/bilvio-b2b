@@ -1,5 +1,6 @@
 import { prisma } from "@/app/utils/db";
 import OrdersClient from "./OrdersClient";
+import { cookies } from "next/headers";
 export type OrderType = "new" | "used";
 
 export type Product = {
@@ -33,7 +34,23 @@ export type Order = {
 
 
 async function getOrders(): Promise<Order[]> {
+
+    const cookieStore =await cookies();
+    const email = cookieStore.get("bilvio_session")?.value;
+  
+    // Get userId based on email
+    let userId: string | undefined;
+    if (email) {
+      const user = await prisma.user.findUnique({
+        where: { email },
+        select: { id: true },
+      });
+      userId = user?.id;
+    }
+
+
   const orders = await prisma.order.findMany({
+    where: userId ? { userId } : undefined,
     include: { items: { include: { product: true } } },
     orderBy: { createdAt: "desc" },
   });
