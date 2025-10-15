@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import React from "react";
 import { prisma } from "@/app/utils/db";
+import { OrderSection } from "./OrderComponent";
 
 async function getOfferById(id: string) {
   const offer = await prisma.product.findUnique({
@@ -249,10 +250,12 @@ export default async function UsedCarOfferDetailsPage({
                     Price: {formatCurrency(discountedNet)} <p className="text-sm mt-1 ml-3 text-gray-400"> SEK NET {" "}</p>/{" "}
                     {formatCurrency(discountedGross)} <p className="text-sm mt-1 ml-3 text-gray-400">SEK GROSS</p>
                   </div>
+                  
                 </>
               );
             })()}
           </div>
+          <OrderSection productId={offer.id} /> 
         </div>
       </div>
 

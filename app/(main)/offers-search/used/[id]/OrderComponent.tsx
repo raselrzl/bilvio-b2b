@@ -54,7 +54,7 @@ export function OrderSection({ productId }: { productId: string }) {
           <Button
             type="submit"
             disabled={isPending}
-            className="bg-green-600 text-white hover:bg-green-500 w-[200px] rounded-xs px-4 py-2 text-sm font-semibold"
+            className="bg-green-600 text-white hover:bg-green-500 w-[120px] rounded-xs px-4 py-2 text-sm font-semibold"
           >
             {isPending ? (
               <>Placing<Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /></>

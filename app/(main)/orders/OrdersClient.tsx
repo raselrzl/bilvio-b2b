@@ -17,7 +17,6 @@ import {
 import Link from "next/link";
 import { Order } from "./page";
 
-
 export default function OrdersClient({ orders }: { orders: Order[] }) {
   const [activeTab, setActiveTab] = useState<Order["status"] | "new">("NEW");
   const [filters, setFilters] = useState<{
@@ -47,9 +46,24 @@ export default function OrdersClient({ orders }: { orders: Order[] }) {
   }, [activeTab, filters, orders]);
 
   const formatNumber = (num?: number) =>
-  num ? num.toLocaleString("sv-SE") : "-"; // "sv-SE" uses space as thousand separator
+    num ? num.toLocaleString("sv-SE") : "-"; // "sv-SE" uses space as thousand separator
 
- 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "NEW":
+        return "text-green-600";
+      case "ACCEPTED":
+        return "text-blue-600";
+      case "REJECTED":
+        return "text-red-600";
+      case "CANCELLED":
+        return "text-amber-500";
+      case "COMPLETED":
+        return "text-green-600";
+      default:
+        return "text-gray-700";
+    }
+  };
 
   const tabs: (Order["status"] | "new")[] = [
     "new",
@@ -60,15 +74,14 @@ export default function OrdersClient({ orders }: { orders: Order[] }) {
   ];
 
   const formatDate = (date?: string | Date) =>
-  date
-    ? new Date(date).toLocaleDateString("sv-SE") // or "en-GB" for consistent format
-    : "-";
-
+    date
+      ? new Date(date).toLocaleDateString("sv-SE") // or "en-GB" for consistent format
+      : "-";
 
   return (
     <div className="max-w-7xl mx-auto w-full mt-4">
       {/* Header */}
-      <div className="flex items-center justify-between px-2 sm:px-4 md:px-6 mt-4">
+      <div className="flex items-center justify-between px-2 2xl:px-0 mt-4">
         <h1 className="text-2xl md:text-3xl font-extrabold">Orders</h1>
       </div>
 
@@ -108,14 +121,15 @@ export default function OrdersClient({ orders }: { orders: Order[] }) {
         </div>
       </div>
 
-      {/* Cards */}
-      <div className="grid grid-cols-1 gap-4 mt-6 px-6 2xl:px-2">
+     <div className="bg-white mx-10 2xl:mx-2">
+         {/* Cards */}
+      <div className="grid grid-cols-1 gap-4 p-8 2xl:px-2">
         {filteredOrders.length > 0 ? (
           filteredOrders.map((order) =>
             order.products.map((p) => (
               <div
                 key={p.id}
-                className="relative border rounded-xs p-4 bg-white shadow hover:shadow-md transition"
+                className="relative border rounded-xs p-4 2xl:m-2 bg-white shadow hover:shadow-md transition"
               >
                 {/* --- ORDER INFO HEADER --- */}
                 <div className="flex justify-between items-center mb-3 border-b pb-2">
@@ -124,14 +138,8 @@ export default function OrdersClient({ orders }: { orders: Order[] }) {
                     <p className="text-lg font-bold">{order.orderNumber}</p>
                   </div>
                   <div className="flex flex-col items-end">
-                    <p className="text-sm text-gray-500">Status</p>
-                    <p
-                      className={`font-bold ${
-                        order.status === "NEW"
-                          ? "text-green-600"
-                          : "text-gray-700"
-                      }`}
-                    >
+                    <p className="text-sm text-gray-500">Order Status</p>
+                    <p className={`font-bold ${getStatusColor(order.status)}`}>
                       {order.status}
                     </p>
                   </div>
@@ -278,6 +286,7 @@ export default function OrdersClient({ orders }: { orders: Order[] }) {
           </div>
         )}
       </div>
+     </div>
     </div>
   );
 }
