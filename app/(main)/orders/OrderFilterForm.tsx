@@ -71,7 +71,11 @@ export default function OrderFilterForm({
         {/* Type */}
         <div>
           <Select value={type} onValueChange={(v) => setType(v as any)}>
-            <SelectTrigger id="type" className={selectClass(type)} aria-label="Type">
+            <SelectTrigger
+              id="type"
+              className={selectClass(type)}
+              aria-label="Type"
+            >
               <SelectValue placeholder="Type" />
             </SelectTrigger>
             <SelectContent className="rounded-xs">
