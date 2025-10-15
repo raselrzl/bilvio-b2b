@@ -30,7 +30,7 @@ export interface Demand {
   fuel?: string | null;
   priceFrom?: number | null;
   priceTo?: number | null;
-  demand?: number | null; // quantity
+  demand?: number | null;
   modelYear?: number | null;
   country?: string | null;
   warehouse?: string | null;
@@ -56,6 +56,7 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
   const [priceFromFilter, setPriceFromFilter] = useState<number>();
   const [priceToFilter, setPriceToFilter] = useState<number>();
   const [demandFilter, setDemandFilter] = useState<number>();
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest"); // 🆕 Sort order
 
   useEffect(() => {
     let filtered = [...demands];
@@ -78,6 +79,13 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
     if (demandFilter !== undefined)
       filtered = filtered.filter((d) => (d.demand ?? 0) >= demandFilter);
 
+    // 🆕 Sort newest/oldest
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+    });
+
     setFilteredDemands(filtered);
   }, [
     makeFilter,
@@ -87,6 +95,7 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
     priceFromFilter,
     priceToFilter,
     demandFilter,
+    sortOrder,
     demands,
   ]);
 
@@ -101,94 +110,95 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
     setPriceFromFilter(undefined);
     setPriceToFilter(undefined);
     setDemandFilter(undefined);
+    setSortOrder("newest");
   };
 
   return (
     <div className="w-full max-w-7xl space-y-4">
       {/* Filters */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 items-end mt-4 p-6 bg-white shadow rounded-xs">
-        <div>
-          <Input
-            placeholder="Make"
-            value={makeFilter ?? ""}
-            onChange={(e) => setMakeFilter(e.target.value)}
-            className="h-9 rounded-xs"
-          />
-        </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 items-end mt-4 p-6 bg-white shadow rounded-xs">
+        <Input
+          placeholder="Make"
+          value={makeFilter ?? ""}
+          onChange={(e) => setMakeFilter(e.target.value)}
+          className="h-9 rounded-xs"
+        />
 
-        <div>
-          <Select value={gearboxFilter} onValueChange={setGearboxFilter}>
-            <SelectTrigger className="h-9 rounded-xs w-full">
-              <SelectValue placeholder="Gearbox" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="automatic">Automatic</SelectItem>
-              <SelectItem value="manual">Manual</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <Select value={gearboxFilter} onValueChange={setGearboxFilter}>
+          <SelectTrigger className="h-9 rounded-xs w-full">
+            <SelectValue placeholder="Gearbox" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="automatic">Automatic</SelectItem>
+            <SelectItem value="manual">Manual</SelectItem>
+          </SelectContent>
+        </Select>
 
-        <div>
-          <Select value={fuelFilter} onValueChange={setFuelFilter}>
-            <SelectTrigger className="h-9 rounded-xs w-full">
-              <SelectValue placeholder="Fuel" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="diesel">Diesel</SelectItem>
-              <SelectItem value="electric">Electric</SelectItem>
-              <SelectItem value="LPG">LPG</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <Select value={fuelFilter} onValueChange={setFuelFilter}>
+          <SelectTrigger className="h-9 rounded-xs w-full">
+            <SelectValue placeholder="Fuel" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="diesel">Diesel</SelectItem>
+            <SelectItem value="electric">Electric</SelectItem>
+            <SelectItem value="LPG">LPG</SelectItem>
+          </SelectContent>
+        </Select>
 
-        <div>
-          <Input
-            type="number"
-            min={0}
-            placeholder="Price from"
-            value={priceFromFilter ?? ""}
-            onChange={(e) => setPriceFromFilter(Number(e.target.value))}
-            className="h-9 rounded-xs"
-          />
-        </div>
+        <Input
+          type="number"
+          min={0}
+          placeholder="Price from"
+          value={priceFromFilter ?? ""}
+          onChange={(e) => setPriceFromFilter(Number(e.target.value))}
+          className="h-9 rounded-xs"
+        />
 
-        <div>
-          <Input
-            type="number"
-            min={0}
-            placeholder="Price to"
-            value={priceToFilter ?? ""}
-            onChange={(e) => setPriceToFilter(Number(e.target.value))}
-            className="h-9 rounded-xs"
-          />
-        </div>
+        <Input
+          type="number"
+          min={0}
+          placeholder="Price to"
+          value={priceToFilter ?? ""}
+          onChange={(e) => setPriceToFilter(Number(e.target.value))}
+          className="h-9 rounded-xs"
+        />
 
-        <div>
-          <Input
-            type="number"
-            min={0}
-            placeholder="Demand number"
-            value={demandFilter ?? ""}
-            onChange={(e) => setDemandFilter(Number(e.target.value))}
-            className="h-9 rounded-xs"
-          />
-        </div>
+        <Input
+          type="number"
+          min={0}
+          placeholder="Demand number"
+          value={demandFilter ?? ""}
+          onChange={(e) => setDemandFilter(Number(e.target.value))}
+          className="h-9 rounded-xs"
+        />
 
-        <div>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="h-9 rounded-xs w-full">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="draft">Draft</SelectItem>
-              <SelectItem value="saved">Saved</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="h-9 rounded-xs w-full">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="draft">Draft</SelectItem>
+            <SelectItem value="saved">Saved</SelectItem>
+          </SelectContent>
+        </Select>
 
-        {/* Empty placeholder for layout */}
-        <div className="hidden lg:block" />
-        <div className="hidden lg:block" />
+        {/* 🆕 Sort filter */}
+        <Select
+          value={sortOrder}
+          onValueChange={(v: "newest" | "oldest") => setSortOrder(v)}
+        >
+          <SelectTrigger className="h-9 rounded-xs w-full">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest">Newest</SelectItem>
+            <SelectItem value="oldest">Oldest</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <div></div>
+        <div></div>
+        <div></div>
 
         {/* Reset button */}
         <div className="w-full flex justify-end">
@@ -202,9 +212,7 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
       </div>
 
       {/* Demand cards */}
-
       <div className="px-6 2xl:px-0">
-        {" "}
         <div className="grid grid-cols-1 gap-4 mt-6">
           {filteredDemands.length > 0 ? (
             filteredDemands.map((demand) => (
@@ -272,8 +280,8 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
               <div className="flex flex-col md:flex-row justify-center items-center text-amber-600">
                 <TriangleAlert className="mr-4" />
                 <p>
-                  Unfortunatetly you did not create any demands that meet your
-                  criteria{" "}
+                  Unfortunately you did not create any demands that meet your
+                  criteria.
                 </p>
                 <Link href="/buyer/offers/create">
                   <Button className="rounded-xs inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-black cursor-pointer ml-4">
@@ -287,7 +295,6 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
         </div>
       </div>
 
-      {/* Footer */}
       <div className="mt-2 px-6 2xl:px-2 text-xs text-gray-700">
         Showing {filteredDemands.length} of {demands.length} entries
       </div>
