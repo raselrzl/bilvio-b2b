@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import React from "react";
-import { OrderSection } from "@/app/(main)/orders/orderSection/page";
+import { OrderSection } from "./OrderComponent";
 
 // Helpers
 const formatNumber = (num: number) =>
@@ -192,7 +192,7 @@ export default async function NewCarOfferDetailsPage({
               Price: {formatCurrency(discountedNet)} <p className="text-sm mt-1 ml-3 text-gray-400">SEK NET</p> / {formatCurrency(discountedGross)} <p className="text-sm mt-1 ml-3 text-gray-400">SEK GROSS</p>
             </div>
           </div>
-          <OrderSection productId={offer.id} />
+          <OrderSection productId={offer.id} /> 
         </div>
         
       </div>
