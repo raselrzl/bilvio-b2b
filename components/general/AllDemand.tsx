@@ -122,19 +122,29 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
     setSortOrder("newest");
   };
 
+  const inputClass = (value: string | undefined) =>
+    `h-9 w-full rounded-xs bg-white placeholder-gray-400 focus:outline-none focus:ring-0 focus:border-0 ${
+      value ? "bg-[#619aab] text-white placeholder-white" : ""
+    }`;
+
+  const selectClass = (value: string | undefined) =>
+    `h-9 w-full rounded-xs bg-white focus:outline-none focus:ring-0 focus:border-0 ${
+      value ? "bg-[#619aab] text-white" : ""
+    }`;
+
   return (
     <div className="w-full max-w-7xl space-y-4">
       {/* Filters */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 items-end mt-4 p-6 bg-white shadow rounded-xs">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 items-end mt-4 p-6 bg-gray-500 shadow rounded-xs">
         <Input
-          placeholder="Make"
+          placeholder="Car Name"
           value={makeFilter ?? ""}
           onChange={(e) => setMakeFilter(e.target.value)}
-          className="h-9 rounded-xs"
+          className={inputClass(makeFilter)}
         />
 
         <Select value={gearboxFilter} onValueChange={setGearboxFilter}>
-          <SelectTrigger className="h-9 rounded-xs w-full">
+          <SelectTrigger className={selectClass(gearboxFilter)}>
             <SelectValue placeholder="Gearbox" />
           </SelectTrigger>
           <SelectContent>
@@ -144,7 +154,7 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
         </Select>
 
         <Select value={fuelFilter} onValueChange={setFuelFilter}>
-          <SelectTrigger className="h-9 rounded-xs w-full">
+          <SelectTrigger className={selectClass(fuelFilter)}>
             <SelectValue placeholder="Fuel" />
           </SelectTrigger>
           <SelectContent>
@@ -160,7 +170,7 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
           placeholder="Price from"
           value={priceFromFilter ?? ""}
           onChange={(e) => setPriceFromFilter(Number(e.target.value))}
-          className="h-9 rounded-xs"
+          className={inputClass(String(priceFromFilter))}
         />
 
         <Input
@@ -169,7 +179,7 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
           placeholder="Price to"
           value={priceToFilter ?? ""}
           onChange={(e) => setPriceToFilter(Number(e.target.value))}
-          className="h-9 rounded-xs"
+          className={inputClass(String(priceToFilter))}
         />
 
         <Input
@@ -178,11 +188,11 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
           placeholder="Demand number"
           value={demandFilter ?? ""}
           onChange={(e) => setDemandFilter(Number(e.target.value))}
-          className="h-9 rounded-xs"
+          className={inputClass(String(demandFilter))}
         />
 
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="h-9 rounded-xs w-full">
+          <SelectTrigger className={selectClass(statusFilter)}>
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -196,7 +206,7 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
           value={sortOrder}
           onValueChange={(v: "newest" | "oldest") => setSortOrder(v)}
         >
-          <SelectTrigger className="h-9 rounded-xs w-full">
+          <SelectTrigger className={selectClass(sortOrder)}>
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>
