@@ -55,7 +55,7 @@ export default async function TaskDetailsPage({
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Task Details</h1>
         <Link href="/tasks">
-          <Button variant="outline" className="cursor-pointer">← Back to Tasks</Button>
+          <Button variant="outline" className="cursor-pointer rounded-xs">← Back to Tasks</Button>
         </Link>
       </div>
 

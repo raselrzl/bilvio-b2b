@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 interface Document {
@@ -46,10 +48,13 @@ export default async function DocumentPreviewPage({
 
   return (
     <div className="max-w-7xl mx-auto w-full">
-      <div className="flex items-center justify-between px-2 2xl:px-2 mt-6">
+      <div className="flex items-center justify-between px-4 mt-6">
         <h1 className="text-2xl md:text-3xl font-extrabold">
           Documents / Documents Details
         </h1>
+         <Link href="/documents">
+          <Button variant="outline" className="cursor-pointer rounded-xs">← Back to Document</Button>
+        </Link>
       </div>
       <div className="p-4 space-y-6">
         <div className="border bg-white p-4 rounded shadow grid grid-cols-3 gap-2">
