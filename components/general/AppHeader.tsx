@@ -164,6 +164,18 @@ export default function AppHeader({ email }: { email: string }) {
 
               <DropdownMenuSeparator />
 
+               <DropdownMenuItem asChild>
+                <Link
+                  href="/admin/createTask"
+                  className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white"
+                >
+                  <SquarePlus className="mr-2 h-4 w-4" />
+                  <span>Admin/Create Task</span>
+                </Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuSeparator />
+
               <DropdownMenuItem asChild>
                 <form
                   action={logoutAction}
