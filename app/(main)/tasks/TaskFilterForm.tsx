@@ -22,7 +22,7 @@ export default function TaskFilterForm({
 }) {
   const [status, setStatus] = useState<string | undefined>();
   const [taskType, setTaskType] = useState<string | undefined>();
-  const [type, setType] = useState<"new" | "used" | undefined>();
+  const [type, setType] = useState<"NEW" | "USED" | undefined>();
   const [makeModel, setMakeModel] = useState("");
   const [orderNumber, setOrderNumber] = useState("");
   const [orderPackageNumber, setOrderPackageNumber] = useState("");
@@ -91,37 +91,24 @@ export default function TaskFilterForm({
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="todo">Todo</SelectItem>
-              <SelectItem value="rejected">Rejected</SelectItem>
-              <SelectItem value="waiting">Waiting for Approval</SelectItem>
-              <SelectItem value="done">Done</SelectItem>
-              <SelectItem value="scheduled">Scheduled</SelectItem>
-              <SelectItem value="cancelled">Cancelled</SelectItem>
+              <SelectItem value="TODO">Todo</SelectItem>
+              <SelectItem value="REJECTED">Rejected</SelectItem>
+              <SelectItem value="WAITING">Waiting</SelectItem>
+              <SelectItem value="DONE">Done</SelectItem>
+              <SelectItem value="SCHEDULED">Scheduled</SelectItem>
+              <SelectItem value="CANCELLED">Cancelled</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         {/* Task Type */}
         <div>
-          <Select value={taskType} onValueChange={(v) => setTaskType(v)}>
-            <SelectTrigger className={selectClass(taskType)}>
-              <SelectValue placeholder="Task Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Inspect vehicle before delivery">
-                Inspect vehicle before delivery
-              </SelectItem>
-              <SelectItem value="Prepare registration documents">
-                Prepare registration documents
-              </SelectItem>
-              <SelectItem value="Customer test drive follow-up">
-                Customer test drive follow-up
-              </SelectItem>
-              <SelectItem value="Document review failed">
-                Document review failed
-              </SelectItem>
-            </SelectContent>
-          </Select>
+          <Input
+            placeholder="Task Type"
+            value={taskType || ""}
+            onChange={(e) => setTaskType(e.target.value)}
+            className={inputClass(taskType)}
+          />
         </div>
 
         {/* Car Type */}
@@ -131,8 +118,8 @@ export default function TaskFilterForm({
               <SelectValue placeholder="Car Type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="new">New Cars</SelectItem>
-              <SelectItem value="used">Used Cars</SelectItem>
+              <SelectItem value="NEW">New</SelectItem>
+              <SelectItem value="USED">Used</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -195,7 +182,7 @@ export default function TaskFilterForm({
         {/* Expired Checkbox */}
         <div className="flex items-center space-x-2">
           <Checkbox
-            id="expired" 
+            id="expired"
             checked={expired}
             onCheckedChange={(checked) => setExpired(!!checked)}
             className={`data-[state=checked]:bg-[#619aab] data-[state=checked]:border-[#619aab] border-gray-300 rounded-none cursor-pointer`}

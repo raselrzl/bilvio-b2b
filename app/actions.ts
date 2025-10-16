@@ -501,3 +501,61 @@ export async function createOrderAction(formData: FormData) {
     return { ok: false, message: "Something went wrong while creating the order" };
   }
 }
+
+const taskSchema = z.object({
+  status: z.enum(["TODO","REJECTED","WAITING","DONE","SCHEDULED","CANCELLED"]).optional().default("TODO"),
+  taskType: z.string().min(1),
+  type: z.enum(["NEW", "USED"]),
+  makeModel: z.string().min(1),
+  orderNumber: z.string().min(1),
+  orderPackageNumber: z.string().optional().nullable(),
+  transportNumber: z.string().optional().nullable(),
+  deadline: z.string().min(1),
+  expired: z.boolean().optional().default(false),
+  userId: z.string().optional().nullable(),
+});
+
+export type TaskPayload = z.infer<typeof taskSchema>;
+
+export async function createTaskAction(formData: FormData) {
+  const parsed = taskSchema.safeParse({
+    status: formData.get("status")?.toString() || undefined,
+    taskType: formData.get("taskType")?.toString() || "",
+    type: formData.get("type")?.toString() || "",
+    makeModel: formData.get("makeModel")?.toString() || "",
+    orderNumber: formData.get("orderNumber")?.toString() || "",
+    orderPackageNumber: formData.get("orderPackageNumber")?.toString() || null,
+    transportNumber: formData.get("transportNumber")?.toString() || null,
+    deadline: formData.get("deadline")?.toString() || "",
+    expired: formData.get("expired") === "true" || false,
+    userId: null,
+  });
+
+  if (!parsed.success) {
+    const first = parsed.error.issues[0]?.message ?? "Invalid form input.";
+    throw new Error(first);
+  }
+
+  const jar = await cookies();
+  const userEmail = jar.get("bilvio_session")?.value;
+  if (!userEmail) throw new Error("Unauthorized — please log in.");
+
+  const user = await prisma.user.findUnique({
+    where: { email: userEmail },
+    select: { id: true },
+  });
+  if (!user) throw new Error("User not found.");
+
+  const data = parsed.data;
+
+  await prisma.task.create({
+    data: {
+      ...data,
+      userId: user.id,
+      deadline: new Date(data.deadline),
+    },
+  });
+
+  revalidatePath("/admin/createTask");
+  redirect("/tasks");
+}

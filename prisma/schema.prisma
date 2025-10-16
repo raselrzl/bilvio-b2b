@@ -39,6 +39,7 @@ model User {
 
   products Product[]  @relation("UserProducts")
   orders   Order[]
+  tasks  Task[]
 
 
 }
@@ -187,4 +188,42 @@ enum OrderStatus {
   CANCELLED
   COMPLETED
 }
+
+
+
+model Task {
+  id                  String      @id @default(cuid())
+  status              TaskStatus  @default(TODO)
+  taskType            String
+  type                CarType
+  makeModel           String
+  orderNumber         String
+  orderPackageNumber  String?
+  transportNumber     String?
+  deadline            DateTime
+  expired             Boolean     @default(false)
+
+  // Relation to User (fixed)
+  userId              String?
+  user                User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+}
+
+
+enum TaskStatus {
+  TODO
+  REJECTED
+  WAITING
+  DONE
+  SCHEDULED
+  CANCELLED
+}
+
+enum CarType {
+  NEW
+  USED
+}
+
 
