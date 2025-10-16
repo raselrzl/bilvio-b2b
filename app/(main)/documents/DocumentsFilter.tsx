@@ -192,7 +192,8 @@ export default function DocumentFilterForm({
                   Document Kind: {doc.kind}
                 </div>
                 <div className="bg-gray-100 py-1 px-2 items-center justify-center">
-                  Created at: {new Date(doc.createdAt).toLocaleDateString()}
+                  Created at: {new Date(doc.createdAt).toLocaleDateString("en-CA")}
+
                 </div>
               </div>
 
