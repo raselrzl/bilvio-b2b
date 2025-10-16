@@ -147,9 +147,9 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
           <SelectTrigger className={selectClass(gearboxFilter)}>
             <SelectValue placeholder="Gearbox" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="automatic">Automatic</SelectItem>
-            <SelectItem value="manual">Manual</SelectItem>
+          <SelectContent className="rounded-xs">
+            <SelectItem value="automatic" className="rounded-xs">Automatic</SelectItem>
+            <SelectItem value="manual" className="rounded-xs">Manual</SelectItem>
           </SelectContent>
         </Select>
 
@@ -157,10 +157,10 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
           <SelectTrigger className={selectClass(fuelFilter)}>
             <SelectValue placeholder="Fuel" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="diesel">Diesel</SelectItem>
-            <SelectItem value="electric">Electric</SelectItem>
-            <SelectItem value="LPG">LPG</SelectItem>
+          <SelectContent className="rounded-xs">
+            <SelectItem value="diesel" className="rounded-xs">Diesel</SelectItem>
+            <SelectItem value="electric" className="rounded-xs">Electric</SelectItem>
+            <SelectItem value="LPG" className="rounded-xs">LPG</SelectItem>
           </SelectContent>
         </Select>
 
@@ -195,9 +195,9 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
           <SelectTrigger className={selectClass(statusFilter)}>
             <SelectValue placeholder="Status" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="draft">Draft</SelectItem>
-            <SelectItem value="saved">Saved</SelectItem>
+          <SelectContent className="rounded-xs">
+            <SelectItem value="draft" className="rounded-xs">Draft</SelectItem>
+            <SelectItem value="saved" className="rounded-xs">Saved</SelectItem>
           </SelectContent>
         </Select>
 
@@ -209,8 +209,8 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
           <SelectTrigger className={selectClass(sortOrder)}>
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="newest">Newest</SelectItem>
+          <SelectContent className="rounded-xs">
+            <SelectItem value="newest" className="rounded-xs">Newest</SelectItem>
             <SelectItem value="oldest">Oldest</SelectItem>
           </SelectContent>
         </Select>
