@@ -23,6 +23,7 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
+import { Label } from "@/components/ui/label";
 
 interface Offer {
   id: string;
@@ -168,7 +169,7 @@ export default function OffersFilterForm({
             <SelectTrigger className={selectClass(gearboxFilter)}>
               <SelectValue placeholder="Gearbox" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-xs">
               <SelectItem value="AUTOMATIC">Automatic</SelectItem>
               <SelectItem value="MANUAL">Manual</SelectItem>
             </SelectContent>
@@ -177,7 +178,7 @@ export default function OffersFilterForm({
             <SelectTrigger className={selectClass(fuelFilter)}>
               <SelectValue placeholder="Fuel Type" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-xs">
               <SelectItem value="PETROL">Petrol</SelectItem>
               <SelectItem value="DIESEL">Diesel</SelectItem>
               <SelectItem value="HYBRID">Hybrid</SelectItem>
@@ -204,6 +205,8 @@ export default function OffersFilterForm({
             onChange={(e) => setOfferNumberFilter(e.target.value)}
             className={inputClass(offerNumberFilter)}
           />
+           <div className="">
+            <Label className="text xs text-white mb-1">Created After</Label>
           <Input
             type="date"
             placeholder="Created After"
@@ -211,19 +214,22 @@ export default function OffersFilterForm({
             onChange={(e) => setCreatedAfter(e.target.value)}
             className={inputClass(createdAfter)}
           />
-          
-          <Input
+            </div>
+          <div className="">
+            <Label className="text xs text-white mb-1">Created Before</Label>
+            <Input
             type="date"
             placeholder="Created Before"
             value={createdBefore ?? ""}
             onChange={(e) => setCreatedBefore(e.target.value)}
             className={inputClass(createdBefore)}
           />
+          </div>
           <Select value={sortOption} onValueChange={(v) => setSortOption(v)}>
             <SelectTrigger className={selectClass(sortOption)}>
               <SelectValue placeholder="Sort By" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-xs">
               <SelectItem value="best-discount">Best Discount</SelectItem>
               <SelectItem value="newest">Newest</SelectItem>
               <SelectItem value="oldest">Oldest</SelectItem>
@@ -406,7 +412,7 @@ export default function OffersFilterForm({
           </div>
         )}
       </div>
-      <div className="mt-2 px-2 text-xs text-gray-700">
+      <div className="mt-2 px-2 text-xs text-gray-700 ml-4 2xl:ml-0">
         Showing {filteredOffers.length} of {offers.length} entries
       </div>
     </div>
