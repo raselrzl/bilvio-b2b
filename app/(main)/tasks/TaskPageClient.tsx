@@ -56,9 +56,9 @@ export default function TasksPageClient({
   }, [filters, tasks]);
 
   return (
-    <div className="max-w-7xl mx-auto w-full mt-4">
+    <div className="max-w-7xl mx-auto w-full mt-4 mb-4 pb-8">
       {/* Header */}
-      <div className="flex items-center justify-between px-2 sm:px-4 md:px-6 mt-4">
+      <div className="flex items-center justify-between px-4 2xl:px-1 mt-4">
         <h1 className="text-2xl md:text-3xl font-extrabold">Tasks</h1>
       </div>
 
@@ -70,7 +70,7 @@ export default function TasksPageClient({
       </div>
 
       {/* Task List */}
-      <div className="px-2 sm:px-4 md:px-6 pt-4 bg-white mx-2">
+      <div className="px-2 sm:px-4 md:px-6 pt-4 bg-white pb-8 mx-2">
         {filteredTasks.length === 0 ? (
           <div className="bg-amber-100 border border-amber-300 shadow-sm p-4 text-amber-600 flex items-center justify-center rounded">
             <p>Currently you don’t have any task to perform.</p>
@@ -122,7 +122,7 @@ export default function TasksPageClient({
                   </div>
 
                   {/* Body Info */}
-                  <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-sm text-gray-700">
+                  <div className="mt-3 pb-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-sm text-gray-700">
                     <div className="bg-gray-50 py-1 px-2 rounded-xs">
                       <strong>Make/Model:</strong> {task.makeModel || "-"}
                     </div>

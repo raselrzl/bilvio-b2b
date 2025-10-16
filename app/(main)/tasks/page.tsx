@@ -53,5 +53,9 @@ export async function getTasks(): Promise<Task[]> {
 export default async function TasksPage() {
   const tasks = await getTasks();
 
-  return <TasksPageClient initialTasks={tasks} />;
+  return (
+    <div className="">
+      <TasksPageClient initialTasks={tasks} />
+    </div>
+  );
 }
