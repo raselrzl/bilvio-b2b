@@ -23,6 +23,7 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
+import { Label } from "@/components/ui/label";
 
 interface Offer {
   id: string;
@@ -219,20 +220,26 @@ export default function OffersUsedCarFilterForm({
             onChange={(e) => setOfferNumberFilter(e.target.value)}
             className={inputClass(offerNumberFilter)}
           />
-          <Input
-            type="date"
-            placeholder="Created After"
-            value={createdAfter ?? ""}
-            onChange={(e) => setCreatedAfter(e.target.value)}
-            className={inputClass(createdAfter)}
-          />
-          <Input
-            type="date"
-            placeholder="Created Before"
-            value={createdBefore ?? ""}
-            onChange={(e) => setCreatedBefore(e.target.value)}
-            className={inputClass(createdBefore)}
-          />
+          <div className="">
+            <Label className="text xs text-white mb-1">Created After</Label>
+            <Input
+              type="date"
+              placeholder="Created After"
+              value={createdAfter ?? ""}
+              onChange={(e) => setCreatedAfter(e.target.value)}
+              className={inputClass(createdAfter)}
+            />
+          </div>
+          <div className="">
+            <Label className="text xs text-white mb-1">Created Before</Label>
+            <Input
+              type="date"
+              placeholder="Created Before"
+              value={createdBefore ?? ""}
+              onChange={(e) => setCreatedBefore(e.target.value)}
+              className={inputClass(createdBefore)}
+            />
+          </div>
 
           {/* ✅ New filters start here */}
           <Input
@@ -442,7 +449,9 @@ export default function OffersUsedCarFilterForm({
                     asChild
                     className="bg-[#619aab] text-white hover:bg-[#528a99] rounded-2xl px-4 py-2 text-sm font-semibold"
                   >
-                    <a href={`/offers-search/used/${offer.id}`}>View offer {" >>"}</a>
+                    <a href={`/offers-search/used/${offer.id}`}>
+                      View offer {" >>"}
+                    </a>
                   </Button>
                 </div>
               </div>
@@ -454,7 +463,7 @@ export default function OffersUsedCarFilterForm({
           </div>
         )}
       </div>
-      <div className="mt-2 px-2 text-xs text-gray-700">
+      <div className="mt-2 px-2 ml-4 2xl:ml-0 text-xs text-gray-700">
         Showing {filteredOffers.length} of {offers.length} entries
       </div>
     </div>
