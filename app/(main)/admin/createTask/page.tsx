@@ -66,6 +66,7 @@ export default function CreateTaskForm() {
             value={form.taskType ?? ""}
             onChange={(e) => setForm({ ...form, taskType: e.target.value })}
             className={inputClass(form.taskType)}
+            required
           />
         </div>
 
@@ -94,6 +95,7 @@ export default function CreateTaskForm() {
             value={form.makeModel ?? ""}
             onChange={(e) => setForm({ ...form, makeModel: e.target.value })}
             className={inputClass(form.makeModel)}
+            required
           />
         </div>
 
@@ -105,6 +107,7 @@ export default function CreateTaskForm() {
             value={form.orderNumber ?? ""}
             onChange={(e) => setForm({ ...form, orderNumber: e.target.value })}
             className={inputClass(form.orderNumber)}
+            required
           />
         </div>
 
@@ -112,12 +115,13 @@ export default function CreateTaskForm() {
           <Label>Order Package Number</Label>
           <Input
             name="orderPackageNumber"
-            placeholder="Optional"
+            placeholder="Order Package Number"
             value={form.orderPackageNumber ?? ""}
             onChange={(e) =>
               setForm({ ...form, orderPackageNumber: e.target.value || null })
             }
             className={inputClass(form.orderPackageNumber)}
+            required
           />
         </div>
 
@@ -125,12 +129,13 @@ export default function CreateTaskForm() {
           <Label>Transport Number</Label>
           <Input
             name="transportNumber"
-            placeholder="Optional"
+            placeholder="Transport Number"
             value={form.transportNumber ?? ""}
             onChange={(e) =>
               setForm({ ...form, transportNumber: e.target.value || null })
             }
             className={inputClass(form.transportNumber)}
+            required
           />
         </div>
 
@@ -142,6 +147,7 @@ export default function CreateTaskForm() {
             value={form.deadline ?? ""}
             onChange={(e) => setForm({ ...form, deadline: e.target.value })}
             className={inputClass(form.deadline)}
+            required
           />
         </div>
 
