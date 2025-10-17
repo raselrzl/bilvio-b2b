@@ -204,7 +204,7 @@ export default function AppHeader({ email }: { email: string }) {
       {/* Sidebar */}
       <aside
         className={`fixed left-0 z-[60] h-[100vh] bg-[#2D3748] text-white transition-[width] duration-200 ${
-          expanded ? "w-[200px]" : "w-14"
+          expanded ? "w-[210px]" : "w-14"
         }`}
         style={{ top: "var(--header-h)" }}
         aria-label="Main navigation"
@@ -241,7 +241,7 @@ export default function AppHeader({ email }: { email: string }) {
                   >
                     <Icon className="h-8 w-5" />
                     <span
-                      className={`overflow-hidden flex items-center justify-center whitespace-nowrap transition-[opacity,margin] duration-200
+                      className={`overflow-hidden flex items-center justify-between whitespace-nowrap transition-[opacity,margin] duration-200
                         ${
                           expanded
                             ? "opacity-100 ml-2"
