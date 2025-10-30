@@ -1,0 +1,229 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../lib/generated/prisma"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String  @id @default(cuid())
+  UserID      String  @unique
+  email       String  @unique
+  password    String?
+  taxNumber   String? @unique
+  companyName String?
+  phone       String? @unique
+  street      String
+  country     String
+  city        String
+  zipCode     String
+
+  firstName         String?
+  lastName          String?
+  companyWebsiteUrl String?
+
+  userConcent Boolean @default(false)
+
+  userType       UserType       @default(USER)
+  approvalStatus ApprovalStatus @default(PENDING)
+
+  intent Intent?
+  demands   Demand[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]  @relation("UserProducts")
+  orders   Order[]
+  tasks  Task[]
+
+
+}
+
+enum UserType {
+  USER
+  SUPERADMIN
+  ADMIN
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ACTIVE
+  INACTIVE
+}
+
+enum Intent {
+  SALES
+  PURCHASES
+}
+
+
+model Product {
+  id               String   @id @default(cuid())
+  offerNumber      String   @unique
+  name             String
+  gearbox          Gearbox
+  fuel             FuelType
+  price            Float
+  discount         Float
+  type             OfferType
+  stock            StockStatus
+  colour           String
+  quantity         Int
+  mileage          Int
+  firstRegistration DateTime
+  availability     Availability
+  trim             String
+  engineSpec       String
+  vat              Float
+  transportCost    Float
+  productionYear   Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  userId           String?
+  user             User?    @relation("UserProducts", fields: [userId], references: [id])
+
+  productCondition ProductCondition
+  orderItems        OrderItem[]
+}
+
+enum FuelType {
+  PETROL
+  DIESEL
+  HYBRID
+  ELECTRIC
+}
+ 
+enum Gearbox {
+  AUTOMATIC
+  MANUAL
+}
+
+enum StockStatus {
+  IN_STOCK
+  OUT_OF_STOCK
+}
+
+enum Availability {
+  IMMEDIATELY
+  LATER
+}
+
+enum OfferType {
+  SUPER
+  INTERESTING
+  NOT_INTERESTING
+  LATER
+}
+
+enum ProductCondition {
+  USED
+  NEW
+}
+
+
+model Demand {
+  id          String        @id @default(cuid())
+  make        String?
+  gearbox     String?
+  fuel        String?
+  priceFrom   Float?
+  priceTo     Float?
+  demand      Int?
+  modelYear   Int?
+  country     String?
+  quantity    Int?
+  warehouse   String?
+  wltpCo2     Float?
+  note        String?
+  status      DemandStatus  @default(DRAFT)
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+enum DemandStatus {
+  DRAFT
+  SAVED
+}
+
+
+model Order {
+  id          String       @id @default(cuid())
+  orderNumber String       @unique
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  status      OrderStatus  @default(NEW)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Relation with OrderItem
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  productId   String
+  quantity    Int      @default(1)
+  unitPrice   Float
+  totalPrice  Float
+
+  // Relations
+  order       Order    @relation(fields: [orderId], references: [id])
+  product     Product  @relation(fields: [productId], references: [id])
+}
+
+enum OrderStatus {
+  NEW
+  ACCEPTED
+  REJECTED
+  CANCELLED
+  COMPLETED
+}
+
+
+
+model Task {
+  id                  String      @id @default(cuid())
+  status              TaskStatus  @default(TODO)
+  taskType            String
+  type                CarType
+  makeModel           String
+  orderNumber         String
+  orderPackageNumber  String?
+  transportNumber     String?
+  deadline            DateTime
+  expired             Boolean     @default(false)
+
+  // Relation to User (fixed)
+  userId              String?
+  user                User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+}
+
+
+enum TaskStatus {
+  TODO
+  REJECTED
+  WAITING
+  DONE
+  SCHEDULED
+  CANCELLED
+}
+
+enum CarType {
+  NEW
+  USED
+}
+
+
