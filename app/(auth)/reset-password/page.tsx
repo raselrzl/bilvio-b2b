@@ -3,7 +3,7 @@ import ResetPasswordForm from "./ResetPasswordForm";
 
 export default function ResetPasswordPage() {
   return (
-    <div className="mx-auto max-w-7xl">
+    <div className="">
       
       <main className="min-h-screen grid grid-cols-1 md:grid-cols-2 px-6">
         <div className="relative bg-gray-50">
@@ -14,7 +14,7 @@ export default function ResetPasswordPage() {
           />
         </div>
 
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center max-w-3xl">
           <ResetPasswordForm />
         </div>
       </main>
