@@ -3,7 +3,7 @@ import RegisterForm from "./RegisterForm";
 
 export default async function RegisterPage() {
   return (
-    <div className="mx-auto max-w-7xl">
+    <div className="">
       <main className="min-h-screen grid grid-cols-1 md:grid-cols-2 px-6">
         <div className="relative bg-gray-50">
           <img
@@ -13,7 +13,7 @@ export default async function RegisterPage() {
           />
         </div>
 
-        <div className="flex items-center justify-center py-4">
+        <div className="flex items-center justify-center py-4 max-w-3xl">
           <RegisterForm />
         </div>
       </main>
