@@ -35,9 +35,15 @@ export default async function DocumentsPage() {
 
   return (
     <div className="max-w-7xl mx-auto w-full">
-      <div className="flex items-center justify-between px-2 2xl:px-2 mt-6">
+       <div className="flex items-center justify-between px-6 2xl:px-0 mt-4">
         <h1 className="text-2xl md:text-3xl font-extrabold">Documents</h1>
-        <Link href="/documents/uploaddocuments">Upload A Documents</Link>
+
+        <Link href="/documents/uploaddocuments">
+          <Button className="rounded-xs inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white cursor-pointer">
+            <PlusCircle className="h-5 w-5" aria-hidden="true" />
+            <span>Upload A Documents</span>
+          </Button>
+        </Link>
       </div>
 
       <div className="mt-6">
