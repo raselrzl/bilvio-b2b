@@ -559,3 +559,31 @@ export async function createTaskAction(formData: FormData) {
   revalidatePath("/admin/createTask");
   redirect("/tasks");
 }
+
+
+
+
+export async function uploadDocumentsAction(fileUrl: string) {
+  if (!fileUrl) throw new Error("Please upload a valid PDF document");
+
+  // Get logged-in user from cookie
+  const jar = await cookies();
+  const userEmail = jar.get("bilvio_session")?.value;
+  if (!userEmail) throw new Error("Unauthorized — please log in");
+
+  const user = await prisma.user.findUnique({
+    where: { email: userEmail },
+    select: { id: true },
+  });
+  if (!user) throw new Error("User not found");
+
+  // Update the PDF for this specific user
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { uploadedDocuments: fileUrl },
+  });
+
+  revalidatePath("/documents");
+
+  return { ok: true, message: "PDF uploaded successfully!" };
+}

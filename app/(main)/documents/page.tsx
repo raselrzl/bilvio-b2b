@@ -37,6 +37,7 @@ export default async function DocumentsPage() {
     <div className="max-w-7xl mx-auto w-full">
       <div className="flex items-center justify-between px-2 2xl:px-2 mt-6">
         <h1 className="text-2xl md:text-3xl font-extrabold">Documents</h1>
+        <Link href="/documents/uploaddocuments">Upload A Documents</Link>
       </div>
 
       <div className="mt-6">

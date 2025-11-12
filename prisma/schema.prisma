@@ -41,7 +41,7 @@ model User {
   orders   Order[]
   tasks  Task[]
 
-
+  uploadedDocuments String?
 }
 
 enum UserType {
