@@ -1,6 +1,8 @@
+import { prisma } from "@/app/utils/db";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
 
 interface Document {
   id: string;
@@ -12,29 +14,34 @@ interface Document {
   fileUrl: string;
 }
 
+// ✅ Fetch document from database for logged-in user
 async function getDocument(id: string): Promise<Document | null> {
-  const docs: Document[] = [
-    {
-      id: "1",
-      number: "DOC001",
-      type: "Invoice",
-      kind: "Incoming",
-      status: "Existing",
-      createdAt: new Date().toISOString(),
-      fileUrl: "/demo.pdf",
-    },
-    {
-      id: "2",
-      number: "DOC002",
-      type: "Transport Cost Invoice",
-      kind: "Outgoing",
-      status: "Expected/Deleted",
-      createdAt: new Date().toISOString(),
-      fileUrl: "/demo.pdf",
-    },
-  ];
+  const jar = await cookies();
+  const userEmail = jar.get("bilvio_session")?.value ?? "";
 
-  return docs.find((d) => d.id === id) ?? null;
+  if (!userEmail) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { email: userEmail },
+    select: {
+      id: true,
+      uploadedDocuments: true,
+      createdAt: true,
+    },
+  });
+
+  if (!user || !user.uploadedDocuments) return null;
+
+  // ✅ Mock consistent document details from DB-stored file
+  return {
+    id: user.id,
+    number: "DOC-" + user.id.slice(0, 6).toUpperCase(),
+    type: "Uploaded PDF",
+    kind: "Outgoing",
+    status: "Existing",
+    createdAt: user.createdAt.toISOString(),
+    fileUrl: user.uploadedDocuments,
+  };
 }
 
 export default async function DocumentPreviewPage({
@@ -48,16 +55,24 @@ export default async function DocumentPreviewPage({
 
   return (
     <div className="max-w-7xl mx-auto w-full">
+      {/* Header Section */}
       <div className="flex items-center justify-between px-4 mt-6">
         <h1 className="text-2xl md:text-3xl font-extrabold">
-          Documents / Documents Details
+          Documents / Document Details
         </h1>
-         <Link href="/documents">
-          <Button variant="outline" className="cursor-pointer rounded-xs">← Back to Document</Button>
+        <Link href="/documents">
+          <Button
+            variant="outline"
+            className="cursor-pointer rounded-xs border-amber-600 text-amber-700 hover:bg-amber-50"
+          >
+            ← Back to Documents
+          </Button>
         </Link>
       </div>
+
+      {/* Document Metadata */}
       <div className="p-4 space-y-6">
-        <div className="border bg-white p-4 rounded shadow grid grid-cols-3 gap-2">
+        <div className="border bg-white p-4 rounded shadow grid grid-cols-3 gap-4">
           <div>
             <p className="text-sm text-gray-500">Document Number</p>
             <p className="font-medium">{doc.number}</p>
@@ -82,6 +97,7 @@ export default async function DocumentPreviewPage({
           </div>
         </div>
 
+        {/* PDF Preview */}
         <div className="border rounded shadow overflow-hidden">
           <iframe
             src={doc.fileUrl}
