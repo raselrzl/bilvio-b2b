@@ -1,6 +1,5 @@
 "use client";
-/* this file uploading file */
-import { useTransition, useState } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -13,10 +12,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { XIcon } from "lucide-react";
+import { XIcon, UploadCloud } from "lucide-react";
 import { UploadDropzone } from "./UploadThingReexported";
 import Image from "next/image";
-import { uploadDocumentsAction } from "@/app/actions";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
@@ -31,32 +29,25 @@ export default function UploadDocumentsForm() {
     defaultValues: { document: "" },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    startTransition(() => {
-      alert("PDF uploaded successfully!");
-      form.reset();
-    });
-  }
-
   return (
-    <div className="max-w-sm mx-auto p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <div className="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form className="space-y-6">
           <FormField
             control={form.control}
             name="document"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Document (PDF)</FormLabel>
+                <FormLabel>Upload Document (PDF)</FormLabel>
                 <FormControl>
                   {field.value ? (
-                    <div className="relative w-fit">
+                    <div className="relative w-fit mx-auto">
                       <Image
                         src="/pdf.png"
                         alt="PDF Document"
-                        width={100}
-                        height={100}
-                        className="rounded-lg"
+                        width={120}
+                        height={120}
+                        className="rounded-lg shadow"
                       />
                       <Button
                         type="button"
@@ -69,36 +60,40 @@ export default function UploadDocumentsForm() {
                       </Button>
                     </div>
                   ) : (
-                    <UploadDropzone
-                      endpoint="documentUploader"
-                      onClientUploadComplete={async (res) => {
-                        const uploadedFile = res[0] as any;
-                        const url = uploadedFile.fileUrl || uploadedFile.ufsUrl; // fallback if missing
+                    <div className="rounded-lg p-6 text-center cursor-pointer hover:border-amber-500 transition">
+                      <UploadDropzone
+                        endpoint="documentUploader"
+                       className="
+                        ut-button:bg-amber-600
+                        ut-button:text-white!
+                        ut-button:hover:bg-amber-500
+                        ut-button:rounded-md
+                        ut-button:px-4
+                        ut-button:py-2
+                        ut-button:text-sm
+                      "  onClientUploadComplete={async (res) => {
+                          const uploadedFile = res[0] as any;
+                          const url =
+                            uploadedFile.fileUrl || uploadedFile.ufsUrl;
+                          if (!url) {
+                            alert("Upload failed: no file URL returned");
+                            return;
+                          }
 
-                        if (!url) {
-                          alert("Upload failed: no file URL returned");
-                          return;
-                        }
-
-                        field.onChange(url); // update form state
-                        alert("PDF uploaded successfully!"); // show success
-                        form.reset(); // reset form if needed
-                        router.push("/documents");
-                      }}
-                    />
+                          field.onChange(url); // update form state
+                          alert("PDF uploaded successfully!");
+                          form.reset();
+                          router.push("/documents"); // redirect after upload
+                        }}
+                      />
+                     
+                    </div>
                   )}
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          {/*     <Button
-            type="submit"
-            className="w-full text-sm"
-            disabled={pending || !form.watch("document")}
-          >
-            {pending ? "Submitting..." : "Upload PDF Document"}
-          </Button> */}
         </form>
       </Form>
     </div>
