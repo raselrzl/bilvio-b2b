@@ -319,7 +319,7 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
               </div>
             ))
           ) : (
-            <div className="bg-amber-100 border-1 border-amber-300 shadow-sm p-4">
+            <div className="bg-amber-100 border border-amber-300 shadow-sm p-4">
               <div className="flex flex-col md:flex-row justify-center items-center text-amber-600">
                 <TriangleAlert className="mr-4" />
                 <p>
