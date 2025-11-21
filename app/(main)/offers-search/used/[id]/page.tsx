@@ -18,8 +18,23 @@ import { Input } from "@/components/ui/input";
 import React from "react";
 import { prisma } from "@/app/utils/db";
 import { OrderSection } from "./OrderComponent";
+import { cookies } from "next/headers"; // to read cookies
+import OfferReactions from "@/components/general/OfferReactions";
 
 async function getOfferById(id: string) {
+  // Get cookies
+  const cookieStore = await cookies();
+  const userEmail = cookieStore.get("userEmail")?.value; // Assuming you saved email in cookie
+
+  let currentUserId: string | null = null;
+
+  if (userEmail) {
+    const user = await prisma.user.findUnique({
+      where: { email: userEmail },
+      select: { id: true },
+    });
+    currentUserId = user?.id ?? null;
+  }
   const offer = await prisma.product.findUnique({
     where: { id },
     select: {
@@ -43,6 +58,15 @@ async function getOfferById(id: string) {
       vat: true,
       transportCost: true,
       productionYear: true,
+      reactions: {
+        where: currentUserId ? { userId: currentUserId } : undefined,
+        select: {
+          id: true,
+          reaction: true,
+          userId: true,
+          productId: true,
+        },
+      },
     },
   });
 
@@ -78,12 +102,16 @@ export default async function UsedCarOfferDetailsPage({
           <div>
             <h1 className="text-xl font-bold">{offer.name}</h1>
           </div>
-          <div className="flex gap-2">
+          {/*    <div className="flex gap-2">
             <Heart className="h-5 w-5" />
             <ThumbsUp className="h-5 w-5" />
             <ThumbsDown className="h-5 w-5" />
             <ClockPlus className="h-5 w-5" />
-          </div>
+          </div> */}
+          <OfferReactions
+            productId={offer.id}
+            initialReaction={offer.reactions?.[0]?.reaction}
+          />
           <div className="bg-amber-400 px-2 text-sm rounded-xs font-bold">
             <p>{offer.discount}%</p>
           </div>
@@ -232,7 +260,7 @@ export default async function UsedCarOfferDetailsPage({
                   </div>
 
                   {/* Discount */}
-                   <div className="font-semibold p-2 bg-white flex">
+                  <div className="font-semibold p-2 bg-white flex">
                     <p className="bg-amber-400 px-2 text-sm rounded-xs font-bold">
                       {offer.discount}%
                     </p>
@@ -246,16 +274,17 @@ export default async function UsedCarOfferDetailsPage({
                   </div>
 
                   {/* Final Price */}
-                   <div className="col-span-3 flex items-center bg-black text-white text-lg font-bold py-2 px-6 text-start">
-                    Price: {formatCurrency(discountedNet)} <p className="text-sm mt-1 ml-3 text-gray-400"> SEK NET {" "}</p>/{" "}
-                    {formatCurrency(discountedGross)} <p className="text-sm mt-1 ml-3 text-gray-400">SEK GROSS</p>
+                  <div className="col-span-3 flex items-center bg-black text-white text-lg font-bold py-2 px-6 text-start">
+                    Price: {formatCurrency(discountedNet)}{" "}
+                    <p className="text-sm mt-1 ml-3 text-gray-400"> SEK NET </p>
+                    / {formatCurrency(discountedGross)}{" "}
+                    <p className="text-sm mt-1 ml-3 text-gray-400">SEK GROSS</p>
                   </div>
-                  
                 </>
               );
             })()}
           </div>
-          <OrderSection productId={offer.id} /> 
+          <OrderSection productId={offer.id} />
         </div>
       </div>
 

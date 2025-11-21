@@ -2,8 +2,6 @@ import { prisma } from "@/app/utils/db";
 import AllProducts from "@/components/general/AllProduct";
 import { cookies } from "next/headers"; // to read cookies
 
-export const metadata = { title: "OffersSearchNewCar • Bilvio" };
-
 export default async function MainPage() {
   // Get cookies
   const cookieStore = await cookies();
