@@ -151,7 +151,7 @@ export default async function OrdersPage({ searchParams }: SearchParamsProps) {
                             return (
                               <div
                                 key={item.id}
-                                className="border rounded-md p-2 bg-muted/40"
+                                className="border p-2 bg-muted/40"
                               >
                                 <p className="font-semibold text-sm">
                                   {p.name}
