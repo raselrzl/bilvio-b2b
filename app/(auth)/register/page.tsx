@@ -1,5 +1,6 @@
 import React from "react";
 import RegisterForm from "./RegisterForm";
+import Image from "next/image";
 
 export default async function RegisterPage() {
   return (
@@ -13,8 +14,26 @@ export default async function RegisterPage() {
           />
         </div>
 
-        <div className="flex items-center justify-center py-4 max-w-3xl">
+        <div className="flex flex-col items-center justify-center py-4 max-w-3xl">
           <RegisterForm />
+
+          <div className="flex mt-20 gap-6">
+            <Image
+              src="/11.png"
+              alt="Besikta logo"
+              height={60}
+              width={100}
+              className="object-contain"
+            />
+
+            <Image
+              src="/22.png"
+              alt="handlarfinans logo"
+              height={60}
+              width={100}
+              className="object-contain"
+            />
+          </div>
         </div>
       </main>
     </div>

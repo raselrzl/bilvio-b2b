@@ -30,40 +30,48 @@ export default function UploadDocumentsForm() {
   });
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-      <Form {...form}>
-        <form className="space-y-6">
-          <FormField
-            control={form.control}
-            name="document"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Upload Document (PDF)</FormLabel>
-                <FormControl>
-                  {field.value ? (
-                    <div className="relative w-fit mx-auto">
-                      <Image
-                        src="/pdf.png"
-                        alt="PDF Document"
-                        width={120}
-                        height={120}
-                        className="rounded-lg shadow"
-                      />
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="icon"
-                        className="absolute -top-2 -right-2"
-                        onClick={() => field.onChange("")}
-                      >
-                        <XIcon className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="rounded-lg p-6 text-center cursor-pointer hover:border-amber-500 transition">
-                      <UploadDropzone
-                        endpoint="documentUploader"
-                       className="
+    <div className="">
+      <div className="flex items-center justify-between px-6 2xl:px-0 bg-gray-200 p-4">
+        <h1 className="text-xl font-extrabold p-4">
+          För att kunna handla bilar via vår portal behöver du ladda upp ditt
+          företags registreringsbevis från Bolagsverket.
+        </h1>
+      </div>
+
+      <div className="max-w-md mx-auto p-6 bg-gray-200 dark:bg-gray-800 rounded-lg shadow-lg mt-10">
+        <Form {...form}>
+          <form className="space-y-6">
+            <FormField
+              control={form.control}
+              name="document"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Upload Document (PDF)</FormLabel>
+                  <FormControl>
+                    {field.value ? (
+                      <div className="relative w-fit mx-auto">
+                        <Image
+                          src="/pdf.png"
+                          alt="PDF Document"
+                          width={120}
+                          height={120}
+                          className="rounded-lg shadow"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="icon"
+                          className="absolute -top-2 -right-2"
+                          onClick={() => field.onChange("")}
+                        >
+                          <XIcon className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="rounded-lg p-6 text-center cursor-pointer hover:border-amber-500 transition">
+                        <UploadDropzone
+                          endpoint="documentUploader"
+                          className="
                         ut-button:bg-amber-600
                         ut-button:text-white!
                         ut-button:hover:bg-amber-500
@@ -71,31 +79,32 @@ export default function UploadDocumentsForm() {
                         ut-button:px-4
                         ut-button:py-2
                         ut-button:text-sm
-                      "  onClientUploadComplete={async (res) => {
-                          const uploadedFile = res[0] as any;
-                          const url =
-                            uploadedFile.fileUrl || uploadedFile.ufsUrl;
-                          if (!url) {
-                            alert("Upload failed: no file URL returned");
-                            return;
-                          }
+                      "
+                          onClientUploadComplete={async (res) => {
+                            const uploadedFile = res[0] as any;
+                            const url =
+                              uploadedFile.fileUrl || uploadedFile.ufsUrl;
+                            if (!url) {
+                              alert("Upload failed: no file URL returned");
+                              return;
+                            }
 
-                          field.onChange(url); // update form state
-                          alert("PDF uploaded successfully!");
-                          form.reset();
-                          router.push("/documents"); // redirect after upload
-                        }}
-                      />
-                     
-                    </div>
-                  )}
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </form>
-      </Form>
+                            field.onChange(url); // update form state
+                            alert("PDF uploaded successfully!");
+                            form.reset();
+                            router.push("/documents"); // redirect after upload
+                          }}
+                        />
+                      </div>
+                    )}
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }

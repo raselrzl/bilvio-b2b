@@ -587,3 +587,27 @@ export async function uploadDocumentsAction(fileUrl: string) {
 
   return { ok: true, message: "PDF uploaded successfully!" };
 }
+
+
+
+export async function reactToProduct(
+  productId: string,
+  reaction: "LIKE" | "UP" | "DOWN" | "SAVE"
+) {
+  const jar = await cookies(); // ✅ await here
+  const userEmail = jar.get("bilvio_session")?.value;
+
+  if (!userEmail) throw new Error("Unauthorized");
+
+  const user = await prisma.user.findUnique({ where: { email: userEmail } });
+  if (!user) throw new Error("User not found");
+
+  const updatedReaction = await prisma.productReaction.upsert({
+    where: { productId_userId: { productId, userId: user.id } },
+    update: { reaction },
+    create: { productId, userId: user.id, reaction },
+  });
+
+  return updatedReaction;
+}
+

@@ -34,7 +34,7 @@ model User {
   intent Intent?
   demands   Demand[]
 
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt
 
   products Product[]  @relation("UserProducts")
@@ -42,6 +42,8 @@ model User {
   tasks  Task[]
 
   uploadedDocuments String?
+
+  reactions ProductReaction[]
 }
 
 enum UserType {
@@ -91,7 +93,38 @@ model Product {
 
   productCondition ProductCondition
   orderItems        OrderItem[]
+
+  reactions ProductReaction[]
+
+
 }
+
+
+model ProductReaction {
+  id         String    @id @default(cuid())
+  productId  String
+  userId     String
+  reaction   Reaction
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  user       User      @relation(fields: [userId], references: [id])
+  product    Product   @relation(fields: [productId], references: [id])
+
+  @@unique([productId, userId])  // only ONE reaction per user per product
+}
+
+enum Reaction {
+  LIKE
+  UP
+  DOWN
+  SAVE
+}
+
+
+
+
 
 enum FuelType {
   PETROL
