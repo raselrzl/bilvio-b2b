@@ -77,7 +77,7 @@ export default function AppHeader({ email }: { email: string }) {
   return (
     <div>
       {/* Top Navbar */}
-      <header className="fixed inset-x-0 top-0 z-[80] flex h-14 items-center justify-between px-4 bg-[#2D3748]">
+      <header className="fixed inset-x-0 top-0 z-80 flex h-14 items-center justify-between px-4 bg-[#2D3748]">
         <div className="flex items-center gap-3">
           <Link href="/" aria-label="Go home" className="inline-flex">
             <Image
@@ -160,28 +160,15 @@ export default function AppHeader({ email }: { email: string }) {
 
               <DropdownMenuItem asChild>
                 <Link
-                  href="/admin/createProduct"
+                  href="/dashboard/orders"
                   className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white"
                 >
                   <SquarePlus className="mr-2 h-4 w-4" />
-                  <span>Admin/Add Car</span>
+                  <span>Dashboard</span>
                 </Link>
               </DropdownMenuItem>
 
               <DropdownMenuSeparator />
-
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/admin/createTask"
-                  className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white"
-                >
-                  <SquarePlus className="mr-2 h-4 w-4" />
-                  <span>Admin/Create Task</span>
-                </Link>
-              </DropdownMenuItem>
-
-              <DropdownMenuSeparator />
-
               <DropdownMenuItem asChild>
                 <form
                   action={logoutAction}
@@ -203,7 +190,7 @@ export default function AppHeader({ email }: { email: string }) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 z-[60] h-[100vh] bg-[#2D3748] text-white transition-[width] duration-200 ${
+        className={`fixed left-0 z-60 h-screen bg-[#2D3748] text-white transition-[width] duration-200 ${
           expanded ? "w-[210px]" : "w-14"
         }`}
         style={{ top: "var(--header-h)" }}
