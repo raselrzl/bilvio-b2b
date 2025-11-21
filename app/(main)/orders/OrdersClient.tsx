@@ -92,7 +92,7 @@ export default function OrdersClient({ orders }: { orders: Order[] }) {
       </div>
 
       {/* Filter Form */}
-      <div className="mt-4 px-2 sm:px-4 md:px-6 bg-gray-500 max-w-[100%] lg:max-w-[1500px] mx-auto 2xl:mx-2">
+      <div className="mt-4 px-2 sm:px-4 md:px-6 bg-gray-500 max-w-full lg:max-w-[1500px] mx-auto 2xl:mx-2">
         <div className="p-4">
           <OrderFilterForm
             onFilterChange={(f) =>
@@ -112,10 +112,10 @@ export default function OrdersClient({ orders }: { orders: Order[] }) {
           {tabs.map((tab) => (
             <button
               key={tab}
-              className={`px-4 py-2 font-medium text-sm border-t-1 ${
+              className={`px-4 py-2 font-medium text-sm border-t ${
                 activeTab === tab
                   ? "border-[#619aab] border-t-2 text-[#619aab] bg-white rounded-t-xs"
-                  : "bg-gray-300 border-gray-200 border-x-1 border-l-1 text-black hover:text-gray-700 rounded-t-xs cursor-pointer"
+                  : "bg-gray-300 border-gray-200 border-t border-l text-black hover:text-gray-700 rounded-t-xs cursor-pointer"
               }`}
               onClick={() => setActiveTab(tab)}
             >
