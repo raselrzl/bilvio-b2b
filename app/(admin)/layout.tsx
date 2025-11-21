@@ -37,22 +37,23 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
           <SheetContent
             side="left"
-            className="bg-gray-100 w-[220px] h-[400px] pl-4 text-black text-sm"
+            className="bg-gray-100 w-[220px] h-[400px] pl-4 text-black text-sm flex flex-col gap-6 mt-6 font-medium"
           >
-            <nav className="flex flex-col gap-6 mt-6 font-medium text-lg">
-              <Link href="/" className="hover:underline">
-                Home
-              </Link>
-              <Link href="/dashboard/orders" className="hover:underline">
-                All Orders
-              </Link>
-              <Link href="/admin/createProduct" className="hover:underline">
-                Add Car
-              </Link>
-              <Link href="/admin/createTask" className="hover:underline">
-                Create Task
-              </Link>
-            </nav>
+            {/* Hidden title for accessibility */}
+            <h2 className="sr-only">Mobile Navigation Menu</h2>
+
+            <Link href="/" className="hover:underline">
+              Home
+            </Link>
+            <Link href="/dashboard/orders" className="hover:underline">
+              All Orders
+            </Link>
+            <Link href="/admin/createProduct" className="hover:underline">
+              Add Car
+            </Link>
+            <Link href="/admin/createTask" className="hover:underline">
+              Create Task
+            </Link>
           </SheetContent>
         </Sheet>
       </header>
