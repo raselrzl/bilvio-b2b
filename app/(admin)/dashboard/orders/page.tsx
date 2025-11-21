@@ -117,7 +117,6 @@ export default async function OrdersPage({ searchParams }: SearchParamsProps) {
                     <TableHead>Tax Number</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Created</TableHead>
-                    <TableHead>Updated</TableHead>
                     <TableHead>Products</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
@@ -126,7 +125,7 @@ export default async function OrdersPage({ searchParams }: SearchParamsProps) {
                 <TableBody>
                   {orders.map((order) => (
                     <TableRow key={order.id} className="hover:bg-muted/50">
-                      <TableCell className="font-medium">{order.id}</TableCell>
+                      <TableCell className="font-medium">{order.id.slice(-6)}</TableCell>
                       <TableCell>{order.orderNumber}</TableCell>
                       <TableCell>{order.user?.firstName ?? "-"}</TableCell>
                       <TableCell>{order.user?.email ?? "-"}</TableCell>
@@ -143,11 +142,6 @@ export default async function OrdersPage({ searchParams }: SearchParamsProps) {
                       <TableCell>
                         {new Date(order.createdAt).toLocaleString()}
                       </TableCell>
-
-                      <TableCell>
-                        {new Date(order.updatedAt).toLocaleString()}
-                      </TableCell>
-
                       {/* Product Preview */}
                       <TableCell className="min-w-[230px]">
                         <div className="flex flex-col gap-2">
