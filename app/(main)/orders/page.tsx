@@ -21,6 +21,7 @@ export type Product = {
   vat?: number;
   transportCost?: number;
   availability?: string;
+  reactions?: { reaction: "LIKE" | "UP" | "DOWN" | "SAVE" }[];
 };
 
 export type Order = {
@@ -50,10 +51,21 @@ async function getOrders(): Promise<Order[]> {
 
 
   const orders = await prisma.order.findMany({
-    where: userId ? { userId } : undefined,
-    include: { items: { include: { product: true } } },
-    orderBy: { createdAt: "desc" },
-  });
+  where: userId ? { userId } : undefined,
+  include: {
+    items: {
+      include: {
+        product: {
+          include: {
+            reactions: true, // <-- include reactions here
+          },
+        },
+      },
+    },
+  },
+  orderBy: { createdAt: "desc" },
+});
+
 
   return orders.map((o) => ({
     id: o.id,
@@ -83,6 +95,7 @@ async function getOrders(): Promise<Order[]> {
       vat: item.product.vat,
       transportCost: item.product.transportCost,
       availability: item.product.availability,
+      reactions: item.product.reactions,
     })),
   }));
 }
