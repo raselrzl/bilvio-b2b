@@ -1,10 +1,23 @@
 import { prisma } from "@/app/utils/db";
 import OffersUsedCarFilterForm from "./OffersSearchUsedCar";
-
-export const metadata = { title: "OffersSearchNewCar • Bilvio" };
+import { cookies } from "next/headers"; // to read cookies
 
 
 export default async function OffersSearchUsedCarServer() {
+
+    // Get cookies
+    const cookieStore = await cookies();
+    const userEmail = cookieStore.get("userEmail")?.value; // Assuming you saved email in cookie
+  
+    let currentUserId: string | null = null;
+  
+    if (userEmail) {
+      const user = await prisma.user.findUnique({
+        where: { email: userEmail },
+        select: { id: true },
+      });
+      currentUserId = user?.id ?? null;
+    }
   // Fetch products from the database
   const products = await prisma.product.findMany({
     orderBy: { createdAt: "desc" },
@@ -33,6 +46,15 @@ export default async function OffersSearchUsedCarServer() {
       vat: true,
       transportCost: true,
       productionYear: true,
+       reactions: {
+        where: currentUserId ? { userId: currentUserId } : undefined,
+        select: {
+          id: true,
+          reaction: true,
+          userId: true,
+          productId: true,
+        },
+      },
     },
   });
 

@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
+import OfferReactions from "@/components/general/OfferReactions";
 
 interface Offer {
   id: string;
@@ -46,6 +47,12 @@ interface Offer {
   vat: number;
   transportCost: number;
   productionYear: number; // ✅ Added
+  reactions?: {
+    id: string;
+    reaction: "LIKE" | "UP" | "DOWN" | "SAVE";
+    userId: string;
+    productId: string;
+  }[];
 }
 
 // Helper functions to format numbers/dates deterministically
@@ -324,12 +331,17 @@ export default function OffersUsedCarFilterForm({
                   <div>
                     <h1 className="text-xl font-bold">{offer.name}</h1>
                   </div>
-                  <div className="flex gap-2">
+                  {/*     <div className="flex gap-2">
                     <Heart className="h-5 w-5" />
                     <ThumbsUp className="h-5 w-5" />
                     <ThumbsDown className="h-5 w-5" />
                     <ClockPlus className="h-5 w-5" />
-                  </div>
+                  </div> */}
+
+                  <OfferReactions
+                    productId={offer.id}
+                    initialReaction={offer.reactions?.[0]?.reaction}
+                  />
                   <div className="bg-amber-400 px-2 text-sm rounded-xs font-bold">
                     <p>{offer.discount}%</p>
                   </div>

@@ -1,5 +1,4 @@
 import { prisma } from "@/app/utils/db";
-import OffersUsedCarFilterForm from "./offers-search/used/OffersSearchUsedCar";
 import AllProducts from "@/components/general/AllProduct";
 import { cookies } from "next/headers"; // to read cookies
 
