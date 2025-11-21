@@ -37,7 +37,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
           <SheetContent
             side="left"
-            className="bg-gray-100 w-[220px] h-full text-black text-sm"
+            className="bg-gray-100 w-[220px] h-[400px] pl-4 text-black text-sm"
           >
             <nav className="flex flex-col gap-6 mt-6 font-medium text-lg">
               <Link href="/" className="hover:underline">
