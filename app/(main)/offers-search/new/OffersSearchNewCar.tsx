@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
+import OfferReactions from "@/components/general/OfferReactions";
 
 interface Offer {
   id: string;
@@ -45,6 +46,12 @@ interface Offer {
   engineSpec: string;
   vat: number;
   transportCost: number;
+  reactions?: {
+    id: string;
+    reaction: "LIKE" | "UP" | "DOWN" | "SAVE";
+    userId: string;
+    productId: string;
+  }[];
 }
 
 // Helper functions to format numbers/dates deterministically
@@ -205,25 +212,25 @@ export default function OffersFilterForm({
             onChange={(e) => setOfferNumberFilter(e.target.value)}
             className={inputClass(offerNumberFilter)}
           />
-           <div className="">
+          <div className="">
             <Label className="text xs text-white mb-1">Created After</Label>
-          <Input
-            type="date"
-            placeholder="Created After"
-            value={createdAfter ?? ""}
-            onChange={(e) => setCreatedAfter(e.target.value)}
-            className={inputClass(createdAfter)}
-          />
-            </div>
+            <Input
+              type="date"
+              placeholder="Created After"
+              value={createdAfter ?? ""}
+              onChange={(e) => setCreatedAfter(e.target.value)}
+              className={inputClass(createdAfter)}
+            />
+          </div>
           <div className="">
             <Label className="text xs text-white mb-1">Created Before</Label>
             <Input
-            type="date"
-            placeholder="Created Before"
-            value={createdBefore ?? ""}
-            onChange={(e) => setCreatedBefore(e.target.value)}
-            className={inputClass(createdBefore)}
-          />
+              type="date"
+              placeholder="Created Before"
+              value={createdBefore ?? ""}
+              onChange={(e) => setCreatedBefore(e.target.value)}
+              className={inputClass(createdBefore)}
+            />
           </div>
           <Select value={sortOption} onValueChange={(v) => setSortOption(v)}>
             <SelectTrigger className={selectClass(sortOption)}>
@@ -275,12 +282,17 @@ export default function OffersFilterForm({
                   <div>
                     <h1 className="text-xl font-bold">{offer.name}</h1>
                   </div>
-                  <div className="flex gap-2">
+                  {/*  <div className="flex gap-2">
                     <Heart className="h-5 w-5" />
                     <ThumbsUp className="h-5 w-5" />
                     <ThumbsDown className="h-5 w-5" />
                     <ClockPlus className="h-5 w-5" />
-                  </div>
+                  </div> */}
+
+                  <OfferReactions
+                    productId={offer.id}
+                    initialReaction={offer.reactions?.[0]?.reaction}
+                  />
                   <div className="bg-amber-400 px-2 text-sm rounded-xs font-bold">
                     <p>{offer.discount}%</p>
                   </div>
@@ -400,7 +412,9 @@ export default function OffersFilterForm({
                     asChild
                     className="bg-[#619aab] text-white hover:bg-[#528a99] rounded-2xl px-4 py-2 text-sm font-semibold"
                   >
-                   <a href={`/offers-search/new/${offer.id}`}>View offer {" >>"}</a>
+                    <a href={`/offers-search/new/${offer.id}`}>
+                      View offer {" >>"}
+                    </a>
                   </Button>
                 </div>
               </div>

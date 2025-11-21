@@ -46,14 +46,14 @@ export default async function MainPage() {
       transportCost: true,
       productionYear: true,
       reactions: {
-  where: currentUserId ? { userId: currentUserId } : undefined,
-  select: {
-    id: true,
-    reaction: true,
-    userId: true,
-    productId: true,
-  },
-},
+        where: currentUserId ? { userId: currentUserId } : undefined,
+        select: {
+          id: true,
+          reaction: true,
+          userId: true,
+          productId: true,
+        },
+      },
     },
   });
 
@@ -67,7 +67,9 @@ export default async function MainPage() {
   return (
     <div className="max-w-7xl mx-auto w-full">
       <div className="flex items-center justify-between px-6 2xl:px-0 mt-6">
-        <h1 className="text-2xl md:text-3xl font-extrabold uppercase">Offers Cars</h1>
+        <h1 className="text-2xl md:text-3xl font-extrabold uppercase">
+          Offers Cars
+        </h1>
       </div>
 
       <div className="mt-6">
