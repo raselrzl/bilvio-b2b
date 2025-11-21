@@ -4,21 +4,26 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { MenuIcon } from "lucide-react";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex w-full flex-col max-w-7xl mx-auto">
-
       {/* TOP NAVBAR */}
       <header className="sticky top-0 z-50 flex h-16 items-center justify-between gap-4 bg-gray-100 text-black shadow-sm px-4">
-
         {/* DESKTOP NAV */}
         <nav className="hidden md:flex font-medium gap-6 text-sm ml-2">
           <Link href="/" className="hover:underline">
             Home
+          </Link>
+
+          <Link href="/dashboard/orders" className="hover:underline">
+            All Orders
+          </Link>
+          <Link href="/admin/createProduct" className="hover:underline">
+            Add Car
+          </Link>
+
+          <Link href="/admin/createTask" className="hover:underline">
+            Create Task
           </Link>
         </nav>
 
@@ -40,6 +45,12 @@ export default function DashboardLayout({
               </Link>
               <Link href="/dashboard/orders" className="hover:underline">
                 All Orders
+              </Link>
+              <Link href="/admin/createProduct" className="hover:underline">
+                Add Car
+              </Link>
+              <Link href="/admin/createTask" className="hover:underline">
+                Create Task
               </Link>
             </nav>
           </SheetContent>
