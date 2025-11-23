@@ -11,27 +11,20 @@ import {
 } from "@/components/ui/select";
 import {
   X,
-  Heart,
-  ThumbsUp,
-  ThumbsDown,
-  ClockPlus,
-  Eye,
+  Car,
   Calendar,
   TriangleAlert,
   PlusCircle,
-  ListChevronsUpDown,
-  SquarePen,
-  BellDot,
   EyeIcon,
-  NotebookIcon,
   NotebookPen,
   MessageCircle,
   Save,
-  Car,
+  SquarePen,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import DemandNoteInput from "./DemandNoteInput";
+import { saveDemandNote } from "@/app/actions";
 
 export interface Demand {
   id: string;
@@ -45,17 +38,21 @@ export interface Demand {
   country?: string | null;
   warehouse?: string | null;
   wltpCo2?: number | null;
-  note?: string | null;
   status?: "DRAFT" | "SAVED" | null;
   createdAt: string;
+  lastNote?: string;
 }
 
 interface AllDemandsProps {
   initialDemands: Demand[];
+  currentUser: { id: string; email: string };
 }
 
-export default function AllDemands({ initialDemands }: AllDemandsProps) {
-  const [demands] = useState<Demand[]>(initialDemands);
+export default function AllDemands({
+  initialDemands,
+  currentUser,
+}: AllDemandsProps) {
+  const [demands, setDemands] = useState<Demand[]>(initialDemands);
   const [filteredDemands, setFilteredDemands] =
     useState<Demand[]>(initialDemands);
 
@@ -66,7 +63,7 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
   const [priceFromFilter, setPriceFromFilter] = useState<number>();
   const [priceToFilter, setPriceToFilter] = useState<number>();
   const [demandFilter, setDemandFilter] = useState<number>();
-  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest"); // 🆕 Sort order
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
 
   useEffect(() => {
     let filtered = [...demands];
@@ -89,7 +86,6 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
     if (demandFilter !== undefined)
       filtered = filtered.filter((d) => (d.demand ?? 0) >= demandFilter);
 
-    // 🆕 Sort newest/oldest
     filtered.sort((a, b) => {
       const dateA = new Date(a.createdAt).getTime();
       const dateB = new Date(b.createdAt).getTime();
@@ -149,8 +145,12 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
             <SelectValue placeholder="Gearbox" />
           </SelectTrigger>
           <SelectContent className="rounded-xs">
-            <SelectItem value="automatic" className="rounded-xs">Automatic</SelectItem>
-            <SelectItem value="manual" className="rounded-xs">Manual</SelectItem>
+            <SelectItem value="automatic" className="rounded-xs">
+              Automatic
+            </SelectItem>
+            <SelectItem value="manual" className="rounded-xs">
+              Manual
+            </SelectItem>
           </SelectContent>
         </Select>
 
@@ -159,9 +159,15 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
             <SelectValue placeholder="Fuel" />
           </SelectTrigger>
           <SelectContent className="rounded-xs">
-            <SelectItem value="diesel" className="rounded-xs">Diesel</SelectItem>
-            <SelectItem value="electric" className="rounded-xs">Electric</SelectItem>
-            <SelectItem value="LPG" className="rounded-xs">LPG</SelectItem>
+            <SelectItem value="diesel" className="rounded-xs">
+              Diesel
+            </SelectItem>
+            <SelectItem value="electric" className="rounded-xs">
+              Electric
+            </SelectItem>
+            <SelectItem value="LPG" className="rounded-xs">
+              LPG
+            </SelectItem>
           </SelectContent>
         </Select>
 
@@ -197,12 +203,15 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent className="rounded-xs">
-            <SelectItem value="draft" className="rounded-xs">Draft</SelectItem>
-            <SelectItem value="saved" className="rounded-xs">Saved</SelectItem>
+            <SelectItem value="draft" className="rounded-xs">
+              Draft
+            </SelectItem>
+            <SelectItem value="saved" className="rounded-xs">
+              Saved
+            </SelectItem>
           </SelectContent>
         </Select>
 
-        {/* 🆕 Sort filter */}
         <Select
           value={sortOrder}
           onValueChange={(v: "newest" | "oldest") => setSortOrder(v)}
@@ -211,8 +220,12 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent className="rounded-xs">
-            <SelectItem value="newest" className="rounded-xs">Newest</SelectItem>
-            <SelectItem value="oldest">Oldest</SelectItem>
+            <SelectItem value="newest" className="rounded-xs">
+              Newest
+            </SelectItem>
+            <SelectItem value="oldest" className="rounded-xs">
+              Oldest
+            </SelectItem>
           </SelectContent>
         </Select>
 
@@ -220,7 +233,6 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
         <div></div>
         <div></div>
 
-        {/* Reset button */}
         <div className="w-full flex justify-end">
           <button
             className="h-9 px-3 flex items-center gap-1 border rounded-xs text-gray-600 hover:bg-gray-200 cursor-pointer"
@@ -230,6 +242,7 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
           </button>
         </div>
       </div>
+
       <div className="mt-2 px-6 2xl:px-2 text-xs text-gray-700">
         Showing {filteredDemands.length} of {demands.length} entries
       </div>
@@ -280,34 +293,36 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
                       {demand.modelYear}
                     </div>
                   )}
-                  {/*      {demand.country && (
-                    <div className="bg-gray-100 py-1 px-2">
-                      {demand.country}
-                    </div>
-                  )} */}
-                  {/*    {demand.warehouse && (
-                    <div className="bg-gray-100 py-1 px-2">
-                      {demand.warehouse}
-                    </div>
-                  )} */}
-
                   {demand.demand && (
                     <div className="bg-gray-100 py-1 px-2">
                       Quantity: {formatNumber(demand.demand ?? 0)}
                     </div>
                   )}
                 </div>
-                <div className="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between gap-4">
-                  {/* 1️⃣ Input with icon */}
-                  <DemandNoteInput
-  initialNote={demand.note ?? ""}
-  onSave={(note) => {
-    // call your API to save this note for the specific demand and user
-    console.log("Save note for demand", demand.id, note);
-  }}
-/> 
 
-                  {/* 3️⃣ View offer button */}
+                <div className="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between gap-4">
+                  <DemandNoteInput
+                    initialNotes={
+                      demand.lastNote
+                        ? [{ id: demand.id, note: demand.lastNote }]
+                        : []
+                    }
+                    onSave={async (note) => {
+                      await saveDemandNote({
+                        userId: currentUser.id,
+                        demandId: demand.id,
+                        note,
+                      });
+
+                      // Update UI immediately
+                      setDemands((prev) =>
+                        prev.map((d) =>
+                          d.id === demand.id ? { ...d, lastNote: note } : d
+                        )
+                      );
+                    }}
+                  />
+
                   <div className="flex gap-2">
                     <EyeIcon className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700 hover:bg-gray-200 " />
                     <NotebookPen className="bg-gray-100 p-1 h-8 w-8 cursor-pointer rounded-xs text-gray-700 hover:bg-gray-200" />

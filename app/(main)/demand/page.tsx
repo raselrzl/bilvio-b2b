@@ -7,7 +7,7 @@ import AllDemands from "@/components/general/AllDemand";
 
 export default async function DemandPage() {
   // Get logged-in user's email from cookie
-  const cookieStore =await cookies();
+  const cookieStore = await cookies();
   const email = cookieStore.get("bilvio_session")?.value;
 
   // Get userId based on email
@@ -41,6 +41,11 @@ export default async function DemandPage() {
       status: true,
       createdAt: true,
       userId: true,
+      notes: { 
+      take: 1,
+      orderBy: { createdAt: "desc" },
+      select: { note: true },
+    },
     },
   });
 
@@ -48,6 +53,7 @@ export default async function DemandPage() {
   const formattedDemands = demands.map((d) => ({
     ...d,
     createdAt: d.createdAt.toISOString(),
+    lastNote: d.notes.length > 0 ? d.notes[0].note : "", 
   }));
 
   return (
@@ -64,7 +70,14 @@ export default async function DemandPage() {
       </div>
 
       <div className="mt-4">
-        <AllDemands initialDemands={formattedDemands} />
+        <div className="mt-4">
+          {userId && (
+            <AllDemands
+              initialDemands={formattedDemands}
+              currentUser={{ id: userId, email: email ?? "" }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

@@ -610,3 +610,58 @@ export async function reactToProduct(
   return updatedReaction;
 }
 
+export async function saveDemandNote({
+  userId,
+  demandId,
+  note,
+}: {
+  userId: string;
+  demandId: string;
+  note: string;
+}) {
+  // Check if a note already exists for this user and demand
+  const existingNote = await prisma.demandNote.findUnique({
+    where: {
+      demandId_userId: {
+        demandId,
+        userId,
+      },
+    },
+  });
+
+  if (existingNote) {
+    // Update existing note
+    return prisma.demandNote.update({
+      where: {
+        id: existingNote.id,
+      },
+      data: {
+        note,
+      },
+    });
+  } else {
+    // Create a new note
+    return prisma.demandNote.create({
+      data: {
+        demandId,
+        userId,
+        note,
+      },
+    });
+  }
+}
+
+export async function getDemandNotes(demandId: string) {
+  const notes = await prisma.demandNote.findMany({
+    where: { demandId },
+    orderBy: { createdAt: "desc" }, // latest first
+    select: {
+      id: true,
+      note: true,
+      createdAt: true,
+      userId: true,
+    },
+  });
+
+  return notes;
+}

@@ -194,6 +194,8 @@ model DemandNote {
 
   demand Demand @relation(fields: [demandId], references: [id], onDelete: Cascade)
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([demandId, userId])
 }
 
 
