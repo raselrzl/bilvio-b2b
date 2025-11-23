@@ -73,5 +73,5 @@ export default async function OffersSearchNewCarServer() {
         <OffersFilterForm initialOffers={formattedProducts} />
       </div>
     </div>
-  );
+  ); 
 }

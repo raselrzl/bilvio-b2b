@@ -9,7 +9,7 @@ interface OfferReactionsProps {
   initialReaction?: "LIKE" | "UP" | "DOWN" | "SAVE";
 }
 
-export default function OfferReactions({
+export default function OfferReactions({ 
   productId,
   initialReaction,
 }: OfferReactionsProps) {

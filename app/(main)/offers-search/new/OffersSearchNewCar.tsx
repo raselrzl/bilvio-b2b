@@ -62,7 +62,7 @@ const formatDate = (dateStr: string) => dateStr.split("T")[0]; // YYYY-MM-DD
 export default function OffersFilterForm({
   initialOffers,
 }: {
-  initialOffers: Offer[];
+  initialOffers: Offer[]; 
 }) {
   const [offers, setOffers] = useState(initialOffers);
   const [filteredOffers, setFilteredOffers] = useState(initialOffers);
