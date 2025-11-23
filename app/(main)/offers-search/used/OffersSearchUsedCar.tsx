@@ -27,6 +27,10 @@ import { Label } from "@/components/ui/label";
 import OfferReactions from "@/components/general/OfferReactions";
 import { getProductNotes } from "@/app/actions";
 import ProductNoteInput from "@/components/general/ProductNoteInput";
+interface Note {
+  id: string;
+  note: string;
+}
 
 interface Offer {
   id: string;
@@ -55,6 +59,7 @@ interface Offer {
     userId: string;
     productId: string;
   }[];
+   notesList?: Note[];
 }
 
 interface OffersFilterFormProps {

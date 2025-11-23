@@ -3,18 +3,19 @@ import AllProducts from "@/components/general/AllProduct";
 import { cookies } from "next/headers"; // to read cookies
 
 export default async function MainPage() {
-  // Get cookies
-  const cookieStore = await cookies();
-  const userEmail = cookieStore.get("userEmail")?.value; // Assuming you saved email in cookie
+   const cookieStore = await cookies();
+  const session = cookieStore.get("bilvio_session")?.value;
 
   let currentUserId: string | null = null;
+  let currentUserEmail: string | null = null;
 
-  if (userEmail) {
+  if (session) {
     const user = await prisma.user.findUnique({
-      where: { email: userEmail },
-      select: { id: true },
+      where: { email: session },
+      select: { id: true, email: true },
     });
     currentUserId = user?.id ?? null;
+    currentUserEmail = user?.email ?? null;
   }
 
   // Fetch products from the database
@@ -51,6 +52,11 @@ export default async function MainPage() {
           productId: true,
         },
       },
+       productNotes: {
+      where: currentUserId ? { userId: currentUserId } : undefined, // ✅ only fetch current user notes
+      select: { id: true, note: true },
+      orderBy: { createdAt: "desc" },
+    },
     },
   });
 
@@ -70,7 +76,11 @@ export default async function MainPage() {
       </div>
 
       <div className="mt-6">
-        <AllProducts initialOffers={formattedProducts} />
+        <AllProducts initialOffers={formattedProducts} currentUser={
+            currentUserId && currentUserEmail
+              ? { id: currentUserId, email: currentUserEmail }
+              : null
+          }/>
       </div>
     </div>
   );
