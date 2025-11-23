@@ -379,32 +379,27 @@ export default function OffersFilterForm({
 
               {/* Bottom section */}
               <div className="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between gap-4">
- {currentUser ? (
- <ProductNoteInput
-  productId={offer.id}
-  currentUserId={currentUser.id}
-  onNotesUpdate={async () => {
-    const updatedNotes = await getProductNotes(offer.id, currentUser.id); // ✅ pass userId
-    setOffers((prev) =>
-      prev.map((o) =>
-        o.id === offer.id ? { ...o, notesList: updatedNotes ?? [] } : o
-      )
-    );
-  }}
-/>
-
-) : (
-  <p className="text-red-500 text-sm">Login to add notes</p>
-)}
-
-
-
-
-
-
-
-
-
+                {currentUser ? (
+                  <ProductNoteInput
+                    productId={offer.id}
+                    currentUserId={currentUser.id}
+                    onNotesUpdate={async () => {
+                      const updatedNotes = await getProductNotes(
+                        offer.id,
+                        currentUser.id
+                      ); // ✅ pass userId
+                      setOffers((prev) =>
+                        prev.map((o) =>
+                          o.id === offer.id
+                            ? { ...o, notesList: updatedNotes ?? [] }
+                            : o
+                        )
+                      );
+                    }}
+                  />
+                ) : (
+                  <p className="text-red-500 text-sm">Login to add notes</p>
+                )}
 
                 <div className="flex">
                   <Link

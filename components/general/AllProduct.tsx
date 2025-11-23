@@ -59,7 +59,7 @@ interface Offer {
     reaction: "LIKE" | "UP" | "DOWN" | "SAVE";
     userId: string;
     productId: string;
-  }[]; 
+  }[];
   notesList?: Note[];
 }
 
@@ -440,23 +440,27 @@ export default function AllProducts({
               <div className="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between gap-4">
                 {/* 1️⃣ Input with icon */}
                 {/* 1️⃣ Input with icon */}
-                               {currentUser ? (
-                               <ProductNoteInput
-                                productId={offer.id}
-                                currentUserId={currentUser.id}
-                                onNotesUpdate={async () => {
-                                  const updatedNotes = await getProductNotes(offer.id, currentUser.id); // ✅ pass userId
-                                  setOffers((prev) =>
-                                    prev.map((o) =>
-                                      o.id === offer.id ? { ...o, notesList: updatedNotes ?? [] } : o
-                                    )
-                                  );
-                                }}
-                              />
-                              
-                              ) : (
-                                <p className="text-red-500 text-sm">Login to add notes</p>
-                              )}
+                {currentUser ? (
+                  <ProductNoteInput
+                    productId={offer.id}
+                    currentUserId={currentUser.id}
+                    onNotesUpdate={async () => {
+                      const updatedNotes = await getProductNotes(
+                        offer.id,
+                        currentUser.id
+                      ); // ✅ pass userId
+                      setOffers((prev) =>
+                        prev.map((o) =>
+                          o.id === offer.id
+                            ? { ...o, notesList: updatedNotes ?? [] }
+                            : o
+                        )
+                      );
+                    }}
+                  />
+                ) : (
+                  <p className="text-red-500 text-sm">Login to add notes</p>
+                )}
 
                 {/* 2️⃣ Send message link */}
                 <div className="flex">

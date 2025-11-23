@@ -3,7 +3,7 @@ import AllProducts from "@/components/general/AllProduct";
 import { cookies } from "next/headers"; // to read cookies
 
 export default async function MainPage() {
-   const cookieStore = await cookies();
+  const cookieStore = await cookies();
   const session = cookieStore.get("bilvio_session")?.value;
 
   let currentUserId: string | null = null;
@@ -52,11 +52,11 @@ export default async function MainPage() {
           productId: true,
         },
       },
-       productNotes: {
-      where: currentUserId ? { userId: currentUserId } : undefined, // ✅ only fetch current user notes
-      select: { id: true, note: true },
-      orderBy: { createdAt: "desc" },
-    },
+      productNotes: {
+        where: currentUserId ? { userId: currentUserId } : undefined, // ✅ only fetch current user notes
+        select: { id: true, note: true },
+        orderBy: { createdAt: "desc" },
+      },
     },
   });
 
@@ -76,11 +76,14 @@ export default async function MainPage() {
       </div>
 
       <div className="mt-6">
-        <AllProducts initialOffers={formattedProducts} currentUser={
+        <AllProducts
+          initialOffers={formattedProducts}
+          currentUser={
             currentUserId && currentUserEmail
               ? { id: currentUserId, email: currentUserEmail }
               : null
-          }/>
+          }
+        />
       </div>
     </div>
   );
