@@ -465,7 +465,7 @@ export default function AllProducts({
                 {/* 2️⃣ Send message link */}
                 <div className="flex">
                   <Link
-                    href="#"
+                    href="/message"
                     className="text-sm font-semibold hover:underline"
                   >
                     Send message

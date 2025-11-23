@@ -403,7 +403,7 @@ export default function OffersFilterForm({
 
                 <div className="flex">
                   <Link
-                    href="#"
+                    href="/message"
                     className="text-sm font-semibold hover:underline"
                   >
                     Send message

@@ -278,7 +278,7 @@ export default function OrdersClient({ orders }: { orders: Order[] }) {
                     </div>
                     <div className="flex">
                       <Link
-                        href="#"
+                        href="/message"
                         className="text-sm font-semibold hover:underline"
                       >
                         Send message

@@ -282,7 +282,7 @@ export default async function NewCarOfferDetailsPage({
         </div>
 
         <div className="flex items-center gap-2">
-         {/*  <Link href="#" className="text-sm font-semibold hover:underline">
+         {/*  <Link href="/message" className="text-sm font-semibold hover:underline">
             Send message
           </Link>
           <BellDot className="h-5 w-5 text-gray-600" /> */}
