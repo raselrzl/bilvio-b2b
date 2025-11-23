@@ -1,28 +1,27 @@
 import { prisma } from "@/app/utils/db";
 import OffersFilterForm from "./OffersSearchNewCar";
-import { cookies } from "next/headers"; // to read cookies
+import { cookies } from "next/headers";
 
 export default async function OffersSearchNewCarServer() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get("bilvio_session")?.value;
 
-   const cookieStore = await cookies();
-    const userEmail = cookieStore.get("userEmail")?.value; // Assuming you saved email in cookie
-  
-    let currentUserId: string | null = null;
-  
-    if (userEmail) {
-      const user = await prisma.user.findUnique({
-        where: { email: userEmail },
-        select: { id: true },
-      });
-      currentUserId = user?.id ?? null;
-    }
-  // Fetch products from the database
+  let currentUserId: string | null = null;
+  let currentUserEmail: string | null = null;
+
+  if (session) {
+    const user = await prisma.user.findUnique({
+      where: { email: session },
+      select: { id: true, email: true },
+    });
+    currentUserId = user?.id ?? null;
+    currentUserEmail = user?.email ?? null;
+  }
+
   const products = await prisma.product.findMany({
+    where: { productCondition: "NEW" },
     orderBy: { createdAt: "desc" },
-    where: {
-      productCondition: "NEW", // <-- only new products
-    },
-    take: 20, // get latest 20 products
+    take: 20,
     select: {
       id: true,
       name: true,
@@ -44,23 +43,23 @@ export default async function OffersSearchNewCarServer() {
       vat: true,
       transportCost: true,
       productionYear: true,
-       reactions: {
+      reactions: {
         where: currentUserId ? { userId: currentUserId } : undefined,
-        select: {
-          id: true,
-          reaction: true,
-          userId: true,
-          productId: true,
-        },
+        select: { id: true, reaction: true, userId: true, productId: true },
+      },
+      productNotes: {
+        where: currentUserId ? { userId: currentUserId } : undefined,
+        select: { id: true, note: true },
+        orderBy: { createdAt: "desc" },
       },
     },
   });
 
-  // Transform Prisma Date objects to ISO strings
   const formattedProducts = products.map((p) => ({
     ...p,
     firstRegistration: p.firstRegistration.toISOString(),
     createdAt: p.createdAt.toISOString(),
+    notesList: p.productNotes ?? [],
   }));
 
   return (
@@ -70,8 +69,15 @@ export default async function OffersSearchNewCarServer() {
       </div>
 
       <div className="mt-6">
-        <OffersFilterForm initialOffers={formattedProducts} />
+        <OffersFilterForm
+          initialOffers={formattedProducts}
+          currentUser={
+            currentUserId && currentUserEmail
+              ? { id: currentUserId, email: currentUserEmail }
+              : null
+          }
+        />
       </div>
     </div>
-  ); 
+  );
 }

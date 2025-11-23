@@ -10,21 +10,18 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  BellDot,
-  Calendar,
-  Clock,
-  ClockPlus,
-  Eye,
-  Heart,
-  SquarePen,
-  ThumbsDown,
-  ThumbsUp,
-  X,
-} from "lucide-react";
+import { BellDot, Calendar, Eye, X } from "lucide-react";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import OfferReactions from "@/components/general/OfferReactions";
+import ProductNoteInput from "@/components/general/ProductNoteInput";
+import { getProductNotes, saveProductNote } from "@/app/actions";
+
+// Types
+interface Note {
+  id: string;
+  note: string;
+}
 
 interface Offer {
   id: string;
@@ -52,18 +49,24 @@ interface Offer {
     userId: string;
     productId: string;
   }[];
+  notesList?: Note[];
 }
 
-// Helper functions to format numbers/dates deterministically
+interface OffersFilterFormProps {
+  initialOffers: Offer[];
+  currentUser: { id: string; email: string } | null;
+}
+
+// Helper functions
 const formatNumber = (num: number) =>
   num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
 const formatDate = (dateStr: string) => dateStr.split("T")[0]; // YYYY-MM-DD
 
 export default function OffersFilterForm({
   initialOffers,
-}: {
-  initialOffers: Offer[]; 
-}) {
+  currentUser,
+}: OffersFilterFormProps) {
   const [offers, setOffers] = useState(initialOffers);
   const [filteredOffers, setFilteredOffers] = useState(initialOffers);
 
@@ -277,28 +280,22 @@ export default function OffersFilterForm({
               className="relative border rounded-xs p-4 bg-white shadow hover:shadow-md transition"
             >
               <div>
-                {" "}
                 <div className="flex flex-wrap items-center justify-between">
                   <div>
                     <h1 className="text-xl font-bold">{offer.name}</h1>
                   </div>
-                  {/*  <div className="flex gap-2">
-                    <Heart className="h-5 w-5" />
-                    <ThumbsUp className="h-5 w-5" />
-                    <ThumbsDown className="h-5 w-5" />
-                    <ClockPlus className="h-5 w-5" />
-                  </div> */}
 
                   <OfferReactions
                     productId={offer.id}
                     initialReaction={offer.reactions?.[0]?.reaction}
                   />
+
                   <div className="bg-amber-400 px-2 text-sm rounded-xs font-bold">
                     <p>{offer.discount}%</p>
                   </div>
                   <div className="flex items-center justify-center">
                     <p className="text-lg font-bold">
-                      {formatNumber(offer.price)}{" "}
+                      {formatNumber(offer.price)}
                     </p>
                     <p className="ml-2 text-sm mt-1 font-bold text-gray-600">
                       SEK NET
@@ -315,9 +312,7 @@ export default function OffersFilterForm({
                       </p>
                     </div>
                     <div className="flex text-md items-center justify-center ">
-                      <p>
-                        <Eye className="h-4 w-4 mr-1" />
-                      </p>
+                      <Eye className="h-4 w-4 mr-1" />
                       <p className="text-center">
                         {formatDate(offer.createdAt)}
                       </p>
@@ -335,7 +330,6 @@ export default function OffersFilterForm({
                 </div>
                 <div className="flex flex-wrap text-sm text-gray-700 p-2 rounded-sm gap-2">
                   <div className="flex gap-2">
-                    {" "}
                     <div className="bg-gray-100 py-1 px-2 text-black font-semibold">
                       {offer.engineSpec}
                     </div>
@@ -372,7 +366,6 @@ export default function OffersFilterForm({
                   <div className="flex gap-2 bg-gray-100 py-1 px-2">
                     First registration:{" "}
                     <p className="font-semibold">
-                      {" "}
                       around an availability date at seller warehouse
                     </p>
                   </div>
@@ -383,19 +376,36 @@ export default function OffersFilterForm({
                   </div>
                 </div>
               </div>
-              <div className="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between gap-4">
-                {/* 1️⃣ Input with icon */}
-                <div className="relative flex-1 max-w-sm">
-                  <Input
-                    type="text"
-                    placeholder="Write a note..."
-                    className="pl-10 pr-3 h-9 text-sm border-gray-300 rounded-xs w-full"
-                  />
-                  <SquarePen className="absolute right-2 top-2.5 h-4 w-4 text-gray-500" />
-                  <p className="ml-4 text-xs text-gray-500">0/2000</p>
-                </div>
 
-                {/* 2️⃣ Send message link */}
+              {/* Bottom section */}
+              <div className="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between gap-4">
+ {currentUser ? (
+  <ProductNoteInput
+    productId={offer.id}
+    currentUserId={currentUser.id}
+    onNotesUpdate={async () => {
+      // Fetch the latest notes for this product
+      const updatedNotes = await getProductNotes(offer.id);
+      setOffers((prev) =>
+        prev.map((o) =>
+          o.id === offer.id ? { ...o, notesList: updatedNotes ?? [] } : o
+        )
+      );
+    }}
+  />
+) : (
+  <p className="text-red-500 text-sm">Login to add notes</p>
+)}
+
+
+
+
+
+
+
+
+
+
                 <div className="flex">
                   <Link
                     href="#"
@@ -406,7 +416,6 @@ export default function OffersFilterForm({
                   <BellDot />
                 </div>
 
-                {/* 3️⃣ View offer button */}
                 <div>
                   <Button
                     asChild
@@ -426,6 +435,7 @@ export default function OffersFilterForm({
           </div>
         )}
       </div>
+
       <div className="mt-2 px-2 text-xs text-gray-700 ml-4 2xl:ml-0">
         Showing {filteredOffers.length} of {offers.length} entries
       </div>

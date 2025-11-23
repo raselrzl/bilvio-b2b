@@ -665,3 +665,50 @@ export async function getDemandNotes(demandId: string) {
 
   return notes;
 }
+
+/* 
+export async function addProductNote({
+  userId,
+  productId,
+  note,
+}: {
+  userId: string;
+  productId: string;
+  note: string;
+}) {
+  if (!note || note.trim() === "") throw new Error("Note cannot be empty");
+
+  const newNote = await prisma.productNote.create({
+    data: {
+      userId,
+      productId,
+      note,
+    },
+  });
+
+  return newNote;
+} */
+
+export async function saveProductNote({
+  productId,
+  userId,
+  note,
+}: {
+  productId: string;
+  userId: string;
+  note: string;
+}) {
+  return await prisma.productNote.upsert({
+    where: { productId_userId_id: { productId, userId, id: "" } }, // Prisma requires unique combination, use workaround
+    create: { productId, userId, note },
+    update: { note, updatedAt: new Date() },
+  });
+}
+
+export async function getProductNotes(productId: string) {
+  return await prisma.productNote.findMany({
+    where: { productId },
+    orderBy: { createdAt: "desc" },
+    select: { id: true, note: true, userId: true },
+  });
+}

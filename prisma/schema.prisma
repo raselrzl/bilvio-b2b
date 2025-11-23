@@ -45,6 +45,8 @@ model User {
   uploadedDocuments String?
 
   reactions ProductReaction[]
+  productNotes ProductNote[] @relation("UserProductNotes")
+
 }
 
 enum UserType {
@@ -96,8 +98,7 @@ model Product {
   orderItems        OrderItem[]
 
   reactions ProductReaction[]
-
-
+  productNotes ProductNote[] @relation("ProductNotesRelation")
 }
 
 
@@ -123,6 +124,22 @@ enum Reaction {
   SAVE
 }
 
+
+model ProductNote {
+  id        String   @id @default(cuid())
+  productId String
+  userId    String
+  note      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade, name: "ProductNotesRelation")
+  
+  // ✅ Named the relation explicitly to avoid ambiguity
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade, name: "UserProductNotes")
+
+  @@unique([productId, userId, id]) // optional: one note per product per user per note
+}
 
 
 
