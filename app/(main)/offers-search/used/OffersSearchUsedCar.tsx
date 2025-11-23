@@ -25,6 +25,8 @@ import {
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import OfferReactions from "@/components/general/OfferReactions";
+import { getProductNotes } from "@/app/actions";
+import ProductNoteInput from "@/components/general/ProductNoteInput";
 
 interface Offer {
   id: string;
@@ -55,6 +57,10 @@ interface Offer {
   }[];
 }
 
+interface OffersFilterFormProps {
+  initialOffers: Offer[];
+  currentUser: { id: string; email: string } | null;
+}
 // Helper functions to format numbers/dates deterministically
 const formatNumber = (num: number) =>
   num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -62,9 +68,8 @@ const formatDate = (dateStr: string) => dateStr.split("T")[0]; // YYYY-MM-DD
 
 export default function OffersUsedCarFilterForm({
   initialOffers,
-}: {
-  initialOffers: Offer[];
-}) {
+  currentUser,
+}: OffersFilterFormProps) {
   const [offers, setOffers] = useState(initialOffers);
   const [filteredOffers, setFilteredOffers] = useState(initialOffers);
 
@@ -434,15 +439,23 @@ export default function OffersUsedCarFilterForm({
               </div>
               <div className="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between gap-4">
                 {/* 1️⃣ Input with icon */}
-                <div className="relative flex-1 max-w-sm">
-                  <Input
-                    type="text"
-                    placeholder="Write a note..."
-                    className="pl-10 pr-3 h-9 text-sm border-gray-300 rounded-xs w-full"
-                  />
-                  <SquarePen className="absolute right-2 top-2.5 h-4 w-4 text-gray-500" />
-                  <p className="ml-4 text-xs text-gray-500">0/2000</p>
-                </div>
+                {currentUser ? (
+                <ProductNoteInput
+                 productId={offer.id}
+                 currentUserId={currentUser.id}
+                 onNotesUpdate={async () => {
+                   const updatedNotes = await getProductNotes(offer.id, currentUser.id); // ✅ pass userId
+                   setOffers((prev) =>
+                     prev.map((o) =>
+                       o.id === offer.id ? { ...o, notesList: updatedNotes ?? [] } : o
+                     )
+                   );
+                 }}
+               />
+               
+               ) : (
+                 <p className="text-red-500 text-sm">Login to add notes</p>
+               )}
 
                 {/* 2️⃣ Send message link */}
                 <div className="flex">

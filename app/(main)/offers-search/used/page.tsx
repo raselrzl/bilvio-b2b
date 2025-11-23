@@ -5,19 +5,20 @@ import { cookies } from "next/headers"; // to read cookies
 
 export default async function OffersSearchUsedCarServer() {
 
-    // Get cookies
-    const cookieStore = await cookies();
-    const userEmail = cookieStore.get("userEmail")?.value; // Assuming you saved email in cookie
-  
-    let currentUserId: string | null = null;
-  
-    if (userEmail) {
-      const user = await prisma.user.findUnique({
-        where: { email: userEmail },
-        select: { id: true },
-      });
-      currentUserId = user?.id ?? null;
-    }
+   const cookieStore = await cookies();
+  const session = cookieStore.get("bilvio_session")?.value;
+
+  let currentUserId: string | null = null;
+  let currentUserEmail: string | null = null;
+
+  if (session) {
+    const user = await prisma.user.findUnique({
+      where: { email: session },
+      select: { id: true, email: true },
+    });
+    currentUserId = user?.id ?? null;
+    currentUserEmail = user?.email ?? null;
+  }
   // Fetch products from the database
   const products = await prisma.product.findMany({
     orderBy: { createdAt: "desc" },
@@ -55,6 +56,11 @@ export default async function OffersSearchUsedCarServer() {
           productId: true,
         },
       },
+      productNotes: {
+      where: currentUserId ? { userId: currentUserId } : undefined, // ✅ only fetch current user notes
+      select: { id: true, note: true },
+      orderBy: { createdAt: "desc" },
+    },
     },
   });
 
@@ -74,7 +80,11 @@ export default async function OffersSearchUsedCarServer() {
       </div>
 
       <div className="mt-6">
-        <OffersUsedCarFilterForm initialOffers={formattedProducts} />
+        <OffersUsedCarFilterForm initialOffers={formattedProducts}   currentUser={
+            currentUserId && currentUserEmail
+              ? { id: currentUserId, email: currentUserEmail }
+              : null
+          }/>
       </div>
     </div>
   );
