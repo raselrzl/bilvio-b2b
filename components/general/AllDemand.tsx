@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import DemandNoteInput from "./DemandNoteInput";
 
 export interface Demand {
   id: string;
@@ -298,15 +299,13 @@ export default function AllDemands({ initialDemands }: AllDemandsProps) {
                 </div>
                 <div className="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between gap-4">
                   {/* 1️⃣ Input with icon */}
-                  <div className="relative flex-1 max-w-sm">
-                    <Input
-                      type="text"
-                      placeholder="Write a note..."
-                      className="pl-10 pr-3 h-9 text-sm border-gray-300 rounded-xs w-full"
-                    />
-                    <SquarePen className="absolute right-2 top-2.5 h-4 w-4 text-gray-500" />
-                    <p className="ml-4 text-xs text-gray-500">0/2000</p>
-                  </div>
+                  <DemandNoteInput
+  initialNote={demand.note ?? ""}
+  onSave={(note) => {
+    // call your API to save this note for the specific demand and user
+    console.log("Save note for demand", demand.id, note);
+  }}
+/> 
 
                   {/* 3️⃣ View offer button */}
                   <div className="flex gap-2">

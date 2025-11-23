@@ -6,7 +6,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL") 
 }
 
 model User {
@@ -33,6 +33,7 @@ model User {
 
   intent Intent?
   demands   Demand[]
+  demandNotes  DemandNote[]
 
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt
@@ -174,13 +175,28 @@ model Demand {
   quantity    Int?
   warehouse   String?
   wltpCo2     Float?
-  note        String?
   status      DemandStatus  @default(DRAFT)
   userId      String
   user        User          @relation(fields: [userId], references: [id])
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+
+  notes       DemandNote[]
 }
+
+model DemandNote {
+  id        String   @id @default(cuid())
+  demandId  String
+  userId    String
+  note      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  demand Demand @relation(fields: [demandId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+
 
 enum DemandStatus {
   DRAFT

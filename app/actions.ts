@@ -418,7 +418,6 @@ export async function createDemandAction(formData: FormData) {
       quantity: data.quantity ? Number(data.quantity) : null,
       warehouse: data.warehouse || null,
       wltpCo2: data.wltpCo2 ? Number(data.wltpCo2) : null,
-      note: data.note || null,
       status: intent === "draft" ? "DRAFT" : "SAVED",
       userId: user.id,
     },

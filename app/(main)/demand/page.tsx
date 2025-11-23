@@ -38,7 +38,6 @@ export default async function DemandPage() {
       quantity: true,
       warehouse: true,
       wltpCo2: true,
-      note: true,
       status: true,
       createdAt: true,
       userId: true,
