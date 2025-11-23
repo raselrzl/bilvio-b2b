@@ -705,10 +705,11 @@ export async function saveProductNote({
   });
 }
 
-export async function getProductNotes(productId: string) {
-  return await prisma.productNote.findMany({
-    where: { productId },
+export async function getProductNotes(productId: string, userId: string) {
+  return prisma.productNote.findMany({
+    where: { productId, userId }, // ✅ filter by current user only
+    select: { id: true, note: true },
     orderBy: { createdAt: "desc" },
-    select: { id: true, note: true, userId: true },
   });
 }
+

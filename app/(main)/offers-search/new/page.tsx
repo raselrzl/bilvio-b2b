@@ -48,10 +48,10 @@ export default async function OffersSearchNewCarServer() {
         select: { id: true, reaction: true, userId: true, productId: true },
       },
       productNotes: {
-        where: currentUserId ? { userId: currentUserId } : undefined,
-        select: { id: true, note: true },
-        orderBy: { createdAt: "desc" },
-      },
+      where: currentUserId ? { userId: currentUserId } : undefined, // ✅ only fetch current user notes
+      select: { id: true, note: true },
+      orderBy: { createdAt: "desc" },
+    },
     },
   });
 

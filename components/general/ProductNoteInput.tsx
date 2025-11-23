@@ -25,18 +25,15 @@ export default function ProductNoteInput({
   const [notes, setNotes] = useState<Note[]>([]);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Fetch current user's note and show below input
   useEffect(() => {
     async function fetchNotes() {
-      if (!productId) return;
-      try {
-        const fetchedNotes = await getProductNotes(productId);
-        setNotes(fetchedNotes || []);
-      } catch (err) {
-        console.error("Failed to fetch notes:", err);
-      }
+      const fetchedNotes = await getProductNotes(productId, currentUserId); // ✅ pass userId
+      setNotes(fetchedNotes ?? []); // show note(s) below input
+      setNote(fetchedNotes?.[0]?.note ?? ""); // pre-fill input if you want
     }
     fetchNotes();
-  }, [productId]);
+  }, [productId, currentUserId]);
 
   const handleSave = async () => {
     if (!note.trim()) return;
@@ -49,9 +46,9 @@ export default function ProductNoteInput({
         note,
       });
 
-      const updatedNotes = [savedNote, ...notes];
+      const updatedNotes = [savedNote]; // replace or append if you allow multiple
       setNotes(updatedNotes);
-      setNote("");
+      setNote(""); // clear input after saving
 
       if (onNotesUpdate) onNotesUpdate(updatedNotes);
     } catch (err) {
@@ -77,6 +74,7 @@ export default function ProductNoteInput({
         }`}
         onClick={handleSave}
       />
+      {/* Display notes below input */}
       {notes.length > 0 && (
         <div className="mt-2 ml-4 text-xs text-gray-700 space-y-1">
           {notes.map((n) => (
