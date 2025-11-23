@@ -270,22 +270,22 @@ export default async function NewCarOfferDetailsPage({
       </div>
 
       {/* Bottom actions */}
-      <div className="bg-white py-6 px-2 pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className=" py-6 px-2 pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="relative flex-1 max-w-sm w-full">
-          <Input
+         {/*  <Input
             type="text"
             placeholder="Write a note..."
             className="pl-10 pr-3 h-9 text-sm border-gray-300 rounded w-full"
           />
           <SquarePen className="absolute right-2 top-2.5 h-4 w-4 text-gray-500" />
-          <p className="ml-4 text-xs text-gray-500">0/2000</p>
+          <p className="ml-4 text-xs text-gray-500">0/2000</p> */}
         </div>
 
         <div className="flex items-center gap-2">
-          <Link href="#" className="text-sm font-semibold hover:underline">
+         {/*  <Link href="#" className="text-sm font-semibold hover:underline">
             Send message
           </Link>
-          <BellDot className="h-5 w-5 text-gray-600" />
+          <BellDot className="h-5 w-5 text-gray-600" /> */}
         </div>
 
         <Button

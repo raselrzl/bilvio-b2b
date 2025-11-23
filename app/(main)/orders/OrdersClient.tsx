@@ -266,7 +266,7 @@ export default function OrdersClient({ orders }: { orders: Order[] }) {
                   </div>
 
                   {/* Footer */}
-                  <div className="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between gap-4">
+               {/*    <div className="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between gap-4">
                     <div className="relative flex-1 max-w-sm">
                       <Input
                         type="text"
@@ -295,7 +295,7 @@ export default function OrdersClient({ orders }: { orders: Order[] }) {
                         </a>
                       </Button>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               ))
             )
