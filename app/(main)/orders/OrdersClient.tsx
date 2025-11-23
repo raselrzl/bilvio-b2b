@@ -162,7 +162,7 @@ export default function OrdersClient({ orders }: { orders: Order[] }) {
                   {/* --- PRODUCT CARD CONTENT --- */}
                   <div className="flex flex-wrap items-center justify-between">
                     <h1 className="text-xl font-bold">{p.name}</h1>
-                    <div className="flex gap-2">
+              {/*       <div className="flex gap-2">
                       <Heart
                         className={`h-5 w-5 ${getReactionColor(p, "LIKE")}`}
                       />
@@ -175,7 +175,7 @@ export default function OrdersClient({ orders }: { orders: Order[] }) {
                       <ClockPlus
                         className={`h-5 w-5 ${getReactionColor(p, "SAVE")}`}
                       />
-                    </div>
+                    </div> */}
 
                     <div className="bg-amber-400 px-2 text-sm rounded-xs font-bold">
                       <p>{p.discount ?? 0}%</p>
