@@ -759,3 +759,38 @@ export async function createMessageAction(formData: FormData | { productId: stri
     return { ok: false, message: "Failed to send message" };
   }
 }
+
+
+export async function getUserMessages() {
+  const cookieStore = await cookies();
+  const session =
+    cookieStore.get("bilvio_session")?.value ??
+    cookieStore.get("userEmail")?.value;
+
+  if (!session) return [];
+
+  const user = await prisma.user.findUnique({
+    where: { email: session },
+    select: { id: true },
+  });
+  if (!user) return [];
+
+  // Use `orderBy: { createdAt: "desc" }` with correct type
+  const messages = await prisma.message.findMany({
+    where: { userId: user.id },
+    select: {
+      id: true,
+      message: true,
+      productId: true,
+      product: { select: { id: true, name: true } }, // explicitly select product fields
+    },
+    orderBy: { createdAt: "desc" }, // ✅ should now work
+  });
+
+  return messages.map((msg) => ({
+    id: msg.id,
+    message: msg.message,
+    productName: msg.product?.name ?? "Unknown Product",
+    productId: msg.productId,
+  }));
+}

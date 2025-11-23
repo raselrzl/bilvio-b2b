@@ -2,21 +2,25 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
 import { createMessageAction } from "@/app/actions";
 
 interface MessagePopupProps {
   productId: string;
-  productName: string;
-  userEmail: string; // logged-in user's email
+  productName?: string;
+  userEmail?: string;
+  onMessageSent?: () => void; // callback after sending message
 }
 
 export default function MessagePopup({
   productId,
   productName,
   userEmail,
+  onMessageSent,
 }: MessagePopupProps) {
   const [open, setOpen] = useState(false);
+  const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
@@ -24,14 +28,21 @@ export default function MessagePopup({
   const sendMessage = async () => {
     setLoading(true);
 
-    const res = await createMessageAction({ productId, message });
+    const res = await createMessageAction({
+      productId,
+      message,
+    });
 
     setLoading(false);
 
     if (res.ok) {
       setSuccess("Message sent!");
       setMessage("");
+      setSubject("");
       setTimeout(() => setOpen(false), 800);
+
+      // ✅ trigger callback for parent page
+      if (onMessageSent) onMessageSent();
     } else {
       setSuccess(res.message);
     }
@@ -41,7 +52,7 @@ export default function MessagePopup({
     <>
       <button
         onClick={() => setOpen(true)}
-        className="text-sm font-semibold hover:underline flex items-center gap-1 cursor-pointer"
+        className="text-sm font-semibold hover:underline flex items-center gap-1"
       >
         Send message
       </button>
@@ -53,12 +64,11 @@ export default function MessagePopup({
               <h2 className="text-lg font-bold">Send Message</h2>
               <X className="cursor-pointer" onClick={() => setOpen(false)} />
             </div>
-            <p className="text-sm mb-2 text-gray-700">
-              Email: <span className="font-semibold">{userEmail}</span>
-            </p>
-            <p className="text-sm mb-1 text-gray-700">
-              For Product: <span className="font-semibold">{productName}</span>
-            </p>
+
+            {/* ✅ Show product name and email */}
+            {productName && <p className="font-semibold mb-1">About Product: {productName}</p>}
+            {userEmail && <p className="text-sm text-gray-500 mb-2">From: {userEmail}</p>}
+
 
             <textarea
               placeholder="Write your message..."
@@ -67,9 +77,7 @@ export default function MessagePopup({
               className="w-full h-28 border p-2 text-sm"
             />
 
-            {success && (
-              <p className="text-center text-green-600 mt-2">{success}</p>
-            )}
+            {success && <p className="text-center text-green-600 mt-2">{success}</p>}
 
             <Button
               onClick={sendMessage}
