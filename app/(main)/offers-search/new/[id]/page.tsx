@@ -282,10 +282,21 @@ export default async function NewCarOfferDetailsPage({
         </div>
 
         <div className="flex items-center gap-2">
-         {/*  <Link href="/message" className="text-sm font-semibold hover:underline">
-            Send message
-          </Link>
-          <BellDot className="h-5 w-5 text-gray-600" /> */}
+         {/* <div className="flex items-center gap-2">
+                           {currentUser ? (
+                             <MessagePopup
+                               productId={offer.id}
+                               productName={offer.name}
+                               userEmail={currentUser.email}
+                             />
+                           ) : (
+                             <p className="text-red-500 text-sm">
+                               Login to send a message
+                             </p>
+                           )}
+         
+                           <BellDot />
+                         </div> */}
         </div>
 
         <Button

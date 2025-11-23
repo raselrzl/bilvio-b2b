@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import OfferReactions from "@/components/general/OfferReactions";
 import ProductNoteInput from "@/components/general/ProductNoteInput";
 import { getProductNotes, saveProductNote } from "@/app/actions";
+import MessagePopup from "@/components/general/MessagePopup";
 
 // Types
 interface Note {
@@ -401,15 +402,21 @@ export default function OffersFilterForm({
                   <p className="text-red-500 text-sm">Login to add notes</p>
                 )}
 
-                <div className="flex">
-                  <Link
-                    href="/message"
-                    className="text-sm font-semibold hover:underline"
-                  >
-                    Send message
-                  </Link>
-                  <BellDot />
-                </div>
+                <div className="flex items-center gap-2">
+                                  {currentUser ? (
+                                    <MessagePopup
+                                      productId={offer.id}
+                                      productName={offer.name}
+                                      userEmail={currentUser.email}
+                                    />
+                                  ) : (
+                                    <p className="text-red-500 text-sm">
+                                      Login to send a message
+                                    </p>
+                                  )}
+                
+                                  <BellDot />
+                                </div>
 
                 <div>
                   <Button

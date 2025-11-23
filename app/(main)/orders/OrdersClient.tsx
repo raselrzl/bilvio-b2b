@@ -277,13 +277,21 @@ export default function OrdersClient({ orders }: { orders: Order[] }) {
                       <p className="ml-4 text-xs text-gray-500">0/2000</p>
                     </div>
                     <div className="flex">
-                      <Link
-                        href="/message"
-                        className="text-sm font-semibold hover:underline"
-                      >
-                        Send message
-                      </Link>
-                      <BellDot />
+                    <div className="flex items-center gap-2">
+                                      {currentUser ? (
+                                        <MessagePopup
+                                          productId={offer.id}
+                                          productName={offer.name}
+                                          userEmail={currentUser.email}
+                                        />
+                                      ) : (
+                                        <p className="text-red-500 text-sm">
+                                          Login to send a message
+                                        </p>
+                                      )}
+                    
+                                      <BellDot />
+                                    </div>
                     </div>
                     <div>
                       <Button
