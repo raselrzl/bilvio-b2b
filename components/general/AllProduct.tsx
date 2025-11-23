@@ -26,6 +26,7 @@ import Link from "next/link";
 import OfferReactions from "./OfferReactions";
 import ProductNoteInput from "./ProductNoteInput";
 import { getProductNotes } from "@/app/actions";
+import MessagePopup from "./MessagePopup";
 
 // Types
 interface Note {
@@ -463,13 +464,19 @@ export default function AllProducts({
                 )}
 
                 {/* 2️⃣ Send message link */}
-                <div className="flex">
-                  <Link
-                    href="/message"
-                    className="text-sm font-semibold hover:underline"
-                  >
-                    Send message
-                  </Link>
+                <div className="flex items-center gap-2">
+                  {currentUser ? (
+                    <MessagePopup
+                      productId={offer.id}
+                      productName={offer.name}
+                      userEmail={currentUser.email}
+                    />
+                  ) : (
+                    <p className="text-red-500 text-sm">
+                      Login to send a message
+                    </p>
+                  )}
+
                   <BellDot />
                 </div>
 

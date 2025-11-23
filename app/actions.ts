@@ -713,3 +713,49 @@ export async function getProductNotes(productId: string, userId: string) {
   });
 }
 
+
+export async function createMessageAction(formData: FormData | { productId: string; message: string }) {
+  const data =
+    formData instanceof FormData
+      ? {
+          productId: formData.get("productId") as string,
+          message: (formData.get("message") as string) ?? "",
+        }
+      : formData;
+
+  if (!data.productId || !data.message.trim()) {
+    return { ok: false, message: "Missing product or message." };
+  }
+
+  try {
+    const cookieStore =await cookies();
+    const session = cookieStore.get("bilvio_session")?.value ?? cookieStore.get("userEmail")?.value;
+
+    if (!session) return { ok: false, message: "Not authenticated." };
+
+    const user = await prisma.user.findUnique({
+      where: { email: session },
+      select: { id: true },
+    });
+    if (!user) return { ok: false, message: "User not found." };
+
+    const product = await prisma.product.findUnique({
+      where: { id: data.productId },
+      select: { id: true },
+    });
+    if (!product) return { ok: false, message: "Product not found." };
+
+    const created = await prisma.message.create({
+      data: {
+        userId: user.id,
+        productId: product.id,
+        message: data.message,
+      },
+    });
+
+    return { ok: true, message: "Message sent successfully", id: created.id };
+  } catch (error) {
+    console.error("createMessageAction error:", error);
+    return { ok: false, message: "Failed to send message" };
+  }
+}
