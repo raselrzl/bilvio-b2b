@@ -186,7 +186,7 @@ export default function RegisterForm() {
                 <SelectValue placeholder="Choose one" />
               </SelectTrigger>
 
-              <SelectContent className="w-[var(--radix-select-trigger-width)]">
+              <SelectContent className="w-(--radix-select-trigger-width)">
                 <SelectItem value="sales">Car sales</SelectItem>
                 <SelectItem value="purchases">Car purchases</SelectItem>
               </SelectContent>
@@ -358,7 +358,7 @@ export default function RegisterForm() {
               >
                 <SelectValue placeholder="Select country" />
               </SelectTrigger>
-              <SelectContent className="w-[var(--radix-select-trigger-width)]">
+              <SelectContent className="w-(--radix-select-trigger-width)">
                 <SelectItem value="germany">Germany</SelectItem>
                 <SelectItem value="sweden">Sweden</SelectItem>
                 <SelectItem value="norway">Norway</SelectItem>
