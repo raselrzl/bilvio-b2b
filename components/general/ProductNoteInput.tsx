@@ -14,23 +14,26 @@ interface ProductNoteInputProps {
   productId: string;
   currentUserId: string;
   onNotesUpdate?: (notes: Note[]) => void; // optional callback to update parent
+  maxLength?: number;
 }
 
 export default function ProductNoteInput({
   productId,
   currentUserId,
   onNotesUpdate,
+  maxLength = 2000,
 }: ProductNoteInputProps) {
   const [note, setNote] = useState("");
   const [notes, setNotes] = useState<Note[]>([]);
   const [isSaving, setIsSaving] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   // Fetch current user's note and show below input
   useEffect(() => {
     async function fetchNotes() {
-      const fetchedNotes = await getProductNotes(productId, currentUserId); // ✅ pass userId
+      const fetchedNotes = await getProductNotes(productId, currentUserId);
       setNotes(fetchedNotes ?? []); // show note(s) below input
-      setNote(fetchedNotes?.[0]?.note ?? ""); // pre-fill input if you want
+      /* setNote(fetchedNotes?.[0]?.note ?? ""); // pre-fill input if you want */
     }
     fetchNotes();
   }, [productId, currentUserId]);
@@ -46,13 +49,17 @@ export default function ProductNoteInput({
         note,
       });
 
-      const updatedNotes = [savedNote]; // replace or append if you allow multiple
+      const updatedNotes = [savedNote]; // only show current user's note
       setNotes(updatedNotes);
       setNote(""); // clear input after saving
+      setSuccessMessage("Your note has been saved!");
+      setTimeout(() => setSuccessMessage(""), 3000);
 
       if (onNotesUpdate) onNotesUpdate(updatedNotes);
     } catch (err) {
       console.error("Failed to save note:", err);
+      setSuccessMessage("Failed to save note.");
+      setTimeout(() => setSuccessMessage(""), 3000);
     } finally {
       setIsSaving(false);
     }
@@ -64,7 +71,9 @@ export default function ProductNoteInput({
         type="text"
         placeholder="Write a note..."
         value={note}
-        onChange={(e) => setNote(e.target.value)}
+        onChange={(e) => {
+          if (e.target.value.length <= maxLength) setNote(e.target.value);
+        }}
         disabled={isSaving}
         className="pl-10 pr-3 h-9 text-sm border-gray-300 rounded-xs w-full"
       />
@@ -74,7 +83,15 @@ export default function ProductNoteInput({
         }`}
         onClick={handleSave}
       />
-      {/* Display notes below input */}
+
+      <p className="ml-4 text-xs text-gray-500">
+        {note.length}/{maxLength}
+      </p>
+
+      {successMessage && (
+        <p className="mt-1 ml-4 text-xs text-green-600">{successMessage}</p>
+      )}
+
       {notes.length > 0 && (
         <div className="mt-2 ml-4 text-xs text-gray-700 space-y-1">
           {notes.map((n) => (
