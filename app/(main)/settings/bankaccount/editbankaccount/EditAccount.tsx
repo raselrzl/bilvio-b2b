@@ -17,19 +17,21 @@ export default function EditBankAccountFormComponent({
   defaultValues,
 }: {
   defaultValues?: {
+    bankName?: string; // NEW
     iban: string;
     swift: string;
     main: "Yes" | "No";
   };
 }) {
   // SAFE VALUES
+  const [bankName, setBankName] = useState(defaultValues?.bankName ?? ""); // NEW
   const [iban, setIban] = useState(defaultValues?.iban ?? "");
   const [swift, setSwift] = useState(defaultValues?.swift ?? "");
   const [isMain, setIsMain] = useState<"Yes" | "No">(defaultValues?.main ?? "No");
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log({ iban, swift, isMain });
+    console.log({ bankName, iban, swift, isMain }); // include bankName
   }
 
   return (
@@ -38,6 +40,20 @@ export default function EditBankAccountFormComponent({
       className="max-w-3xl mx-auto mt-10 space-y-6 bg-white border shadow-xs p-6 rounded-xs"
     >
       <h1 className="text-xl font-bold mb-4">Edit Bank Account</h1>
+
+      {/* Bank Name */}
+      <div>
+        <Label htmlFor="bankName" className="mb-1 block text-sm">
+          Bank Name
+        </Label>
+        <Input
+          id="bankName"
+          value={bankName}
+          onChange={(e) => setBankName(e.target.value)}
+          className="h-9 rounded-xs text-sm"
+          placeholder="Enter Bank Name"
+        />
+      </div>
 
       {/* IBAN */}
       <div>
@@ -95,7 +111,7 @@ export default function EditBankAccountFormComponent({
         </Button>
 
         <Link
-          href="/buyer/bank"
+          href="/settings/bankaccount"
           className="rounded-xs border bg-gray-100 hover:bg-gray-200 px-4 py-1 text-sm"
         >
           Cancel
