@@ -105,7 +105,7 @@ export default function EditBankAccountFormComponent({
       <div className="flex items-center gap-3 pt-2">
         <Button
           type="submit"
-          className="rounded-xs bg-amber-600 hover:bg-amber-500 text-white px-5"
+          className="rounded-xs bg-green-600 hover:bg-green-500 text-white px-5"
         >
           Save changes
         </Button>
