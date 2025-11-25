@@ -1,17 +1,44 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Edit, Pencil } from "lucide-react";
+import { Edit } from "lucide-react";
+import { prisma } from "@/app/utils/db";
+import { cookies } from "next/headers";
 
-export default function BankAccountSettingsPage() {
-  // temporary mock data
-  const mockData = [
-    {
-      id: 1,
-      iban: "SE45 5000 0000 0583 9825 7466",
-      swift: "SWEDSESS",
-      main: "Yes",
-    },
-  ];
+export default async function BankAccountSettingsPage() {
+  // Get logged-in user email from cookie
+  const jar = await cookies();
+  const userEmail = jar.get("bilvio_session")?.value;
+
+  if (!userEmail) {
+    return (
+      <div className="text-center mt-20">
+        <p className="text-red-600 font-bold">You must be logged in to see your bank accounts.</p>
+        <Link href="/login">
+          <Button className="mt-4">Login</Button>
+        </Link>
+      </div>
+    );
+  }
+
+  // Fetch user
+  const user = await prisma.user.findUnique({
+    where: { email: userEmail },
+    select: { id: true },
+  });
+
+  if (!user) {
+    return (
+      <div className="text-center mt-20">
+        <p className="text-red-600 font-bold">User not found.</p>
+      </div>
+    );
+  }
+
+  // Fetch only this user's bank accounts
+  const bankAccounts = await prisma.bankAccount.findMany({
+    where: { userId: user.id },
+    orderBy: { createdAt: "desc" },
+  });
 
   return (
     <div className="max-w-7xl mx-auto w-full">
@@ -44,27 +71,35 @@ export default function BankAccountSettingsPage() {
             </tr>
           </thead>
 
-          {/* BODY WITH GRAY BACKGROUND */}
           <tbody className="bg-gray-200">
-            {mockData.map((item) => (
+            {bankAccounts.map((item) => (
               <tr key={item.id}>
+                <td className="py-2 px-3 border border-gray-950/10">{item.iban}</td>
+                <td className="py-2 px-3 border border-gray-950/10">{item.swift}</td>
                 <td className="py-2 px-3 border border-gray-950/10">
-                  {item.iban}
+                  {item.isMain ? "Yes" : "No"}
                 </td>
                 <td className="py-2 px-3 border border-gray-950/10">
-                  {item.swift}
-                </td>
-                <td className="py-2 px-3 border border-gray-950/10">
-                  {item.main}
-                </td>
-                <td className="py-2 px-3 border border-gray-950/10">
-                  <Link href="/settings/bankaccount/editbankaccount" className="flex items-center gap-1 bg-gray-600 rounded-xs text-white p-1 hover:text-gray-500 text-sm">
+                  <Link
+                    href={`/settings/bankaccount/${item.id}`}
+                    className="flex items-center gap-1 bg-gray-600 rounded-xs text-white p-1 hover:text-gray-500 text-sm"
+                  >
                     <Edit className="w-4 h-4" />
                     Edit
                   </Link>
                 </td>
               </tr>
             ))}
+            {bankAccounts.length === 0 && (
+              <tr>
+                <td
+                  colSpan={4}
+                  className="text-center py-4 text-gray-600 border border-gray-950/10"
+                >
+                  No bank accounts found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

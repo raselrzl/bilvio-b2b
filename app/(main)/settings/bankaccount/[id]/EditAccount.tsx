@@ -12,26 +12,47 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { editBankAccountAction } from "@/app/actions";
 
 export default function EditBankAccountFormComponent({
-  defaultValues,
+  account,
 }: {
-  defaultValues?: {
-    bankName?: string; // NEW
+  account: {
+    id: string;
+    bankName: string;
     iban: string;
     swift: string;
-    main: "Yes" | "No";
+    isMain: boolean;
   };
 }) {
-  // SAFE VALUES
-  const [bankName, setBankName] = useState(defaultValues?.bankName ?? ""); // NEW
-  const [iban, setIban] = useState(defaultValues?.iban ?? "");
-  const [swift, setSwift] = useState(defaultValues?.swift ?? "");
-  const [isMain, setIsMain] = useState<"Yes" | "No">(defaultValues?.main ?? "No");
+  const [bankName, setBankName] = useState(account.bankName);
+  const [iban, setIban] = useState(account.iban);
+  const [swift, setSwift] = useState(account.swift);
+  const [isMain, setIsMain] = useState(account.isMain ? "Yes" : "No");
 
-  function handleSubmit(e: React.FormEvent) {
+  const [loading, setLoading] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log({ bankName, iban, swift, isMain }); // include bankName
+    setLoading(true);
+    setMsg("");
+
+    try {
+      await editBankAccountAction({
+        id: account.id,
+        bankName,
+        iban,
+        swift,
+        isMain: isMain === "Yes",
+      });
+
+      setMsg("Bank account updated successfully!");
+    } catch (err: any) {
+      setMsg(err.message || "Failed to update");
+    }
+
+    setLoading(false);
   }
 
   return (
@@ -41,78 +62,73 @@ export default function EditBankAccountFormComponent({
     >
       <h1 className="text-xl font-bold mb-4">Edit Bank Account</h1>
 
+      {msg && (
+        <div className="p-2 mb-4 text-sm bg-gray-100 border rounded">{msg}</div>
+      )}
+
       {/* Bank Name */}
       <div>
-        <Label htmlFor="bankName" className="mb-1 block text-sm">
-          Bank Name
-        </Label>
+        <Label htmlFor="bankName">Bank Name</Label>
         <Input
           id="bankName"
           value={bankName}
           onChange={(e) => setBankName(e.target.value)}
           className="h-9 rounded-xs text-sm"
-          placeholder="Enter Bank Name"
         />
       </div>
 
       {/* IBAN */}
       <div>
-        <Label htmlFor="iban" className="mb-1 block text-sm">
-          Bank Account Number (IBAN)
-        </Label>
+        <Label htmlFor="iban">Bank Account Number (IBAN)</Label>
         <Input
           id="iban"
           value={iban}
           onChange={(e) => setIban(e.target.value)}
           className="h-9 rounded-xs text-sm"
-          placeholder="Enter IBAN number"
         />
       </div>
 
       {/* SWIFT */}
       <div>
-        <Label htmlFor="swift" className="mb-1 block text-sm">
-          Swift / BIC Code
-        </Label>
+        <Label htmlFor="swift">Swift/BIC Code</Label>
         <Input
           id="swift"
           value={swift}
           onChange={(e) => setSwift(e.target.value)}
           className="h-9 rounded-xs text-sm"
-          placeholder="Enter Swift code"
         />
       </div>
 
       {/* Main Account */}
       <div>
-        <Label htmlFor="isMain" className="mb-1 block text-sm">
-          Is this the main account?
-        </Label>
-
-        <Select value={isMain} onValueChange={(v) => setIsMain(v as any)}>
-          <SelectTrigger id="isMain" className="h-9 rounded-xs w-full text-sm">
-            <SelectValue placeholder="Select option" />
+        <Label>Is this the main account?</Label>
+        <Select
+          value={isMain}
+          onValueChange={(value) => setIsMain(value as "Yes" | "No")}
+        >
+          <SelectTrigger className="h-9 rounded-xs w-full text-sm">
+            <SelectValue />
           </SelectTrigger>
-
-          <SelectContent className="rounded-xs">
+          <SelectContent>
             <SelectItem value="Yes">Yes</SelectItem>
             <SelectItem value="No">No</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      {/* BUTTONS */}
-      <div className="flex items-center gap-3 pt-2">
+      {/* Buttons */}
+      <div className="flex items-center gap-3">
         <Button
           type="submit"
-          className="rounded-xs bg-green-600 hover:bg-green-500 text-white px-5"
+          disabled={loading}
+          className="rounded-xs bg-green-600 hover:bg-green-500 text-white px-5 h-8"
         >
-          Save changes
+          {loading ? "Saving..." : "Save Changes"}
         </Button>
 
         <Link
           href="/settings/bankaccount"
-          className="rounded-xs border bg-gray-100 hover:bg-gray-200 px-4 py-1 text-sm"
+          className="rounded-xs border bg-gray-100 px-4 py-1 text-sm"
         >
           Cancel
         </Link>

@@ -794,3 +794,88 @@ export async function getUserMessages() {
     productId: msg.productId,
   }));
 }
+
+
+const bankAccountSchema = z.object({
+  bankName: z.string().min(1, "Bank name is required."),
+  iban: z.string().min(15, "Enter a valid IBAN."),
+  swift: z.string().min(8, "Enter a valid SWIFT code."),
+  isMain: z.boolean().optional(),
+});
+
+export type BankAccountPayload = z.infer<typeof bankAccountSchema>;
+
+export async function createBankAccountAction(data: BankAccountPayload) {
+  // Validate input
+  const parsed = bankAccountSchema.safeParse(data);
+  if (!parsed.success) {
+    const firstError = parsed.error.issues[0]?.message ?? "Invalid input";
+    throw new Error(firstError);
+  }
+
+  // Get logged-in user
+  const jar = await cookies();
+  const userEmail = jar.get("bilvio_session")?.value;
+  if (!userEmail) throw new Error("Unauthorized — please log in.");
+
+  const user = await prisma.user.findUnique({ where: { email: userEmail } });
+  if (!user) throw new Error("User not found");
+
+  // If isMain is true, unset previous main accounts
+  if (parsed.data.isMain) {
+    await prisma.bankAccount.updateMany({
+      where: { userId: user.id, isMain: true },
+      data: { isMain: false },
+    });
+  }
+
+  // Create bank account
+  try {
+    await prisma.bankAccount.create({
+      data: {
+        userId: user.id,
+        bankName: parsed.data.bankName,
+        iban: parsed.data.iban,
+        swift: parsed.data.swift,
+        isMain: parsed.data.isMain ?? false,
+      },
+    });
+
+    revalidatePath("/settings/bankaccount");
+    return { ok: true, message: "Bank account created successfully" };
+  } catch (e: any) {
+    if (e?.code === "P2002" && Array.isArray(e?.meta?.target)) {
+      return { ok: false, message: `${e.meta.target[0]} already exists` };
+    }
+    console.error(e);
+    return { ok: false, message: "Unexpected error occurred" };
+  }
+}
+
+
+
+export async function editBankAccountAction(formData: {
+  id: string;
+  bankName: string;
+  iban: string;
+  swift: string;
+  isMain?: boolean;
+}) {
+  const { id, bankName, iban, swift, isMain } = formData;
+
+  const jar = await cookies();
+  const userEmail = jar.get("bilvio_session")?.value;
+  if (!userEmail) throw new Error("Unauthorized");
+
+  await prisma.bankAccount.update({
+    where: { id },
+    data: {
+      bankName,
+      iban,
+      swift,
+      isMain: !!isMain,
+    },
+  });
+
+  redirect("/settings/bankaccount");
+}
