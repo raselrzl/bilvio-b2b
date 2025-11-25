@@ -976,3 +976,82 @@ export async function updateCompanySettingsAction(
 
   return { ok: true };
 }
+
+
+interface WarehouseFormData {
+  name: string;
+  address: string;
+  responsible: string;
+  comment?: string;
+  openingHours: Record<string, { open: boolean; from: string; to: string }>;
+}
+
+export async function createWarehouse(data: WarehouseFormData) {
+  // Get logged-in user email from cookie
+  const jar = await cookies();
+  const userEmail = jar.get("bilvio_session")?.value;
+
+  if (!userEmail) {
+    throw new Error("You must be logged in to create a warehouse.");
+  }
+
+  // Fetch user
+  const user = await prisma.user.findUnique({
+    where: { email: userEmail },
+    select: { id: true },
+  });
+
+  if (!user) {
+    throw new Error("User not found.");
+  }
+
+  // Create warehouse
+  const warehouse = await prisma.warehouse.create({
+    data: {
+      userId: user.id,
+      name: data.name,
+      address: data.address,
+      responsible: data.responsible,
+      comment: data.comment,
+      openingHours: {
+        create: Object.entries(data.openingHours).map(([day, hours]) => ({
+          day,
+          open: hours.open,
+          from: hours.from,
+          to: hours.to,
+        })),
+      },
+    },
+    include: { openingHours: true },
+  });
+
+  return warehouse;
+}
+
+
+
+export async function updateWarehouse(warehouseId: string, data: WarehouseFormData) {
+  const { name, address, responsible, comment, openingHours } = data;
+
+  const warehouse = await prisma.warehouse.update({
+    where: { id: warehouseId },
+    data: {
+      name,
+      address,
+      responsible,
+      comment,
+      openingHours: {
+        deleteMany: {}, // remove old hours
+        create: Object.entries(openingHours).map(([day, hours]) => ({
+          day,
+          open: hours.open,
+          from: hours.from,
+          to: hours.to,
+        })),
+      },
+    },
+    include: { openingHours: true },
+  });
+
+  return warehouse;
+}

@@ -1,19 +1,22 @@
 "use client";
+
+import { createWarehouse } from "@/app/actions";
 import WarehouseFormComponent from "./WarehouseFormComponent";
+import { useRouter } from "next/navigation";
 
-export default function EditWarehousePage() {
-  // Mock default values
-  const defaultValues = {
-    name: "Central Warehouse",
-    address: "Kista, Stockholm, Sweden",
-    hours: "10:00–18:00 | 5 days/week",
-    responsible: "John Andersson",
-  };
+export default function CreateWarehousePage() {
+  const router = useRouter();
 
-  function handleEdit(data: any) {
-    console.log("Warehouse edited:", data);
-    // TODO: Call server action or API to update data
+  async function handleCreate(data: any) {
+    try {
+      await createWarehouse(data);
+      alert("Warehouse created successfully!");
+      router.push("/settings/warehouse");
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || "Failed to create warehouse");
+    }
   }
 
-  return <WarehouseFormComponent defaultValues={defaultValues} onSubmit={handleEdit} />;
+  return <WarehouseFormComponent onSubmit={handleCreate} />;
 }

@@ -6,87 +6,76 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const daysOfWeek = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 
-// generate 30-min increments from 00:00 to 23:30
+// Generate 30-min increments
 const times = Array.from({ length: 48 }, (_, i) => {
   const hour = Math.floor(i / 2);
   const minute = i % 2 === 0 ? "00" : "30";
-  return `${hour.toString().padStart(2, "0")}:${minute}`;
+  return `${hour.toString().padStart(2,"0")}:${minute}`;
 });
 
-export default function WarehouseFormComponent({
+interface OpeningHour {
+  open: boolean;
+  from: string;
+  to: string;
+}
+
+interface WarehouseFormValues {
+  name: string;
+  address: string;
+  responsible: string;
+  comment: string;
+  openingHours: Record<string, OpeningHour>;
+}
+
+export default function WarehouseFormComponentEditForm({
   defaultValues,
+  warehouseId,
   onSubmit,
 }: {
-  defaultValues?: {
-    name: string;
-    address: string;
-    responsible: string;
-    comment?: string;
-    openingHours?: Record<
-      string,
-      { open: boolean; from: string; to: string }
-    >;
-  };
-  onSubmit: (data: {
-    name: string;
-    address: string;
-    responsible: string;
-    comment?: string;
-    openingHours: Record<string, { open: boolean; from: string; to: string }>;
-  }) => Promise<void>;
+  defaultValues: WarehouseFormValues;
+  warehouseId?: string;
+  onSubmit: (data: WarehouseFormValues) => Promise<void>; // Make onSubmit async
 }) {
-  const [name, setName] = useState(defaultValues?.name ?? "");
-  const [address, setAddress] = useState(defaultValues?.address ?? "");
-  const [responsible, setResponsible] = useState(defaultValues?.responsible ?? "");
-  const [comment, setComment] = useState(defaultValues?.comment ?? "");
+  const [name, setName] = useState(defaultValues.name);
+  const [address, setAddress] = useState(defaultValues.address);
+  const [responsible, setResponsible] = useState(defaultValues.responsible);
+  const [comment, setComment] = useState(defaultValues.comment ?? "");
 
-  const [openingHours, setOpeningHours] = useState<Record<string, { open: boolean; from: string; to: string }>>(
+  const [openingHours, setOpeningHours] = useState<Record<string, OpeningHour>>(
     () => {
-      const init: Record<string, { open: boolean; from: string; to: string }> = {};
+      const init: Record<string, OpeningHour> = {};
       daysOfWeek.forEach((day) => {
-        init[day] = defaultValues?.openingHours?.[day] ?? { open: true, from: "10:00", to: "18:00" };
+        init[day] = defaultValues.openingHours[day] ?? { open: false, from: "10:00", to: "18:00" };
       });
       return init;
     }
   );
 
-  const [isSaving, setIsSaving] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(""); // ✅ error state
+  const [isSaving, setIsSaving] = useState(false); // Loading state
 
   function toggleDay(day: string) {
-    setOpeningHours({
-      ...openingHours,
-      [day]: { ...openingHours[day], open: !openingHours[day].open },
-    });
+    setOpeningHours(prev => ({
+      ...prev,
+      [day]: { ...prev[day], open: !prev[day].open },
+    }));
   }
 
   function handleTimeChange(day: string, type: "from" | "to", value: string) {
-    setOpeningHours({
-      ...openingHours,
-      [day]: { ...openingHours[day], [type]: value },
-    });
+    setOpeningHours(prev => ({
+      ...prev,
+      [day]: { ...prev[day], [type]: value },
+    }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setIsSaving(true);
-    setErrorMessage(""); // reset error
+    setIsSaving(true); // start loading
     try {
       await onSubmit({ name, address, responsible, comment, openingHours });
-    } catch (err: any) {
-      console.error(err);
-      // Example: check for a specific error
-      if (err.message?.includes("already exists")) {
-        setErrorMessage(
-          "You already have a warehouse. You can edit it if you want."
-        );
-      } else {
-        setErrorMessage("An unexpected error occurred. Please try again.");
-      }
     } finally {
-      setIsSaving(false);
+      setIsSaving(false); // stop loading after submit
     }
   }
 
@@ -96,16 +85,9 @@ export default function WarehouseFormComponent({
         onSubmit={handleSubmit}
         className="max-w-3xl mx-auto mt-10 space-y-6 bg-white border shadow-xs p-6 rounded-xs"
       >
-        <h1 className="text-xl font-bold mb-4">{defaultValues ? "Edit Warehouse" : "Create Warehouse"}</h1>
+        <h1 className="text-xl font-bold mb-4">Edit Warehouse</h1>
 
-        {/* Error message */}
-        {errorMessage && (
-          <div className="mb-4 p-2 text-sm text-red-700 bg-red-100 border border-red-300 rounded-xs">
-            {errorMessage}
-          </div>
-        )}
-
-        {/* Warehouse Name */}
+        {/* Name */}
         <div>
           <Label htmlFor="name" className="mb-1 block text-sm font-semibold">Warehouse Name</Label>
           <Input
@@ -159,6 +141,7 @@ export default function WarehouseFormComponent({
           <div className="space-y-2">
             {daysOfWeek.map((day) => (
               <div key={day} className="flex items-center gap-2">
+                {/* Day toggle */}
                 <button
                   type="button"
                   onClick={() => toggleDay(day)}
@@ -170,6 +153,7 @@ export default function WarehouseFormComponent({
                   <span className="text-sm ml-1">{day}</span>
                 </button>
 
+                {/* From / To */}
                 {openingHours[day].open ? (
                   <>
                     <select
@@ -177,9 +161,7 @@ export default function WarehouseFormComponent({
                       onChange={(e) => handleTimeChange(day, "from", e.target.value)}
                       className="h-8 w-20 border rounded-xs text-sm"
                     >
-                      {times.map((t) => (
-                        <option key={t} value={t}>{t}</option>
-                      ))}
+                      {times.map(t => <option key={t} value={t}>{t}</option>)}
                     </select>
                     <span className="mx-1 text-sm">-</span>
                     <select
@@ -187,9 +169,7 @@ export default function WarehouseFormComponent({
                       onChange={(e) => handleTimeChange(day, "to", e.target.value)}
                       className="h-8 w-20 border rounded-xs text-sm"
                     >
-                      {times.map((t) => (
-                        <option key={t} value={t}>{t}</option>
-                      ))}
+                      {times.map(t => <option key={t} value={t}>{t}</option>)}
                     </select>
                   </>
                 ) : (
@@ -231,7 +211,9 @@ export default function WarehouseFormComponent({
                 </svg>
                 Saving...
               </>
-            ) : defaultValues ? "Save" : "Create Warehouse"}
+            ) : (
+              "Save"
+            )}
           </Button>
           <Link
             href="/settings/warehouse"
