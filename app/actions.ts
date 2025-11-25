@@ -904,3 +904,75 @@ export async function editBankAccountAction(formData: {
 
   redirect("/settings/bankaccount");
 }
+ 
+
+
+
+async function getLoggedInUser() {
+  const jar = await cookies();
+  const email =
+    jar.get("bilvio_session")?.value ??
+    jar.get("userEmail")?.value ??
+    "";
+
+  if (!email) return null;
+
+  return prisma.user.findUnique({
+    where: { email },
+    select: { id: true },
+  });
+}
+
+// ==================================================
+//  GET COMPANY SETTINGS
+// ==================================================
+
+export async function getCompanySettingsAction() {
+  const user = await getLoggedInUser();
+  if (!user) return null;
+
+  const settings = await prisma.companySettings.findUnique({
+    where: { userId: user.id },
+  });
+
+  return settings; // can be null (no settings yet)
+}
+
+// ==================================================
+//  UPDATE A FIELD IMMEDIATELY
+// ==================================================
+
+export async function updateCompanySettingsAction(
+  field: string,
+  value: string
+) {
+  const user = await getLoggedInUser();
+  if (!user) throw new Error("Unauthorized");
+
+  // Convert empty string → null
+  const val = value === "" ? null : value;
+
+  // If record does NOT exist, create it first
+  const exists = await prisma.companySettings.findUnique({
+    where: { userId: user.id },
+  });
+
+  if (!exists) {
+    await prisma.companySettings.create({
+      data: {
+        userId: user.id,
+        [field]: val,
+      },
+    });
+  } else {
+    await prisma.companySettings.update({
+      where: { userId: user.id },
+      data: { [field]: val },
+    });
+  }
+
+  // Revalidate the page showing settings
+  revalidatePath("/settings/company");
+
+  return { ok: true };
+}

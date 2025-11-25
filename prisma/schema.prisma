@@ -50,6 +50,7 @@ model User {
   messages Message[]
 
 bankAccounts BankAccount[]
+companySettings CompanySettings?
 }
 
 enum UserType {
@@ -327,5 +328,24 @@ model BankAccount {
 
   @@unique([userId, iban])
 }
+
+
+model CompanySettings {
+  id        String  @id @default(cuid())
+  userId    String  @unique
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  onlyCarsWithPDI     String? // "yes" or "no"
+  iAcceptRegistration String? // "yes" or "no"
+  iAcceptWarranty     String? // "yes" or "no"
+  cocNewCars          String? // "yes" or "no"
+  cocUsedCars         String? // "yes" or "no"
+  documentAddress     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
 
 
