@@ -867,6 +867,31 @@ export async function editBankAccountAction(formData: {
   const userEmail = jar.get("bilvio_session")?.value;
   if (!userEmail) throw new Error("Unauthorized");
 
+  // Fetch the account we want to update
+  const currentAccount = await prisma.bankAccount.findUnique({ where: { id } });
+  if (!currentAccount) throw new Error("Bank account not found");
+
+  // Check if IBAN exists in another account
+  const existing = await prisma.bankAccount.findFirst({
+    where: {
+      iban,
+      NOT: { id }, // exclude current account
+    },
+  });
+
+  if (existing) {
+    throw new Error("This IBAN is already used by another account.");
+  }
+
+  // If isMain is true, unset previous main accounts for the same user
+  if (isMain) {
+    await prisma.bankAccount.updateMany({
+      where: { userId: currentAccount.userId, isMain: true },
+      data: { isMain: false },
+    });
+  }
+
+  // Update the account
   await prisma.bankAccount.update({
     where: { id },
     data: {

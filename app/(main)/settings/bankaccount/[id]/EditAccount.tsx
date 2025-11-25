@@ -14,6 +14,26 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { editBankAccountAction } from "@/app/actions";
 
+// IBAN validator
+function isValidIBAN(iban: string) {
+  const formatted = iban.replace(/\s+/g, "").toUpperCase();
+
+  if (formatted.length < 15 || formatted.length > 34) return false;
+  if (!/^[A-Z0-9]+$/.test(formatted)) return false;
+
+  const rearranged = formatted.slice(4) + formatted.slice(0, 4);
+  const converted = rearranged.replace(/[A-Z]/g, (letter) =>
+    (letter.charCodeAt(0) - 55).toString()
+  );
+
+  let total = "";
+  for (let i = 0; i < converted.length; i += 6) {
+    total = String(parseInt(total + converted.slice(i, i + 6)) % 97);
+  }
+
+  return Number(total) === 1;
+}
+
 export default function EditBankAccountFormComponent({
   account,
 }: {
@@ -32,12 +52,50 @@ export default function EditBankAccountFormComponent({
 
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
+  const [ibanError, setIbanError] = useState("");
+  const [bankError, setBankError] = useState("");
+  const [swiftError, setSwiftError] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setMsg("");
 
+    // Reset errors
+    setIbanError("");
+    setBankError("");
+    setSwiftError("");
+
+    // Validation
+    let hasError = false;
+
+    if (!bankName.trim()) {
+      setBankError("Bank name is required.");
+      hasError = true;
+    }
+
+    if (!iban.trim()) {
+      setIbanError("IBAN cannot be empty.");
+      hasError = true;
+    } else if (iban.replace(/\s+/g, "").length < 15) {
+      setIbanError("IBAN is too short. Please enter a full IBAN.");
+      hasError = true;
+    } else if (!isValidIBAN(iban)) {
+      setIbanError("Invalid IBAN number. Please enter a correct Swedish or international IBAN.");
+      hasError = true;
+    }
+
+    if (!swift.trim()) {
+      setSwiftError("SWIFT/BIC code is required.");
+      hasError = true;
+    }
+
+    if (hasError) {
+      setLoading(false);
+      return;
+    }
+
+    // Submit to server
     try {
       await editBankAccountAction({
         id: account.id,
@@ -49,7 +107,8 @@ export default function EditBankAccountFormComponent({
 
       setMsg("Bank account updated successfully!");
     } catch (err: any) {
-      setMsg(err.message || "Failed to update");
+      // Show server errors (e.g., duplicate IBAN)
+      setMsg(err.message || "Something went wrong while updating. IBAN may already exist.");
     }
 
     setLoading(false);
@@ -73,8 +132,12 @@ export default function EditBankAccountFormComponent({
           id="bankName"
           value={bankName}
           onChange={(e) => setBankName(e.target.value)}
-          className="h-9 rounded-xs text-sm"
+          className={`h-9 rounded-xs text-sm ${
+            bankError ? "border-red-500" : bankName ? "border-green-500" : ""
+          }`}
+          placeholder="Enter Bank Name"
         />
+        {bankError && <p className="text-red-600 text-xs mt-1">{bankError}</p>}
       </div>
 
       {/* IBAN */}
@@ -83,9 +146,16 @@ export default function EditBankAccountFormComponent({
         <Input
           id="iban"
           value={iban}
-          onChange={(e) => setIban(e.target.value)}
-          className="h-9 rounded-xs text-sm"
+          onChange={(e) => {
+            setIban(e.target.value);
+            setIbanError("");
+          }}
+          className={`h-9 rounded-xs text-sm ${
+            ibanError ? "border-red-500" : iban ? "border-green-500" : ""
+          }`}
+          placeholder="Example: SE45 5000 0000 0583 9825 7466"
         />
+        {ibanError && <p className="text-red-600 text-xs mt-1">{ibanError}</p>}
       </div>
 
       {/* SWIFT */}
@@ -95,8 +165,12 @@ export default function EditBankAccountFormComponent({
           id="swift"
           value={swift}
           onChange={(e) => setSwift(e.target.value)}
-          className="h-9 rounded-xs text-sm"
+          className={`h-9 rounded-xs text-sm ${
+            swiftError ? "border-red-500" : swift ? "border-green-500" : ""
+          }`}
+          placeholder="Example: SWEDSESS"
         />
+        {swiftError && <p className="text-red-600 text-xs mt-1">{swiftError}</p>}
       </div>
 
       {/* Main Account */}
@@ -106,7 +180,9 @@ export default function EditBankAccountFormComponent({
           value={isMain}
           onValueChange={(value) => setIsMain(value as "Yes" | "No")}
         >
-          <SelectTrigger className="h-9 rounded-xs w-full text-sm">
+          <SelectTrigger
+            className={`h-9 rounded-xs w-full text-sm ${isMain ? "border-green-500" : ""}`}
+          >
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

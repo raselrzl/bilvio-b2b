@@ -8,24 +8,57 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { createBankAccountAction } from "@/app/actions";
 
+// Validate IBAN (simple, correct for 99% cases)
+function isValidIBAN(iban: string) {
+  const formatted = iban.replace(/\s+/g, "").toUpperCase();
+
+  if (formatted.length < 15 || formatted.length > 34) return false;
+  if (!/^[A-Z0-9]+$/.test(formatted)) return false;
+
+  const rearranged = formatted.slice(4) + formatted.slice(0, 4);
+  const converted = rearranged.replace(/[A-Z]/g, (letter) =>
+    (letter.charCodeAt(0) - 55).toString()
+  );
+
+  let total = "";
+  for (let i = 0; i < converted.length; i += 6) {
+    total = String(parseInt(total + converted.slice(i, i + 6)) % 97);
+  }
+
+  return Number(total) === 1;
+}
+
+
 export default function BankAccountForm() {
   const [bankName, setBankName] = useState("");
   const [iban, setIban] = useState("");
   const [swift, setSwift] = useState("");
   const [isMain, setIsMain] = useState("");
+  const [ibanError, setIbanError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  // Example: get userId from session/auth
-  const userId = "current-user-id"; // replace with actual user session
+  const userId = "current-user-id";
+
+  function handleIbanChange(value: string) {
+    setIban(value);
+
+    if (!value) {
+      setIbanError("");
+      return;
+    }
+
+    if (!isValidIBAN(value)) {
+      setIbanError("Invalid IBAN. Example SE3550000000054910000003");
+    } else {
+      setIbanError("");
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    if (!userId) {
-      console.error("User not logged in");
-      return;
-    }
+    if (ibanError) return; // block submit
 
     const payload = {
       userId,
@@ -60,7 +93,6 @@ export default function BankAccountForm() {
       >
         <h1 className="text-xl font-bold mb-4">Create Bank Account</h1>
 
-        {/* Success Alert */}
         {success && (
           <div className="p-2 mb-4 text-green-800 bg-green-100 border border-green-300 rounded">
             Bank account created successfully!
@@ -69,14 +101,12 @@ export default function BankAccountForm() {
 
         {/* Bank Name */}
         <div>
-          <Label htmlFor="bankName" className="mb-1 block text-sm">
-            Bank Name
-          </Label>
+          <Label htmlFor="bankName" className="mb-1 block text-sm">Bank Name</Label>
           <Input
             id="bankName"
             value={bankName}
             onChange={(e) => setBankName(e.target.value)}
-            className={`h-9 rounded-xs text-sm ${bankName ? "border-green-500" : ""}`}
+            className="h-9 rounded-xs text-sm"
             placeholder="Enter Bank Name"
           />
         </div>
@@ -86,35 +116,37 @@ export default function BankAccountForm() {
           <Label htmlFor="iban" className="mb-1 block text-sm">
             Bank Account Number (IBAN)
           </Label>
+
           <Input
             id="iban"
             value={iban}
-            onChange={(e) => setIban(e.target.value)}
-            className={`h-9 rounded-xs text-sm ${iban ? "border-green-500" : ""}`}
-            placeholder="Enter IBAN number"
+            onChange={(e) => handleIbanChange(e.target.value)}
+            className={`h-9 rounded-xs text-sm ${
+              ibanError ? "border-red-500" : iban ? "border-green-500" : ""
+            }`}
+            placeholder="e.g. SE3550000000054910000003"
           />
+
+          {ibanError && (
+            <p className="text-red-600 text-sm mt-1">{ibanError}</p>
+          )}
         </div>
 
         {/* SWIFT */}
         <div>
-          <Label htmlFor="swift" className="mb-1 block text-sm">
-            Swift / BIC Code
-          </Label>
+          <Label htmlFor="swift" className="mb-1 block text-sm">Swift / BIC Code</Label>
           <Input
             id="swift"
             value={swift}
             onChange={(e) => setSwift(e.target.value)}
-            className={`h-9 rounded-xs text-sm ${swift ? "border-green-500" : ""}`}
-            placeholder="Enter Swift code"
+            className="h-9 rounded-xs text-sm"
+            placeholder="e.g. SWEDSESS"
           />
         </div>
 
         {/* Main Account */}
         <div>
-          <Label htmlFor="isMain" className="mb-1 block text-sm">
-            Is this the main account?
-          </Label>
-
+          <Label htmlFor="isMain" className="mb-1 block text-sm">Is this the main account?</Label>
           <Select value={isMain} onValueChange={setIsMain}>
             <SelectTrigger
               id="isMain"
@@ -134,10 +166,9 @@ export default function BankAccountForm() {
         <div className="flex items-center gap-3 pt-2">
           <Button
             type="submit"
-            className="rounded-xs bg-green-600 hover:bg-green-500 text-white px-5 h-8 flex items-center justify-center gap-2"
-            disabled={loading}
+            disabled={loading || ibanError !== ""}
+            className="rounded-xs bg-green-600 hover:bg-green-500 text-white px-5 h-8 flex items-center gap-2"
           >
-            {loading && <span className="loader-border h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>}
             {loading ? "Saving..." : "Save"}
           </Button>
 
