@@ -9,34 +9,26 @@ const Article1: React.FC = () => (
   <article id="article-1" className="space-y-3 text-justify">
     <h2 className="text-xl font-bold">Article 1. General provisions</h2>
     <p className="text-justify text-sm">
-      These Terms and Conditions of the Bilvio Platform for Buyers (hereinafter
-      referred to as “T&amp;C”) establish the rules of using the transaction
-      platform available at the bilvio domain (hereinafter referred to as the
-      “Bilvio Platform”), including submitting offers and finalising purchases.
+      These Terms and Conditions for the Bilvio Platform for Buyers (hereinafter
+      referred to as the “T&C”) set forth the rules governing the use of the
+      transaction platform available under the Bilvio domain (hereinafter
+      referred to as the “Bilvio Platform”), including the submission of offers
+      and the completion of purchases.{" "}
     </p>
     <p className="text-justify text-sm">
-      The operator of the Bilvio Platform is BILVIO Europe OÜ, an Estonian law
-      company which has its seat in Tallinn, with the following registered
-      address: Lõõtsa 2b, 11415 Tallinn, Estonia, entered into the register at
-      the Regional Court in the Harju province under number 16624843, with a
-      share capital of 1,000,000 EUR and the following tax identification
-      number: EE102562446 (hereinafter referred to as the “Operator” or
-      “Seller”).
+      The Bilvio Platform is operated by Bilvio (hereinafter referred to as the
+      “Operator” or the “Seller”). The Operator provides electronic services to
+      users of the Bilvio Platform (hereinafter referred to as “Users” or
+      “Buyers”), including certain services provided against fees specified in
+      the Table of Fees and Commissions, constituting Annex No. 1 to these T&C.{" "}
     </p>
     <p className="text-justify text-sm">
-      The Operator provides services electronically in aid of Users of the
-      Bilvio Platform (hereinafter referred to as “Users” or “Buyers”),
-      including services against the fees specified in the Table of Fees and
-      Commissions constituting Attachment No. 1 to the Terms and Conditions.
-    </p>
-    <p className="text-justify text-sm">
-      In order to use the Bilvio Platform, it is necessary to have a device with
-      access to the Internet and the most recent version of a standard web
-      browser e.g. Internet Explorer, Microsoft Edge, Google Chrome, Mozilla
-      Firefox, Opera or Safari. The Bilvio Platform is available on the bilvio
-      domain. It is necessary to have an active e-mail account in order to use
-      certain functions of the Bilvio Platform, including registration as well
-      as to make offers.
+      To use the Bilvio Platform, Users must have a device with Internet access
+      and the latest version of a standard web browser, such as Microsoft Edge,
+      Google Chrome, Mozilla Firefox, Opera, or Safari. The Bilvio Platform is
+      accessible through the Bilvio domain. An active email account is required
+      to access certain functions of the Bilvio Platform, including registration
+      and the submission of offers.{" "}
     </p>
   </article>
 );
