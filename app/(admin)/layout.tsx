@@ -25,6 +25,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           <Link href="/admin/createTask" className="hover:underline">
             Create Task
           </Link>
+          <Link href="/admin/alldemands" className="hover:underline">
+            All Demands
+          </Link>
+          <Link href="/admin/allusers" className="hover:underline">
+            All Users
+          </Link>
         </nav>
 
         {/* MOBILE NAV (Sheet) */}
