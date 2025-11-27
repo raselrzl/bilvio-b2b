@@ -23,6 +23,8 @@ import WatchedTotal from "./WatchedTotal";
 import { PaginationComponent } from "@/components/general/PaginationComponent";
 import { prisma } from "@/app/utils/db";
 import DeleteOrderDialog from "@/app/(admin)/dashboard/orders/DeleteOrderDialog";
+import AcceptOrderDialog from "./OrderActionDialog";
+import OrderActionDialog from "./OrderActionDialog";
 
 type SearchParamsProps = {
   searchParams: Promise<{ page?: string; id?: string }>;
@@ -187,46 +189,51 @@ export default async function OrdersPage({ searchParams }: SearchParamsProps) {
 
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
+<DropdownMenuItem asChild>
+  <OrderActionDialog
+    orderId={order.id}
+    action="ACCEPTED"
+    label="Accept Order"
+    color="green"
+  />
+</DropdownMenuItem>
 
-                            <DropdownMenuItem asChild>
-                              <Link
-                                href={`/dashboard/orders/${order.id}/details`}
-                              >
-                                <PenBoxIcon className="w-4 h-4 mr-2" />
-                                View Details
-                              </Link>
-                            </DropdownMenuItem>
+<DropdownMenuItem asChild>
+  <OrderActionDialog
+    orderId={order.id}
+    action="REJECTED"
+    label="Reject Order"
+    color="red"
+  />
+</DropdownMenuItem>
 
-                            <DropdownMenuItem asChild>
-                              <Link
-                                href={`/dashboard/orders/${order.id}/updateInvoiceStatus`}
-                              >
-                                <PenBoxIcon className="w-4 h-4 mr-2" />
-                                Update Invoice Status
-                              </Link>
-                            </DropdownMenuItem>
+<DropdownMenuItem asChild>
+  <OrderActionDialog
+    orderId={order.id}
+    action="CANCELLED"
+    label="Cancel Order"
+    color="orange"
+  />
+</DropdownMenuItem>
 
-                            <DropdownMenuItem asChild>
-                              <Link
-                                href={`/dashboard/orders/${order.id}/updateorderStatus`}
-                              >
-                                <PenBoxIcon className="w-4 h-4 mr-2" />
-                                Update Order Status
-                              </Link>
-                            </DropdownMenuItem>
+<DropdownMenuItem asChild>
+  <OrderActionDialog
+    orderId={order.id}
+    action="COMPLETED"
+    label="Mark as Completed"
+    color="blue"
+  />
+</DropdownMenuItem>
 
-                            <DropdownMenuItem asChild>
-                              <Link
-                                href={`/dashboard/orders/${order.id}/updatedeliverystatus`}
-                              >
-                                <PenBoxIcon className="w-4 h-4 mr-2" />
-                                Update Delivery Status
-                              </Link>
-                            </DropdownMenuItem>
+<DropdownMenuItem asChild>
+  <OrderActionDialog
+    orderId={order.id}
+    action="DELETE"
+    label="Delete Order"
+    color="red"
+  />
+</DropdownMenuItem>
 
-                            <DropdownMenuItem asChild>
-                              <DeleteOrderDialog orderId={order.id} />
-                            </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>

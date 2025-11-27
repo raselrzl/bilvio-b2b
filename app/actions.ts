@@ -5,6 +5,7 @@ import { z } from "zod";
 import { prisma } from "./utils/db";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { OrderStatus } from "@/lib/generated/prisma";
 
 const registerSchema = z
   .object({
@@ -1106,5 +1107,46 @@ export async function deleteOrderAction(orderId: string) {
   } catch (err) {
     console.error("❌ Failed to delete order:", err);
     return { success: false, error: "Failed to delete order" };
+  }
+}
+
+/* export async function acceptOrderAction(orderId: string) {
+  try {
+    await prisma.order.update({
+      where: { id: orderId },
+      data: { status: "ACCEPTED" },
+    });
+
+    // Refresh orders page
+    revalidatePath("/dashboard/orders");
+
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Accept order error:", error);
+    return { success: false };
+  }
+} */
+
+
+  export async function orderAction(
+  orderId: string,
+  action: "DELETE" | OrderStatus
+) {
+  try {
+    if (action === "DELETE") {
+      await prisma.order.delete({ where: { id: orderId } });
+    } else {
+      await prisma.order.update({
+        where: { id: orderId },
+        data: { status: action },
+      });
+    }
+
+    revalidatePath("/dashboard/orders");
+
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Order Action Error:", error);
+    return { success: false };
   }
 }
