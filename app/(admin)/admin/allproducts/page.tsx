@@ -20,7 +20,7 @@ export async function getAllProducts() {
           lastName: p.user.lastName ?? "",
           email: p.user.email,
         }
-      : null,
+      : null, 
   }));
 }
 

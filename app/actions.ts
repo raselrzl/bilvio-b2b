@@ -1081,7 +1081,7 @@ export async function updateWarehouse(warehouseId: string, data: WarehouseFormDa
 }
 
 
-export async function deleteProductAction(productId: string) {
+/* export async function deleteProductAction(productId: string) {
   try {
     await prisma.product.delete({
       where: { id: productId },
@@ -1091,7 +1091,7 @@ export async function deleteProductAction(productId: string) {
     console.error("Failed to delete product:", err);
     return { ok: false, error: "Failed to delete product" };
   }
-}
+} */
 
 
 export async function deleteOrderAction(orderId: string) {
@@ -1211,4 +1211,62 @@ export async function updateUserTypeAction(userId: string, userType: any) {
 
   revalidatePath("/dashboard/users");
   return { success: true, message: "User role updated" };
+}
+
+
+
+export async function deleteProductAction(productId: string) {
+  try {
+    await prisma.product.delete({
+      where: { id: productId },
+    });
+
+    return { ok: true };
+  } catch (err: any) {
+    console.error("Error deleting product:", err);
+    return { ok: false, error: err.message };
+  }
+}
+
+// Check product availability
+export async function checkProductAvailabilityAction(productId: string) {
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+      select: {
+        stock: true,
+        availability: true,
+      },
+    });
+
+    if (!product) throw new Error("Product not found");
+
+    return {
+      stock: product.stock,
+      availability: product.availability,
+    };
+  } catch (err: any) {
+    console.error("Error checking product availability:", err);
+    throw new Error(err.message);
+  }
+}
+
+
+export async function toggleProductStockAction(productId: string) {
+  const product = await prisma.product.findUnique({
+    where: { id: productId },
+    select: { stock: true, name: true },
+  });
+
+  if (!product) throw new Error("Product not found");
+
+  // Toggle stock
+  const newStock = product.stock === "IN_STOCK" ? "OUT_OF_STOCK" : "IN_STOCK";
+
+  const updated = await prisma.product.update({
+    where: { id: productId },
+    data: { stock: newStock },
+  });
+
+  return updated;
 }

@@ -1,19 +1,32 @@
 "use client";
 
-import { useState } from "react";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { MoreHorizontalIcon } from "lucide-react";
+import { useState, useTransition } from "react";
 import { Product } from "./page";
 import { toast } from "react-hot-toast";
-import { deleteProductAction } from "@/app/actions";
+import { deleteProductAction, toggleProductStockAction } from "@/app/actions";
+import ProductActionDialog from "./ProductActionDialog";
 
 export default function ProductsTableClient({ products }: { products: Product[] }) {
+  const [productList, setProductList] = useState(products);
+
+  const handleStockToggle = async (productId: string) => {
+    try {
+      const updated = await toggleProductStockAction(productId);
+      toast.success(
+        `Product "${updated.name}" is now ${
+          updated.stock === "IN_STOCK" ? "in stock" : "out of stock"
+        }!`
+      );
+      setProductList((prev) =>
+        prev.map((p) =>
+          p.id === productId ? { ...p, stock: updated.stock } : p
+        )
+      );
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update stock");
+    }
+  };
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">All Products</h1>
@@ -30,12 +43,13 @@ export default function ProductsTableClient({ products }: { products: Product[] 
               <th className="p-3 border text-left">Gearbox</th>
               <th className="p-3 border text-left">Condition</th>
               <th className="p-3 border text-left">Stock</th>
+              <th className="p-3 border text-left">Availability</th>
               <th className="p-3 border text-left">Owner</th>
               <th className="p-3 border text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {products.map((p) => (
+            {productList.map((p) => (
               <tr key={p.id} className="hover:bg-gray-50">
                 <td className="p-3 border">{p.id}</td>
                 <td className="p-3 border">{p.name}</td>
@@ -45,11 +59,27 @@ export default function ProductsTableClient({ products }: { products: Product[] 
                 <td className="p-3 border">{p.gearbox}</td>
                 <td className="p-3 border">{p.productCondition}</td>
                 <td className="p-3 border">{p.stock}</td>
+                <td className="p-3 border text-center">
+                  <StockSwitch
+                    stock={p.stock}
+                    onToggle={() => handleStockToggle(p.id)}
+                  />
+                </td>
                 <td className="p-3 border">
-                  {p.user ? `${p.user.firstName} ${p.user.lastName} (${p.user.email})` : "-"}
+                  {p.user
+                    ? `${p.user.firstName} ${p.user.lastName} (${p.user.email})`
+                    : "-"}
                 </td>
                 <td className="p-3 border text-center">
-                  <ActionsDropdown productId={p.id} />
+                  <div className="flex gap-2 justify-center">
+                    <ProductActionDialog productId={p.id} label="Delete" color="red" />
+                    <ProductActionDialog
+                      productId={p.id}
+                      label="Check Availability"
+                      color="blue"
+                      checkAvailability={true}
+                    />
+                  </div>
                 </td>
               </tr>
             ))}
@@ -60,37 +90,29 @@ export default function ProductsTableClient({ products }: { products: Product[] 
   );
 }
 
-// Actions Dropdown
-function ActionsDropdown({ productId }: { productId: string }) {
-  const [loading, setLoading] = useState(false);
-
-  const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this product?")) return;
-
-    setLoading(true);
-    const result = await deleteProductAction(productId);
-
-    if (result.ok) {
-      toast.success("Product deleted successfully!");
-      window.location.reload();
-    } else {
-      toast.error(result.error || "Failed to delete product");
-    }
-    setLoading(false);
-  };
+// Switch Component
+function StockSwitch({
+  stock,
+  onToggle,
+}: {
+  stock: string;
+  onToggle: () => void;
+}) {
+  const [isPending, startTransition] = useTransition();
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" aria-label="More Options" disabled={loading}>
-          <MoreHorizontalIcon />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-36">
-        <DropdownMenuItem onClick={handleDelete} className="text-red-600">
-          Delete
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <button
+      onClick={() => startTransition(onToggle)}
+      disabled={isPending}
+      className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none ${
+        stock === "IN_STOCK" ? "bg-green-500" : "bg-gray-300"
+      }`}
+    >
+      <span
+        className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${
+          stock === "IN_STOCK" ? "translate-x-5" : "translate-x-1"
+        }`}
+      />
+    </button>
   );
 }
