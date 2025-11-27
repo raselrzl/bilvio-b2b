@@ -22,6 +22,7 @@ import { OrderFilter } from "./OrderFilter";
 import WatchedTotal from "./WatchedTotal";
 import { PaginationComponent } from "@/components/general/PaginationComponent";
 import { prisma } from "@/app/utils/db";
+import DeleteOrderDialog from "@/app/(admin)/dashboard/orders/DeleteOrderDialog";
 
 type SearchParamsProps = {
   searchParams: Promise<{ page?: string; id?: string }>;
@@ -125,7 +126,9 @@ export default async function OrdersPage({ searchParams }: SearchParamsProps) {
                 <TableBody>
                   {orders.map((order) => (
                     <TableRow key={order.id} className="hover:bg-muted/50">
-                      <TableCell className="font-medium">{order.id.slice(-6)}</TableCell>
+                      <TableCell className="font-medium">
+                        {order.id.slice(-6)}
+                      </TableCell>
                       <TableCell>{order.orderNumber}</TableCell>
                       <TableCell>{order.user?.firstName ?? "-"}</TableCell>
                       <TableCell>{order.user?.email ?? "-"}</TableCell>
@@ -222,12 +225,7 @@ export default async function OrdersPage({ searchParams }: SearchParamsProps) {
                             </DropdownMenuItem>
 
                             <DropdownMenuItem asChild>
-                              <Link
-                                href={`/dashboard/orders/${order.id}/delete`}
-                              >
-                                <XCircle className="w-4 h-4 mr-2 text-red-600" />
-                                Delete
-                              </Link>
+                              <DeleteOrderDialog orderId={order.id} />
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>

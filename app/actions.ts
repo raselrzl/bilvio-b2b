@@ -1091,3 +1091,20 @@ export async function deleteProductAction(productId: string) {
     return { ok: false, error: "Failed to delete product" };
   }
 }
+
+
+export async function deleteOrderAction(orderId: string) {
+  try {
+    await prisma.order.delete({
+      where: { id: orderId },
+    });
+
+    // Refresh the orders page after deletion
+    revalidatePath("/dashboard/orders");
+
+    return { success: true };
+  } catch (err) {
+    console.error("❌ Failed to delete order:", err);
+    return { success: false, error: "Failed to delete order" };
+  }
+}
