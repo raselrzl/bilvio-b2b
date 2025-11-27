@@ -1182,3 +1182,33 @@ export async function updateDemandStatusAction(id: string, status: "DRAFT" | "SA
     return { success: false };
   }
 }
+
+
+
+export async function deleteUserAction(userId: string) {
+  await prisma.user.delete({ where: { id: userId } });
+  revalidatePath("/dashboard/users");
+  return { success: true, message: "User deleted successfully" };
+}
+
+// UPDATE APPROVAL STATUS
+export async function updateApprovalStatusAction(userId: string, status: any) {
+  await prisma.user.update({
+    where: { id: userId },
+    data: { approvalStatus: status },
+  });
+
+  revalidatePath("/dashboard/users");
+  return { success: true, message: "Status updated" };
+}
+
+// UPDATE USER TYPE (ADMIN / USER / SUPERADMIN)
+export async function updateUserTypeAction(userId: string, userType: any) {
+  await prisma.user.update({
+    where: { id: userId },
+    data: { userType },
+  });
+
+  revalidatePath("/dashboard/users");
+  return { success: true, message: "User role updated" };
+}

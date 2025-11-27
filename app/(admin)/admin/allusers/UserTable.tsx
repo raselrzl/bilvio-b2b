@@ -9,6 +9,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontalIcon } from "lucide-react";
+import { deleteUserAction, updateApprovalStatusAction, updateUserTypeAction } from "@/app/actions";
+import { useTransition } from "react";
+import UserActionDialog from "./UserActionDialog";
 
 export interface User {
   id: string;
@@ -91,24 +94,49 @@ export default function UsersTableClient({ users }: { users: User[] }) {
 }
 
 // Dropdown Actions
-function ActionsDropdown({ user }: { user: User }) {
-  const handleDelete = () => console.log("Delete user:", user.id);
-  const handleUpdateStatus = (status: User["approvalStatus"]) =>
-    console.log("Update status:", user.id, status);
-
+export function ActionsDropdown({ user }: { user: User }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" aria-label="More Options">
+        <Button variant="outline" size="icon">
           <MoreHorizontalIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-36">
-        <DropdownMenuItem onClick={() => handleUpdateStatus("APPROVED")}>Approve</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleUpdateStatus("REJECTED")}>Reject</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleUpdateStatus("ACTIVE")}>Activate</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleUpdateStatus("INACTIVE")}>Deactivate</DropdownMenuItem>
-        <DropdownMenuItem onClick={handleDelete} className="text-red-600">Delete</DropdownMenuItem>
+
+      <DropdownMenuContent className="w-48" align="end">
+        {/* USER TYPE */}
+        <DropdownMenuItem asChild>
+          <UserActionDialog userId={user.id} action="USER" label="Set as USER" color="blue" />
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <UserActionDialog userId={user.id} action="ADMIN" label="Set as ADMIN" color="blue" />
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <UserActionDialog userId={user.id} action="SUPERADMIN" label="Set as SUPERADMIN" color="blue" />
+        </DropdownMenuItem>
+
+        <div className="border-t my-1" />
+
+        {/* APPROVAL STATUS */}
+        <DropdownMenuItem asChild>
+          <UserActionDialog userId={user.id} action="APPROVED" label="Approve" color="green" />
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <UserActionDialog userId={user.id} action="REJECTED" label="Reject" color="red" />
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <UserActionDialog userId={user.id} action="ACTIVE" label="Activate" color="green" />
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <UserActionDialog userId={user.id} action="INACTIVE" label="Deactivate" color="red" />
+        </DropdownMenuItem>
+
+        <div className="border-t my-1" />
+
+        {/* DELETE USER */}
+        <DropdownMenuItem asChild>
+          <UserActionDialog userId={user.id} action="DELETE" label="Delete User" color="red" />
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
