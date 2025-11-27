@@ -5,47 +5,85 @@ import { Demand } from "./page";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontalIcon } from "lucide-react";
+import { deleteDemandAction, updateDemandStatusAction } from "@/app/actions";
+import { toast } from "sonner";
+import DemandActionDialog from "./DemandActionDialog";
 
 export default function DemandsTableClient({ demands }: { demands: Demand[] }) {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">All Demands</h1>
 
-      <div className="overflow-x-auto">
-        <table className="w-full border border-gray-200 rounded-lg shadow-sm">
-          <thead className="bg-gray-100">
+      <div className="rounded-md border shadow-sm">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-50 border-b">
             <tr>
-              <th className="p-3 text-left border">ID</th>
-              <th className="p-3 text-left border">Make</th>
-              <th className="p-3 text-left border">Year</th>
-              <th className="p-3 text-left border">Price Range</th>
-              <th className="p-3 text-left border">Demand</th>
-              <th className="p-3 text-left border">Status</th>
-              <th className="p-3 text-left border">Created By</th>
-              <th className="p-3 text-left border">Notes</th>
-              <th className="p-3 text-left border">Actions</th>
+              <th className="p-3 text-left font-medium">ID</th>
+              <th className="p-3 text-left font-medium">Make</th>
+              <th className="p-3 text-left font-medium">Year</th>
+              <th className="p-3 text-left font-medium">Price Range</th>
+              <th className="p-3 text-left font-medium">Demand</th>
+              <th className="p-3 text-left font-medium">Status</th>
+              <th className="p-3 text-left font-medium">Created By</th>
+              <th className="p-3 text-left font-medium">Notes</th>
+              <th className="p-3 text-center font-medium">Actions</th>
             </tr>
           </thead>
+
           <tbody>
-            {demands.map((d) => (
-              <tr key={d.id} className="hover:bg-gray-50">
-                <td className="p-3 border">{d.id}</td>
-                <td className="p-3 border">{d.make ?? "-"}</td>
-                <td className="p-3 border">{d.modelYear ?? "-"}</td>
-                <td className="p-3 border">{d.priceFrom ?? "-"} - {d.priceTo ?? "-"}</td>
-                <td className="p-3 border">{d.demand ?? "-"}</td>
-                <td className="p-3 border">{d.status}</td>
-                <td className="p-3 border">
-                  {d.createdBy.firstName ?? ""} {d.createdBy.lastName ?? ""} ({d.createdBy.email})
+            {demands.map((d, index) => (
+              <tr
+                key={d.id}
+                className={`${
+                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                } border-b hover:bg-gray-100 transition`}
+              >
+                <td className="p-3">{d.id}</td>
+                <td className="p-3">{d.make ?? "-"}</td>
+                <td className="p-3">{d.modelYear ?? "-"}</td>
+                <td className="p-3">
+                  {d.priceFrom ?? "-"} – {d.priceTo ?? "-"}
                 </td>
-                <td className="p-3 border">
+                <td className="p-3">{d.demand ?? "-"}</td>
+
+                <td className="p-3">
+                  <span
+                    className={`px-2 py-1 text-xs rounded-full ${
+                      d.status === "SAVED"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-blue-100 text-blue-700"
+                    }`}
+                  >
+                    {d.status}
+                  </span>
+                </td>
+
+                <td className="p-3">
+                  {d.createdBy.firstName} {d.createdBy.lastName} <br />
+                  <span className="text-xs text-gray-500">
+                    {d.createdBy.email}
+                  </span>
+                </td>
+
+                <td className="p-3">
+                  {d.notes.length === 0 && (
+                    <span className="text-gray-400 text-sm">No notes</span>
+                  )}
+
                   {d.notes.map((n) => (
-                    <div key={n.id} className="text-sm border-b border-gray-100 pb-1 mb-1">
-                      {n.user.firstName ?? ""} {n.user.lastName ?? ""}: {n.note}
+                    <div
+                      key={n.id}
+                      className="text-sm border-b border-gray-200 pb-1 mb-1"
+                    >
+                      <strong>
+                        {n.user.firstName} {n.user.lastName}:
+                      </strong>{" "}
+                      {n.note}
                     </div>
                   ))}
                 </td>
-                <td className="p-3 border text-center">
+
+                <td className="p-3 text-center">
                   <ActionsDropdown demand={d} />
                 </td>
               </tr>
@@ -58,30 +96,57 @@ export default function DemandsTableClient({ demands }: { demands: Demand[] }) {
 }
 
 // Dropdown Component using Schadcn UI
-function ActionsDropdown({ demand }: { demand: Demand }) {
-  const handleDelete = () => console.log("Delete", demand.id);
-  const handleUpdate = () => console.log("Update", demand.id);
-  const handleStatusUpdate = (status: "DRAFT" | "SAVED") => console.log("Update status", demand.id, status);
-
+export function ActionsDropdown({ demand }: { demand: Demand }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" aria-label="More Options">
-              <MoreHorizontalIcon />
-            </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 p-0 rounded-full hover:bg-gray-200"
+        >
+          <MoreHorizontalIcon className="h-4 w-4" />
+        </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-36">
-        <DropdownMenuItem onClick={handleUpdate}>Update</DropdownMenuItem>
-        <DropdownMenuItem onClick={handleDelete} className="text-red-600">
-          Delete
+
+      <DropdownMenuContent align="end" className="w-48">
+
+        <DropdownMenuItem
+          onClick={() => console.log("Update form coming")}
+          className="cursor-pointer"
+        >
+          Update
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleStatusUpdate("DRAFT")}>
-          Mark as Draft
+
+        <DropdownMenuItem asChild className="cursor-pointer text-red-600">
+          <DemandActionDialog
+            demandId={demand.id}
+            action="DELETE"
+            label="Delete"
+            color="red"
+          />
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleStatusUpdate("SAVED")}>
-          Mark as Saved
+
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <DemandActionDialog
+            demandId={demand.id}
+            action="DRAFT"
+            label="Mark as Draft"
+            color="blue"
+          />
         </DropdownMenuItem>
+
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <DemandActionDialog
+            demandId={demand.id}
+            action="SAVED"
+            label="Mark as Saved"
+            color="green"
+          />
+        </DropdownMenuItem>
+
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
+

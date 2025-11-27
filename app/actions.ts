@@ -1150,3 +1150,35 @@ export async function deleteOrderAction(orderId: string) {
     return { success: false };
   }
 }
+
+
+
+export async function deleteDemandAction(id: string) {
+  try {
+    await prisma.demand.delete({
+      where: { id },
+    });
+
+    revalidatePath("/dashboard/demands");
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Delete Demand Error:", error);
+    return { success: false };
+  }
+}
+
+// UPDATE status (DRAFT / SAVED)
+export async function updateDemandStatusAction(id: string, status: "DRAFT" | "SAVED") {
+  try {
+    await prisma.demand.update({
+      where: { id },
+      data: { status },
+    });
+
+    revalidatePath("/dashboard/demands");
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Update Demand Status Error:", error);
+    return { success: false };
+  }
+}
