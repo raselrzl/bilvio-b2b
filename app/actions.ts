@@ -1078,3 +1078,16 @@ export async function updateWarehouse(warehouseId: string, data: WarehouseFormDa
 
   return warehouse;
 }
+
+
+export async function deleteProductAction(productId: string) {
+  try {
+    await prisma.product.delete({
+      where: { id: productId },
+    });
+    return { ok: true };
+  } catch (err) {
+    console.error("Failed to delete product:", err);
+    return { ok: false, error: "Failed to delete product" };
+  }
+}

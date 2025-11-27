@@ -34,6 +34,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           <Link href="/admin/alltask" className="hover:underline">
               All Task
             </Link>
+
+             <Link href="/admin/allproducts" className="hover:underline">
+              All Products
+            </Link>
         </nav>
 
         {/* MOBILE NAV (Sheet) */}
