@@ -106,6 +106,8 @@ model Product {
   reactions ProductReaction[]
   productNotes ProductNote[] @relation("ProductNotesRelation")
   messages Message[]
+
+  options ProductOption[]
 }
 
 
@@ -380,4 +382,23 @@ model WarehouseOpeningHour {
 
 
 
+model ProductOption {
+  id        String   @id @default(cuid())
+  productId String
+  type      OptionType
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, type])
+}
+
+enum OptionType {
+  EXTERIOR
+  INTERIOR
+  SAFETY
+  PERFORMANCE
+  PACKAGE
+}

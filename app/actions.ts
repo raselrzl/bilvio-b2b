@@ -283,6 +283,10 @@ export async function updateProfileBasicsAction(formData: FormData) {
   );
 }
 
+export type ProductOptionInput = {
+  type: "EXTERIOR" | "INTERIOR" | "SAFETY" | "PERFORMANCE" | "PACKAGE";
+  name: string;
+};
 
 const productSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -305,6 +309,14 @@ const productSchema = z.object({
   transportCost: z.number().min(0, "Transport cost must be positive"),
   productionYear: z.number().min(1900).max(new Date().getFullYear()),
   userId: z.string().optional(),
+  options: z
+    .array(
+      z.object({
+        type: z.enum(["EXTERIOR", "INTERIOR", "SAFETY", "PERFORMANCE", "PACKAGE"]),
+        name: z.string(),
+      })
+    )
+    .optional(),
 });
 
 export type ProductPayload = z.infer<typeof productSchema>;
@@ -313,6 +325,7 @@ export async function createProductAction(
   raw: ProductPayload
 ): Promise<{ ok: boolean; errors?: Record<string, string[]> }> {
   const parsed = productSchema.safeParse(raw);
+
   if (!parsed.success) {
     const fieldErrors: Record<string, string[]> = {};
     for (const issue of parsed.error.issues) {
@@ -323,17 +336,26 @@ export async function createProductAction(
   }
 
   try {
+    // Create product and optional options
     await prisma.product.create({
       data: {
         ...parsed.data,
         firstRegistration: new Date(parsed.data.firstRegistration),
+        options: parsed.data.options?.length
+          ? {
+              create: parsed.data.options.map((opt) => ({
+                type: opt.type,
+                name: opt.name,
+              })),
+            }
+          : undefined,
       },
     });
 
     revalidatePath("/admin/createProduct");
     revalidatePath("/");
 
-    return { ok: true }; // always returns an object
+    return { ok: true };
   } catch (e: any) {
     if (e?.code === "P2002" && Array.isArray(e?.meta?.target)) {
       const errors: Record<string, string[]> = {};
@@ -346,6 +368,7 @@ export async function createProductAction(
     return { ok: false, errors: { form: ["Unexpected error."] } };
   }
 }
+
 
 
 

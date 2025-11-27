@@ -15,8 +15,83 @@ import {
 import { Label } from "@/components/ui/label";
 import { createProductAction } from "@/app/actions";
 
+const EXTERIOR_OPTIONS = [
+  "Solid colours",
+  "Metallic/pearlescent colours",
+  "Matte finishes",
+  "Two-tone roof options",
+  "Headlights: Halogen / LED / Laser / Matrix LED",
+  "Daytime Running Lights (DRL)",
+  "Fog lights",
+  "Taillights: LED / Sequential / Dynamic",
+  "Wheel size (16” / 17” / 18”)",
+  "Alloy wheels / Steel wheels",
+  "Multi-spoke, split-spoke, turbine designs",
+  "Wheel colour: silver, black, two-tone",
+  "Tires: all-season / summer / winter / run-flat",
+  "Sunroof / Panoramic roof",
+  "Roof rails",
+  "Spoilers / Diffuser",
+  "Side skirts",
+  "Tow hooks / hitch",
+  "Body kits / aerodynamic kits",
+];
+
+const INTERIOR_OPTIONS = [
+  "Leather / Fabric / Alcantara",
+  "Heated / Ventilated / Massaging seats",
+  "Power-adjustable / Memory function",
+  "Sport seats / Captain chairs",
+  "Touchscreen display size",
+  "Apple CarPlay / Android Auto",
+  "Navigation system",
+  "Bluetooth / USB / Wi-Fi hotspot",
+  "Premium audio systems",
+  "Climate control: single / dual / tri-zone",
+  "Ambient lighting",
+  "Keyless entry / push start",
+  "Power windows / rear sunshades",
+];
+
+const SAFETY_OPTIONS = [
+  "Automatic emergency braking",
+  "Lane departure warning / lane keeping assist",
+  "Blind spot monitoring",
+  "Adaptive cruise control",
+  "Traffic sign recognition",
+  "Airbags (front, side, curtain, knee)",
+  "Reinforced body structure / crumple zones",
+  "Seatbelt pre-tensioners",
+  "Parking assist / 360° camera",
+  "Hill start assist / hill descent control",
+  "Traction control / Electronic stability control",
+  "Autonomous driving features",
+];
+
+const PERFORMANCE_OPTIONS = [
+  "Engine variants / power output",
+  "Transmission types: manual / automatic / CVT / dual-clutch",
+  "Drive type: FWD / RWD / AWD",
+  "Suspension: standard / sport / adaptive",
+  "Brakes: standard / sport / carbon-ceramic",
+];
+
+const PACKAGE_OPTIONS = [
+  "Sport package (upgraded suspension, rims, styling)",
+  "Luxury package (leather, premium sound, ambient lights)",
+  "Technology package (advanced safety, head-up display)",
+  "Off-road package (skid plates, higher suspension, all-terrain tires)",
+];
+
+export type ProductOptionInput = {
+  type: "EXTERIOR" | "INTERIOR" | "SAFETY" | "PERFORMANCE" | "PACKAGE";
+  name: string;
+};
+
 export default function ProductForm({ userId }: { userId?: string }) {
   const router = useRouter();
+
+  // Product basic info
   const [name, setName] = useState("");
   const [offerNumber, setOfferNumber] = useState("");
   const [gearbox, setGearbox] = useState<"AUTOMATIC" | "MANUAL">("AUTOMATIC");
@@ -25,33 +100,38 @@ export default function ProductForm({ userId }: { userId?: string }) {
   );
   const [price, setPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
-  const [type, setType] = useState<
-    "SUPER" | "INTERESTING" | "NOT_INTERESTING" | "LATER"
-  >("SUPER");
+  const [type, setType] = useState<"SUPER" | "INTERESTING" | "NOT_INTERESTING" | "LATER">(
+    "SUPER"
+  );
   const [stock, setStock] = useState<"IN_STOCK" | "OUT_OF_STOCK">("IN_STOCK");
   const [colour, setColour] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [mileage, setMileage] = useState(0);
   const [firstRegistration, setFirstRegistration] = useState("");
-  const [availability, setAvailability] = useState<"IMMEDIATELY" | "LATER">(
-    "IMMEDIATELY"
-  );
+  const [availability, setAvailability] = useState<"IMMEDIATELY" | "LATER">("IMMEDIATELY");
   const [trim, setTrim] = useState("");
   const [engineSpec, setEngineSpec] = useState("");
   const [vat, setVat] = useState(0);
   const [transportCost, setTransportCost] = useState(0);
-  const [productionYear, setProductionYear] = useState(
-    new Date().getFullYear()
-  );
+  const [productionYear, setProductionYear] = useState(new Date().getFullYear());
+  const [productCondition, setProductCondition] = useState<"NEW" | "USED">("NEW");
   const [loading, setLoading] = useState(false);
-  const [productCondition, setProductCondition] = useState<"NEW" | "USED">(
-    "NEW"
-  );
+
+  // Product options
+  const [exteriorOptions, setExteriorOptions] = useState<string[]>([]);
+  const [interiorOptions, setInteriorOptions] = useState<string[]>([]);
+  const [safetyOptions, setSafetyOptions] = useState<string[]>([]);
+  const [performanceOptions, setPerformanceOptions] = useState<string[]>([]);
+  const [packageOptions, setPackageOptions] = useState<string[]>([]);
 
   const inputClass = (value: string | number | undefined) =>
     `h-9 w-full rounded-xs bg-white placeholder-gray-400 focus:outline-none focus:ring-0 focus:border-0 ${
       value ? "bg-[#619aab] text-white placeholder-white" : ""
     }`;
+
+
+const mapOptions = (type: "EXTERIOR" | "INTERIOR" | "SAFETY" | "PERFORMANCE" | "PACKAGE", options: string[]): ProductOptionInput[] =>
+  options.map((name) => ({ type, name }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,8 +157,15 @@ export default function ProductForm({ userId }: { userId?: string }) {
         vat,
         transportCost,
         productionYear,
-        userId,
         productCondition,
+        userId,
+        options: [
+    ...mapOptions("EXTERIOR", exteriorOptions),
+    ...mapOptions("INTERIOR", interiorOptions),
+    ...mapOptions("SAFETY", safetyOptions),
+    ...mapOptions("PERFORMANCE", performanceOptions),
+    ...mapOptions("PACKAGE", packageOptions),
+  ],
       });
 
       if (result.ok) {
@@ -105,6 +192,12 @@ export default function ProductForm({ userId }: { userId?: string }) {
         setVat(0);
         setTransportCost(0);
         setProductionYear(new Date().getFullYear());
+        setProductCondition("NEW");
+        setExteriorOptions([]);
+        setInteriorOptions([]);
+        setSafetyOptions([]);
+        setPerformanceOptions([]);
+        setPackageOptions([]);
       } else {
         toast.error("Failed to create product.");
         console.log(result.errors);
@@ -116,6 +209,41 @@ export default function ProductForm({ userId }: { userId?: string }) {
       setLoading(false);
     }
   };
+
+  const MultiSelect = ({
+    label,
+    options,
+    selectedOptions,
+    setSelectedOptions,
+  }: {
+    label: string;
+    options: string[];
+    selectedOptions: string[];
+    setSelectedOptions: (val: string[]) => void;
+  }) => (
+    <div className="flex flex-col gap-1">
+  <Label>{label}</Label>
+  <div className="flex flex-wrap gap-2">
+    {options.map((opt) => (
+      <label key={opt} className="flex items-center gap-1">
+        <input
+          type="checkbox"
+          checked={selectedOptions.includes(opt)}
+          onChange={(e) => {
+            if (e.target.checked) {
+              setSelectedOptions([...selectedOptions, opt]);
+            } else {
+              setSelectedOptions(selectedOptions.filter((s) => s !== opt));
+            }
+          }}
+        />
+        {opt}
+      </label>
+    ))}
+  </div>
+</div>
+
+  );
 
   return (
     <div className="w-full max-w-7xl mx-auto bg-gray-50 p-6 mt-8 rounded shadow space-y-6">
@@ -387,6 +515,38 @@ export default function ProductForm({ userId }: { userId?: string }) {
           />
         </div>
 
+        {/* Product Option Multi-selects */}
+        <MultiSelect
+          label="Exterior Options"
+          options={EXTERIOR_OPTIONS}
+          selectedOptions={exteriorOptions}
+          setSelectedOptions={setExteriorOptions}
+        />
+        <MultiSelect
+          label="Interior Options"
+          options={INTERIOR_OPTIONS}
+          selectedOptions={interiorOptions}
+          setSelectedOptions={setInteriorOptions}
+        />
+        <MultiSelect
+          label="Safety Options"
+          options={SAFETY_OPTIONS}
+          selectedOptions={safetyOptions}
+          setSelectedOptions={setSafetyOptions}
+        />
+        <MultiSelect
+          label="Performance Options"
+          options={PERFORMANCE_OPTIONS}
+          selectedOptions={performanceOptions}
+          setSelectedOptions={setPerformanceOptions}
+        />
+        <MultiSelect
+          label="Package Options"
+          options={PACKAGE_OPTIONS}
+          selectedOptions={packageOptions}
+          setSelectedOptions={setPackageOptions}
+        />
+
         <Button
           type="submit"
           className="col-span-full cursor-pointer bg-[#619aab] text-white hover:bg-[#528a99] rounded-xs h-10 mt-2 flex items-center justify-center"
@@ -417,6 +577,7 @@ export default function ProductForm({ userId }: { userId?: string }) {
           {loading ? "Creating..." : "Create Product"}
         </Button>
       </form>
+
 
       <Toaster position="top-right" />
     </div>
