@@ -67,6 +67,16 @@ async function getOfferById(id: string) {
           productId: true,
         },
       },
+      options: {
+        select: {
+          id: true,
+          name: true,
+          type: true,
+        },
+        orderBy: {
+          type: "asc", // group by OptionType in UI
+        },
+      },
     },
   });
 
@@ -292,7 +302,7 @@ export default async function UsedCarOfferDetailsPage({
       <div className=" py-6 px-2 pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         {/* Input note */}
         <div className="relative flex-1 max-w-sm w-full">
-       {/*    <Input
+          {/*    <Input
             type="text"
             placeholder="Write a note..."
             className="pl-10 pr-3 h-9 text-sm border-gray-300 rounded w-full"
@@ -303,7 +313,7 @@ export default async function UsedCarOfferDetailsPage({
 
         {/* Send message */}
         <div className="flex items-center gap-2">
-   {/*        <div className="flex items-center gap-2">
+          {/*        <div className="flex items-center gap-2">
                      {currentUser ? (
                        <MessagePopup
                          productId={offer.id}
@@ -319,7 +329,36 @@ export default async function UsedCarOfferDetailsPage({
                      <BellDot />
                    </div> */}
         </div>
-
+        {/* Equipment */}
+        <div className="mt-6 border overflow-hidden">
+          <div className="bg-white text-xl font-bold p-3">Equipment</div>
+          <div className="grid grid-cols-2 text-sm text-gray-700">
+            {offer.options.length === 0 ? (
+              <div className="col-span-2 p-3 text-gray-500">
+                No options available
+              </div>
+            ) : (
+              offer.options.map((option, index) => (
+                <React.Fragment key={option.id}>
+                  <div
+                    className={`font-semibold p-2 ${
+                      index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                    }`}
+                  >
+                    {option.type}:
+                  </div>
+                  <div
+                    className={`p-2 ${
+                      index % 2 === 0 ? "bg-gray-100" : "bg-white"
+                    }`}
+                  >
+                    {option.name}
+                  </div>
+                </React.Fragment>
+              ))
+            )}
+          </div>
+        </div>
         {/* Add demand button */}
         <Button
           asChild
