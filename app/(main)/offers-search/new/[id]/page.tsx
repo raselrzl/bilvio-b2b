@@ -313,7 +313,7 @@ export default async function NewCarOfferDetailsPage({
 
         {/* Equipment */}
 <div className="mt-6 border overflow-hidden">
-  <div className="bg-white text-xl font-bold p-3">Equipment</div>
+  <div className="bg-white text-xl font-bold p-3">Available Equipment</div>
   <div className="grid grid-cols-2 text-sm text-gray-700">
     {offer.options.length === 0 ? (
       <div className="col-span-2 p-3 text-gray-500">No options available</div>

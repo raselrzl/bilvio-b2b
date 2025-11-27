@@ -100,21 +100,27 @@ export default function ProductForm({ userId }: { userId?: string }) {
   );
   const [price, setPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
-  const [type, setType] = useState<"SUPER" | "INTERESTING" | "NOT_INTERESTING" | "LATER">(
-    "SUPER"
-  );
+  const [type, setType] = useState<
+    "SUPER" | "INTERESTING" | "NOT_INTERESTING" | "LATER"
+  >("SUPER");
   const [stock, setStock] = useState<"IN_STOCK" | "OUT_OF_STOCK">("IN_STOCK");
   const [colour, setColour] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [mileage, setMileage] = useState(0);
   const [firstRegistration, setFirstRegistration] = useState("");
-  const [availability, setAvailability] = useState<"IMMEDIATELY" | "LATER">("IMMEDIATELY");
+  const [availability, setAvailability] = useState<"IMMEDIATELY" | "LATER">(
+    "IMMEDIATELY"
+  );
   const [trim, setTrim] = useState("");
   const [engineSpec, setEngineSpec] = useState("");
   const [vat, setVat] = useState(0);
   const [transportCost, setTransportCost] = useState(0);
-  const [productionYear, setProductionYear] = useState(new Date().getFullYear());
-  const [productCondition, setProductCondition] = useState<"NEW" | "USED">("NEW");
+  const [productionYear, setProductionYear] = useState(
+    new Date().getFullYear()
+  );
+  const [productCondition, setProductCondition] = useState<"NEW" | "USED">(
+    "NEW"
+  );
   const [loading, setLoading] = useState(false);
 
   // Product options
@@ -129,9 +135,10 @@ export default function ProductForm({ userId }: { userId?: string }) {
       value ? "bg-[#619aab] text-white placeholder-white" : ""
     }`;
 
-
-const mapOptions = (type: "EXTERIOR" | "INTERIOR" | "SAFETY" | "PERFORMANCE" | "PACKAGE", options: string[]): ProductOptionInput[] =>
-  options.map((name) => ({ type, name }));
+  const mapOptions = (
+    type: "EXTERIOR" | "INTERIOR" | "SAFETY" | "PERFORMANCE" | "PACKAGE",
+    options: string[]
+  ): ProductOptionInput[] => options.map((name) => ({ type, name }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -160,12 +167,12 @@ const mapOptions = (type: "EXTERIOR" | "INTERIOR" | "SAFETY" | "PERFORMANCE" | "
         productCondition,
         userId,
         options: [
-    ...mapOptions("EXTERIOR", exteriorOptions),
-    ...mapOptions("INTERIOR", interiorOptions),
-    ...mapOptions("SAFETY", safetyOptions),
-    ...mapOptions("PERFORMANCE", performanceOptions),
-    ...mapOptions("PACKAGE", packageOptions),
-  ],
+          ...mapOptions("EXTERIOR", exteriorOptions),
+          ...mapOptions("INTERIOR", interiorOptions),
+          ...mapOptions("SAFETY", safetyOptions),
+          ...mapOptions("PERFORMANCE", performanceOptions),
+          ...mapOptions("PACKAGE", packageOptions),
+        ],
       });
 
       if (result.ok) {
@@ -222,27 +229,26 @@ const mapOptions = (type: "EXTERIOR" | "INTERIOR" | "SAFETY" | "PERFORMANCE" | "
     setSelectedOptions: (val: string[]) => void;
   }) => (
     <div className="flex flex-col gap-1">
-  <Label>{label}</Label>
-  <div className="flex flex-wrap gap-2">
-    {options.map((opt) => (
-      <label key={opt} className="flex items-center gap-1">
-        <input
-          type="checkbox"
-          checked={selectedOptions.includes(opt)}
-          onChange={(e) => {
-            if (e.target.checked) {
-              setSelectedOptions([...selectedOptions, opt]);
-            } else {
-              setSelectedOptions(selectedOptions.filter((s) => s !== opt));
-            }
-          }}
-        />
-        {opt}
-      </label>
-    ))}
-  </div>
-</div>
-
+      <Label>{label}</Label>
+      <div className="flex flex-wrap gap-2">
+        {options.map((opt) => (
+          <label key={opt} className="flex items-center gap-1">
+            <input
+              type="checkbox"
+              checked={selectedOptions.includes(opt)}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setSelectedOptions([...selectedOptions, opt]);
+                } else {
+                  setSelectedOptions(selectedOptions.filter((s) => s !== opt));
+                }
+              }}
+            />
+            {opt}
+          </label>
+        ))}
+      </div>
+    </div>
   );
 
   return (
@@ -515,6 +521,36 @@ const mapOptions = (type: "EXTERIOR" | "INTERIOR" | "SAFETY" | "PERFORMANCE" | "
           />
         </div>
 
+        <Button
+          type="submit"
+          className="col-span-full cursor-pointer bg-[#619aab] text-white hover:bg-[#528a99] rounded-xs h-10 mt-2 flex items-center justify-center"
+          disabled={loading}
+        >
+          {loading && (
+            <svg
+              className="animate-spin h-5 w-5 mr-2 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v8H4z"
+              ></path>
+            </svg>
+          )}
+          {loading ? "Creating..." : "Create Product"}
+        </Button>
+
         {/* Product Option Multi-selects */}
         <MultiSelect
           label="Exterior Options"
@@ -546,38 +582,7 @@ const mapOptions = (type: "EXTERIOR" | "INTERIOR" | "SAFETY" | "PERFORMANCE" | "
           selectedOptions={packageOptions}
           setSelectedOptions={setPackageOptions}
         />
-
-        <Button
-          type="submit"
-          className="col-span-full cursor-pointer bg-[#619aab] text-white hover:bg-[#528a99] rounded-xs h-10 mt-2 flex items-center justify-center"
-          disabled={loading}
-        >
-          {loading && (
-            <svg
-              className="animate-spin h-5 w-5 mr-2 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v8H4z"
-              ></path>
-            </svg>
-          )}
-          {loading ? "Creating..." : "Create Product"}
-        </Button>
       </form>
-
 
       <Toaster position="top-right" />
     </div>
