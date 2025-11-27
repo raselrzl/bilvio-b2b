@@ -22,6 +22,7 @@ interface User {
   createdAt: string;
 }
 
+
 export default function UserFilterForm({
   initialUsers,
   onFilterChange,
@@ -84,7 +85,7 @@ export default function UserFilterForm({
       {/* 🔹 Filter Section */}
       <form className="space-y-4 mt-6 px-0 2xl:px-2">
         {/* Row 1: Email + Status + Clear */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2 items-end mt-4 py-4 px-2 sm:px-4 md:px-6 bg-gray-500 max-w-[100%] lg:max-w-[1500px]">
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2 items-end mt-4 py-4 px-2 sm:px-4 md:px-6 bg-gray-500 max-w-full lg:max-w-[1500px]">
           <div>
             <Input
               type="text"
