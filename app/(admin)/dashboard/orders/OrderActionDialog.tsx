@@ -95,13 +95,13 @@ export default function OrderActionDialog({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" className={`flex items-center ${styles.text}`}>
+        <Button variant="ghost" className={`flex items-center h-8 cursor-pointer ${styles.text}`}>
           <Icon className="w-4 h-4 mr-2" />
           {label}
         </Button>
       </AlertDialogTrigger>
 
-      <AlertDialogContent>
+      <AlertDialogContent className="rounded-xs">
         <AlertDialogHeader>
           <AlertDialogTitle>
             {action === "DELETE"
@@ -117,12 +117,12 @@ export default function OrderActionDialog({
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="h-8 rounded-xs cursor-pointer">Cancel</AlertDialogCancel>
 
           <AlertDialogAction
             onClick={handleConfirm}
             disabled={loading}
-            className={`${styles.bg} ${styles.hover}`}
+            className={`${styles.bg}  ${styles.hover} h-8 rounded-xs cursor-pointer`}
           >
             {loading ? "Processing..." : "Confirm"}
           </AlertDialogAction>

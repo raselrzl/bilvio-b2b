@@ -175,12 +175,12 @@ export default async function OrdersPage({ searchParams }: SearchParamsProps) {
                       <TableCell className="text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
+                            <Button variant="outline" size="icon" className="rounded-xs cursor-pointer">
                               <MoreHorizontal className="w-4 h-4" />
                             </Button>
                           </DropdownMenuTrigger>
 
-                          <DropdownMenuContent align="end">
+                          <DropdownMenuContent align="end" className="rounded-none">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem asChild>
                               <OrderActionDialog
