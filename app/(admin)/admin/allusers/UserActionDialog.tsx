@@ -61,7 +61,7 @@ export default function UserActionDialog({
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className="h-8 m-1 rounded-xs cursor-pointer">
           {label}
         </Button>
       </Dialog.Trigger>
@@ -75,7 +75,7 @@ export default function UserActionDialog({
           </p>
           <div className="flex justify-end gap-2">
             <Dialog.Close asChild>
-              <Button variant="outline" disabled={isPending}>
+              <Button variant="outline" disabled={isPending} className="h-8 rounded-xs cursor-pointer">
                 Cancel
               </Button>
             </Dialog.Close>
@@ -83,10 +83,10 @@ export default function UserActionDialog({
               onClick={handleAction}
               className={
                 color === "red"
-                  ? "bg-red-600 text-white"
+                  ? "bg-red-600 text-white h-8 rounded-xs"
                   : color === "green"
-                  ? "bg-green-600 text-white"
-                  : "bg-blue-600 text-white"
+                  ? "bg-green-600 text-white h-8 rounded-xs"
+                  : "bg-blue-600 text-white h-8 rounded-xs"
               }
               disabled={isPending}
             >

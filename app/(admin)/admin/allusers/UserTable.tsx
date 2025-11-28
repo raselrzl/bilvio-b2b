@@ -98,15 +98,15 @@ export function ActionsDropdown({ user }: { user: User }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button variant="outline" size="icon" className="h-8 m-1 rounded-xs cursor-pointer">
           <MoreHorizontalIcon />
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-48" align="end">
+      <DropdownMenuContent className="w-48 rounded-xs" align="end">
         {/* USER TYPE */}
         <DropdownMenuItem asChild>
-          <UserActionDialog userId={user.id} action="USER" label="Set as USER" color="blue" />
+          <UserActionDialog userId={user.id} action="USER" label="Set as USER" color="blue"/>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <UserActionDialog userId={user.id} action="ADMIN" label="Set as ADMIN" color="blue" />
@@ -147,161 +147,118 @@ function ViewDetailsButton({ user }: { user: User }) {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <Button variant="outline" size="sm">View Details</Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 px-3 py-1 text-sm bg-amber-600 text-white hover:bg-amber-700 rounded-none cursor-pointer"
+        >
+          View Details
+        </Button>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 w-[90%] max-w-4xl -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg overflow-auto max-h-[80vh]">
-          <Dialog.Title className="text-xl font-bold mb-4">User Details</Dialog.Title>
-          <div className="space-y-4 text-sm">
-            <div><strong>Name:</strong> {user.firstName ?? ""} {user.lastName ?? ""}</div>
-            <div><strong>Email:</strong> {user.email}</div>
-            <div><strong>Company:</strong> {user.companyName ?? "-"}</div>
-            <div><strong>Phone:</strong> {user.phone ?? "-"}</div>
-            <div><strong>Address:</strong> {user.street}, {user.city}, {user.country}, {user.zipCode}</div>
-            <div><strong>User Type:</strong> {user.userType}</div>
-            <div><strong>Approval Status:</strong> {user.approvalStatus}</div>
-            <div><strong>Intent:</strong> {user.intent ?? "None"}</div>
-            <div><strong>Uploaded Documents:</strong> {user.uploadedDocuments ?? "None"}</div>
+        <Dialog.Content className="fixed top-1/2 left-1/2 w-[90%] max-w-4xl -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded shadow-lg overflow-auto max-h-[80vh] text-sm">
+          <Dialog.Title className="text-lg font-semibold mb-4">User Details</Dialog.Title>
+
+          <div className="grid grid-cols-1 gap-3">
+            <DetailRow label="Name" value={`${user.firstName ?? ""} ${user.lastName ?? ""}`} />
+            <DetailRow label="Email" value={user.email} />
+            <DetailRow label="Company" value={user.companyName ?? "-"} />
+            <DetailRow label="Phone" value={user.phone ?? "-"} />
+            <DetailRow
+              label="Address"
+              value={`${user.street}, ${user.city}, ${user.country}, ${user.zipCode}`}
+            />
+            <DetailRow label="User Type" value={user.userType} />
+            <DetailRow label="Approval Status" value={user.approvalStatus} />
+            <DetailRow label="Intent" value={user.intent ?? "None"} />
+            <DetailRow label="Uploaded Documents" value={user.uploadedDocuments ?? "None"} />
 
             {/* Orders */}
-            <div>
-              <strong>Orders:</strong>
-              {user.orders.length > 0 ? (
-                <ul className="ml-4 list-disc">
-                  {user.orders.map(o => (
-                    <li key={o.id}>{o.orderNumber} - Status: {o.status}</li>
-                  ))}
-                </ul>
-              ) : " None"}
-            </div>
-
+            <DetailList label="Orders" items={user.orders.map(o => `${o.orderNumber} - ${o.status}`)} />
             {/* Tasks */}
-            <div>
-              <strong>Tasks:</strong>
-              {user.tasks.length > 0 ? (
-                <ul className="ml-4 list-disc">
-                  {user.tasks.map(t => (
-                    <li key={t.id}>{t.taskType} - {t.status}</li>
-                  ))}
-                </ul>
-              ) : " None"}
-            </div>
-
+            <DetailList label="Tasks" items={user.tasks.map(t => `${t.taskType} - ${t.status}`)} />
             {/* Bank Accounts */}
-            <div>
-              <strong>Bank Accounts:</strong>
-              {user.bankAccounts.length > 0 ? (
-                <ul className="ml-4 list-disc">
-                  {user.bankAccounts.map(b => (
-                    <li key={b.id}>{b.bankName} - {b.iban} {b.isMain && "(Main)"}</li>
-                  ))}
-                </ul>
-              ) : " None"}
-            </div>
-
+            <DetailList
+              label="Bank Accounts"
+              items={user.bankAccounts.map(b => `${b.bankName} - ${b.iban} ${b.isMain ? "(Main)" : ""}`)}
+            />
             {/* Warehouses */}
-            <div>
-              <strong>Warehouses:</strong>
-              {user.warehouses.length > 0 ? (
-                <ul className="ml-4 list-disc">
-                  {user.warehouses.map(w => (
-                    <li key={w.id}>
-                      {w.name} - {w.address}
-                      {w.openingHours && w.openingHours.length > 0 && (
-                        <ul className="ml-4 list-decimal">
-                          {w.openingHours.map(h => (
-                            <li key={h.day}>{h.day}: {h.open ? `${h.from} - ${h.to}` : "Closed"}</li>
-                          ))}
-                        </ul>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              ) : " None"}
-            </div>
-
+            <DetailList
+              label="Warehouses"
+              items={user.warehouses.map(
+                w =>
+                  `${w.name} - ${w.address}${
+                    w.openingHours && w.openingHours.length > 0
+                      ? " (" + w.openingHours.map(h => `${h.day}: ${h.open ? `${h.from} - ${h.to}` : "Closed"}`).join(", ") + ")"
+                      : ""
+                  }`
+              )}
+            />
             {/* Demands */}
-            <div>
-              <strong>Demands:</strong>
-              {user.demands.length > 0 ? (
-                <ul className="ml-4 list-disc">
-                  {user.demands.map(d => (
-                    <li key={d.id}>{d.make ?? "-"} {d.gearbox ?? "-"} {d.fuel ?? "-"} - Status: {d.status ?? "-"}</li>
-                  ))}
-                </ul>
-              ) : " None"}
-            </div>
-
+            <DetailList
+              label="Demands"
+              items={user.demands.map(d => `${d.make ?? "-"} ${d.gearbox ?? "-"} ${d.fuel ?? "-"} - ${d.status ?? "-"}`)}
+            />
             {/* Products */}
-            <div>
-              <strong>Products:</strong>
-              {user.products.length > 0 ? (
-                <ul className="ml-4 list-disc">
-                  {user.products.map(p => (
-                    <li key={p.id}>{p.name} - {p.offerNumber}</li>
-                  ))}
-                </ul>
-              ) : " None"}
-            </div>
-
+            <DetailList label="Products" items={user.products.map(p => `${p.name} - ${p.offerNumber}`)} />
             {/* Product Notes */}
-            <div>
-              <strong>Product Notes:</strong>
-              {user.productNotes.length > 0 ? (
-                <ul className="ml-4 list-disc">
-                  {user.productNotes.map(n => (
-                    <li key={n.id}>ProductID: {n.productId} - {n.note}</li>
-                  ))}
-                </ul>
-              ) : " None"}
-            </div>
-
+            <DetailList label="Product Notes" items={user.productNotes.map(n => `ProductID: ${n.productId} - ${n.note}`)} />
             {/* Reactions */}
-            <div>
-              <strong>Reactions:</strong>
-              {user.reactions.length > 0 ? (
-                <ul className="ml-4 list-disc">
-                  {user.reactions.map(r => (
-                    <li key={r.id}>ProductID: {r.productId} - {r.reaction}</li>
-                  ))}
-                </ul>
-              ) : " None"}
-            </div>
-
+            <DetailList label="Reactions" items={user.reactions.map(r => `ProductID: ${r.productId} - ${r.reaction}`)} />
             {/* Messages */}
-            <div>
-              <strong>Messages:</strong>
-              {user.messages.length > 0 ? (
-                <ul className="ml-4 list-disc">
-                  {user.messages.map(m => (
-                    <li key={m.id}>{m.message}</li>
-                  ))}
-                </ul>
-              ) : " None"}
-            </div>
-
+            <DetailList label="Messages" items={user.messages.map(m => m.message)} />
             {/* Company Settings */}
-            <div>
-              <strong>Company Settings:</strong>
-              {user.companySettings ? (
-                <ul className="ml-4 list-disc">
-                  <li>Only Cars With PDI: {user.companySettings.onlyCarsWithPDI ?? "-"}</li>
-                  <li>Accept Registration: {user.companySettings.iAcceptRegistration ?? "-"}</li>
-                  <li>Accept Warranty: {user.companySettings.iAcceptWarranty ?? "-"}</li>
-                  <li>COC New Cars: {user.companySettings.cocNewCars ?? "-"}</li>
-                  <li>COC Used Cars: {user.companySettings.cocUsedCars ?? "-"}</li>
-                  <li>Document Address: {user.companySettings.documentAddress ?? "-"}</li>
-                </ul>
-              ) : " None"}
-            </div>
+            {user.companySettings ? (
+              <DetailList
+                label="Company Settings"
+                items={[
+                  `Only Cars With PDI: ${user.companySettings.onlyCarsWithPDI ?? "-"}`,
+                  `Accept Registration: ${user.companySettings.iAcceptRegistration ?? "-"}`,
+                  `Accept Warranty: ${user.companySettings.iAcceptWarranty ?? "-"}`,
+                  `COC New Cars: ${user.companySettings.cocNewCars ?? "-"}`,
+                  `COC Used Cars: ${user.companySettings.cocUsedCars ?? "-"}`,
+                  `Document Address: ${user.companySettings.documentAddress ?? "-"}`,
+                ]}
+              />
+            ) : null}
           </div>
 
           <Dialog.Close asChild>
-            <Button className="mt-4 w-full">Close</Button>
+            <Button className="mt-4 w-full bg-amber-600 text-white hover:bg-amber-700 rounded-none text-sm">
+              Close
+            </Button>
           </Dialog.Close>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
   );
 }
+
+// Small helper components for consistent table-like design
+function DetailRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex justify-between border-b py-1">
+      <span className="font-medium text-gray-600">{label}:</span>
+      <span className="text-gray-800">{value}</span>
+    </div>
+  );
+}
+
+function DetailList({ label, items }: { label: string; items: string[] }) {
+  return (
+    <div className="py-1">
+      <span className="font-medium text-gray-600">{label}:</span>
+      {items.length > 0 ? (
+        <ul className="ml-4 list-disc text-gray-800">
+          {items.map((item, idx) => (
+            <li key={idx}>{item}</li>
+          ))}
+        </ul>
+      ) : (
+        <span className="ml-1 text-gray-800">None</span>
+      )}
+    </div>
+  );
+}
+
