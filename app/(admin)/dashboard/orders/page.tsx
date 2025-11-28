@@ -166,12 +166,7 @@ export default async function OrdersPage({ searchParams }: SearchParamsProps) {
                                 </p>
                                 <p className="text-xs">Price: {p.price}</p>
 
-                                <Link
-                                  href={`/dashboard/products/${p.id}`}
-                                  className="text-primary underline text-xs"
-                                >
-                                  View details →
-                                </Link>
+                             
                               </div>
                             );
                           })}
