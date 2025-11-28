@@ -76,7 +76,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
       </header>
 
       {/* PAGE CONTENT */}
-      <main className="my-5 px-2 md:px-0">{children}</main>
+      <main className="my-5 px-2 md:px-0">{children}</main> 
     </div>
   );
 }
