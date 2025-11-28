@@ -57,7 +57,16 @@ const SETTINGS_LINKS = [
   { href: "/settings/warehouse", label: "Warehouse" },
 ];
 
-export default function AppHeader({ email }: { email: string }) {
+export default function AppHeader({
+  email,
+  userType,
+}: {
+  email: string;
+  userType: "USER" | "ADMIN" | "SUPERADMIN";
+}) {
+
+  const isAdmin = userType === "ADMIN" || userType === "SUPERADMIN";
+
   const [expanded, setExpanded] = useState(false);
   const [offersOpen, setOffersOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -152,23 +161,25 @@ export default function AppHeader({ email }: { email: string }) {
                   className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white"
                 >
                   <FileText className="mr-2 h-4 w-4" />
-                  <span>Regulations</span>
+                  <span>Regulations</span> 
                 </Link>
               </DropdownMenuItem>
 
-              <DropdownMenuSeparator />
+              {isAdmin && (
+  <>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem asChild>
+      <Link
+        href="/dashboard/orders"
+        className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white"
+      >
+        <SquarePlus className="mr-2 h-4 w-4" />
+        <span>Dashboard</span>
+      </Link>
+    </DropdownMenuItem>
+  </>
+)}
 
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/dashboard/orders"
-                  className="flex items-center hover:rounded-none hover:bg-[#619aab] hover:text-white"
-                >
-                  <SquarePlus className="mr-2 h-4 w-4" />
-                  <span>Dashboard</span>
-                </Link>
-              </DropdownMenuItem>
-
-              <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <form
                   action={logoutAction}
@@ -260,7 +271,7 @@ export default function AppHeader({ email }: { email: string }) {
                         />
                         <span className="text-sm">New cars</span>
                       </Link>
-
+ 
                       <Link
                         href="/offers-search/used"
                         className={`flex items-center gap-2 h-8 pl-8 px-2
