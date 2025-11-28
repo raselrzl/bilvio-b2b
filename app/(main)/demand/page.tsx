@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { prisma } from "@/app/utils/db"; // adjust path
-import AllDemands from "@/components/general/AllDemand";
+import AllDemands from "./AllDemand";
 
 export default async function DemandPage() {
   // Get logged-in user's email from cookie
@@ -25,27 +25,28 @@ export default async function DemandPage() {
     where: userId ? { userId } : undefined,
     orderBy: { createdAt: "desc" },
     take: 50,
-    select: {
-      id: true,
-      make: true,
-      gearbox: true,
-      fuel: true,
-      priceFrom: true,
-      priceTo: true,
-      demand: true,
-      modelYear: true,
-      country: true,
-      quantity: true,
-      warehouse: true,
-      wltpCo2: true,
-      status: true,
-      createdAt: true,
-      userId: true,
-      notes: { 
-      take: 1,
-      orderBy: { createdAt: "desc" },
-      select: { note: true },
-    },
+   select: {
+  id: true,
+  make: true,
+  gearbox: true,
+  fuel: true,
+  priceFrom: true,
+  priceTo: true,
+  demand: true,
+  modelYear: true,
+  country: true,
+  quantity: true,
+  warehouse: true,
+  wltpCo2: true,
+  status: true,
+  createdAt: true,
+  updatedAt: true,   // ← add this
+  userId: true,
+  notes: {
+    take: 1,
+    orderBy: { createdAt: "desc" },
+    select: { note: true },
+  },
     },
   });
 

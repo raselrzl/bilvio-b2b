@@ -1270,3 +1270,17 @@ export async function toggleProductStockAction(productId: string) {
 
   return updated;
 }
+
+
+export async function setDemandStatusAction(demandId: string, status: "DRAFT" | "SAVED") {
+  try {
+    const updated = await prisma.demand.update({
+      where: { id: demandId },
+      data: { status },
+    });
+
+    return { ok: true, demand: updated };
+  } catch (err: any) {
+    return { ok: false, error: err.message };
+  }
+}
