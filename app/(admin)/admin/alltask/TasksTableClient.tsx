@@ -70,11 +70,11 @@ function ActionsDropdown({ task }: { task: Task }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" aria-label="More Options">
+        <Button variant="outline" size="icon" aria-label="More Options" className="h-8 rounded-xs cursor-pointer">
           <MoreHorizontalIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-36">
+      <DropdownMenuContent align="end" className="w-36 rounded-none">
         <DropdownMenuItem onClick={handleUpdate}>Update</DropdownMenuItem>
         <DropdownMenuItem onClick={handleDelete} className="text-red-600">
           Delete
