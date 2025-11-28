@@ -54,14 +54,14 @@ const handleCheckAvailability = async () => {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className="h-8 rounded-xs">
           {label}
         </Button>
       </Dialog.Trigger>
 
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/40" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md bg-white p-6 rounded-lg shadow-lg space-y-4">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md bg-white p-6 rounded-xs shadow-lg space-y-4">
           <Dialog.Title className="text-lg font-semibold">{label}</Dialog.Title>
           <p className="text-sm text-gray-700">
             Are you sure you want to perform this action on this product?
@@ -73,6 +73,7 @@ const handleCheckAvailability = async () => {
                 variant="outline"
                 onClick={handleCheckAvailability}
                 disabled={isPending}
+                className="h-8 rounded-xs"
               >
                 {isPending ? "Checking..." : "Check Availability"}
               </Button>
@@ -81,7 +82,7 @@ const handleCheckAvailability = async () => {
             {color === "red" && (
               <Button
                 onClick={handleDelete}
-                className="bg-red-600 text-white"
+                className="bg-red-600 text-white h-8 rounded-xs"
                 disabled={isPending}
               >
                 {isPending ? "Processing..." : "Delete Product"}
@@ -91,7 +92,7 @@ const handleCheckAvailability = async () => {
 
           <div className="flex justify-end">
             <Dialog.Close asChild>
-              <Button variant="outline" disabled={isPending}>
+              <Button variant="outline" disabled={isPending} className="h-8 rounded-none">
                 Cancel
               </Button>
             </Dialog.Close>
