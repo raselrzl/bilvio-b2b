@@ -103,7 +103,7 @@ export function ActionsDropdown({ demand }: { demand: Demand }) {
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 p-0 rounded-full hover:bg-gray-200"
+          className="h-8 w-8 p-0 rounded-xs hover:bg-gray-200 border"
         >
           <MoreHorizontalIcon className="h-4 w-4" />
         </Button>

@@ -98,7 +98,7 @@ export default function DemandActionDialog({
         </Button>
       </AlertDialogTrigger>
 
-      <AlertDialogContent>
+      <AlertDialogContent className="rounded-none">
         <AlertDialogHeader>
           <AlertDialogTitle>
             {action === "DELETE"
@@ -114,12 +114,12 @@ export default function DemandActionDialog({
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="h-8 rounded-none cursor-pointer">Cancel</AlertDialogCancel>
 
           <AlertDialogAction
             disabled={loading}
             onClick={handleConfirm}
-            className={`${styles.bg} ${styles.hover}`}
+            className={`${styles.bg} ${styles.hover} h-8 rounded-none cursor-pointer`}
           >
             {loading ? "Processing..." : "Confirm"}
           </AlertDialogAction>
