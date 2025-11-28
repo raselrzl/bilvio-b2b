@@ -165,8 +165,6 @@ export default async function OrdersPage({ searchParams }: SearchParamsProps) {
                                   Condition: {p.productCondition}
                                 </p>
                                 <p className="text-xs">Price: {p.price}</p>
-
-                             
                               </div>
                             );
                           })}
@@ -184,51 +182,50 @@ export default async function OrdersPage({ searchParams }: SearchParamsProps) {
 
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-<DropdownMenuItem asChild>
-  <OrderActionDialog
-    orderId={order.id}
-    action="ACCEPTED"
-    label="Accept Order"
-    color="green"
-  />
-</DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                              <OrderActionDialog
+                                orderId={order.id}
+                                action="ACCEPTED"
+                                label="Accept Order"
+                                color="green"
+                              />
+                            </DropdownMenuItem>
 
-<DropdownMenuItem asChild>
-  <OrderActionDialog
-    orderId={order.id}
-    action="REJECTED"
-    label="Reject Order"
-    color="red"
-  />
-</DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                              <OrderActionDialog
+                                orderId={order.id}
+                                action="REJECTED"
+                                label="Reject Order"
+                                color="red"
+                              />
+                            </DropdownMenuItem>
 
-<DropdownMenuItem asChild>
-  <OrderActionDialog
-    orderId={order.id}
-    action="CANCELLED"
-    label="Cancel Order"
-    color="orange"
-  />
-</DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                              <OrderActionDialog
+                                orderId={order.id}
+                                action="CANCELLED"
+                                label="Cancel Order"
+                                color="orange"
+                              />
+                            </DropdownMenuItem>
 
-<DropdownMenuItem asChild>
-  <OrderActionDialog
-    orderId={order.id}
-    action="COMPLETED"
-    label="Mark as Completed"
-    color="blue"
-  />
-</DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                              <OrderActionDialog
+                                orderId={order.id}
+                                action="COMPLETED"
+                                label="Mark as Completed"
+                                color="blue"
+                              />
+                            </DropdownMenuItem>
 
-<DropdownMenuItem asChild>
-  <OrderActionDialog
-    orderId={order.id}
-    action="DELETE"
-    label="Delete Order"
-    color="red"
-  />
-</DropdownMenuItem>
-
+                            <DropdownMenuItem asChild>
+                              <OrderActionDialog
+                                orderId={order.id}
+                                action="DELETE"
+                                label="Delete Order"
+                                color="red"
+                              />
+                            </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
