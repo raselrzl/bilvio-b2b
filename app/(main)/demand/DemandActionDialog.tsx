@@ -52,11 +52,11 @@ export default function DemandActionDialog({
             <p>Are you sure you want to {label.toLowerCase()}?</p>
 
             <AlertDialogFooter>
-              <Button variant="outline" onClick={() => setOpen(false)}>
+              <Button variant="outline" onClick={() => setOpen(false)} className="h-8 rounded-none cursor-pointer">
                 Cancel
               </Button>
 
-              <Button onClick={handleConfirm} disabled={loading}>
+              <Button onClick={handleConfirm} disabled={loading}  className="h-8 rounded-none cursor-pointer">
                 {loading ? "Processing..." : "Confirm"}
               </Button>
             </AlertDialogFooter>

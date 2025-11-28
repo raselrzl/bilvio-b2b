@@ -31,7 +31,7 @@ export default function DemandViewDialog({ demand }: { demand: DemandView }) {
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/40" />
 
-        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[95%] max-w-lg p-6 rounded-md shadow">
+        <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-[95%] max-w-lg p-6 rounded-xs shadow">
           <Dialog.Title className="text-xl font-bold">
             Demand Details
           </Dialog.Title>
@@ -51,7 +51,7 @@ export default function DemandViewDialog({ demand }: { demand: DemandView }) {
 
           <div className="flex justify-end mt-6">
             <Dialog.Close asChild>
-              <Button variant="outline">Close</Button>
+              <Button variant="outline"  className="h-8 rounded-none cursor-pointer">Close</Button>
             </Dialog.Close>
           </div>
         </Dialog.Content>
